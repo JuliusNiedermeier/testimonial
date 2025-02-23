@@ -14,10 +14,10 @@ export default {
   ],
   theme: {
     colors: {
-      "background-primary": "#F2F2F2",
-      "background-secondary": "#FFFFFF",
-      "foreground-primary": "#282828",
-      "foreground-secondary": "#808080",
+      "background-primary": "var(--color-background-primary)",
+      "background-secondary": "var(--color-background-secondary)",
+      "foreground-primary": "var(--color-foreground-primary)",
+      "foreground-secondary": "var(--color-foreground-secondary)",
     },
     fontFamily: {
       sans: ["var(--font-switzer)"],
