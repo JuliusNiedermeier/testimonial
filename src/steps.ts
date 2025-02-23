@@ -1,9 +1,10 @@
-import { StepConfig } from "./components/step";
+import { StepConfig } from "./utils/step-builder";
 
 export const steps: StepConfig[] = [
   {
-    id: "id-dh23",
+    id: "step-1",
     title: "First step",
+    nextStepId: "step-2",
     blocks: [
       {
         id: "id-d662",
@@ -24,6 +25,27 @@ export const steps: StepConfig[] = [
         title: "Name",
         type: "single-line-text-input",
         config: { placeholder: "Your name" },
+      },
+    ],
+  },
+  {
+    id: "step-2",
+    title: "Second step",
+    nextStepId: "",
+    blocks: [
+      {
+        id: "id-d662",
+        title: "Heading",
+        type: "heading",
+        config: {
+          content: "Complete!",
+        },
+      },
+      {
+        id: "id-d73k",
+        title: "Description",
+        type: "body",
+        config: { content: "You reached the last step." },
       },
     ],
   },

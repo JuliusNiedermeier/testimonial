@@ -1,13 +1,7 @@
 import { ComponentProps, FC } from "react";
-import { BlockMap } from "./blocks";
 import { cn } from "@/utils/cn";
 import { Block } from "./blocks/index";
-
-export interface StepConfig {
-  id: string;
-  title: string;
-  blocks: BlockMap[keyof BlockMap][];
-}
+import { StepConfig } from "@/utils/step-builder";
 
 export interface Props extends Omit<ComponentProps<"div">, "children"> {
   config: StepConfig;

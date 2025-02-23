@@ -1,7 +1,8 @@
+import { cn } from "@/utils/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import { ComponentProps, FC } from "react";
 
-const buttonVariants = cva("p-6 text-label", {
+const buttonVariants = cva("p-6 text-label flex items-center gap-4", {
   variants: {
     variant: {
       primary: "bg-foreground-primary text-background-primary",
@@ -16,9 +17,17 @@ const buttonVariants = cva("p-6 text-label", {
 type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonVariants>;
 
-export const Button: FC<ButtonProps> = ({ children, className, variant }) => {
+export const Button: FC<ButtonProps> = ({
+  children,
+  className,
+  variant,
+  ...restProps
+}) => {
   return (
-    <button className={buttonVariants({ className, variant })}>
+    <button
+      className={cn(buttonVariants({ variant }), className)}
+      {...restProps}
+    >
       {children}
     </button>
   );

@@ -2,27 +2,7 @@ import { FC } from "react";
 import { HeadingBlock } from "./heading";
 import { BodyBlock } from "./body";
 import { SingleLineTextInputBlock } from "./single-line-text-input";
-
-interface BlockConfigTypeMap {
-  heading: {
-    content: string;
-  };
-  body: {
-    content: string;
-  };
-  "single-line-text-input": {
-    placeholder: string;
-  };
-}
-
-export type BlockMap = {
-  [Key in keyof BlockConfigTypeMap]: {
-    id: string;
-    title: string;
-    type: Key;
-    config: BlockConfigTypeMap[Key];
-  };
-};
+import { BlockMap } from "@/utils/step-builder";
 
 export const blocks = {
   heading: HeadingBlock,
