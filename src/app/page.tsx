@@ -1,8 +1,19 @@
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+"use client";
+
+import { Button } from "@/components/primitives/button";
+import { Step } from "@/components/step";
+import { steps } from "@/steps";
 import { cn } from "@/utils/cn";
+import { useMemo, useState } from "react";
 
 export default function Home() {
+  const [currentStepId, setCurrentStepId] = useState(steps[0].id);
+
+  const currentStepConfig = useMemo(
+    () => steps.find((step) => step.id === currentStepId),
+    [currentStepId]
+  );
+
   return (
     <div className="flex flex-col p-8 gap-8 h-[100svh]">
       <div className="flex gap-2">
@@ -16,18 +27,9 @@ export default function Home() {
           />
         ))}
       </div>
-      <div className="flex-1">
-        <h1 className="text-heading font-serif">
-          Thank you so much for sharing your feedback with us!
-        </h1>
-        <p className="text-foreground-secondary">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit veniam
-          eveniet iusto minus quis. Odio eius error mollitia explicabo nesciunt
-          animi at possimus ipsa, architecto voluptatem minima ad laboriosam
-          dicta?
-        </p>
-        <Input />
-      </div>
+      {currentStepConfig && (
+        <Step className="flex-1" config={currentStepConfig} />
+      )}
       <Button>Next</Button>
     </div>
   );
