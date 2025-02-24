@@ -1,8 +1,17 @@
 "use client";
 
 import { FC } from "react";
-import { SpaceConfig } from "../space-config";
+import { useForm } from "..";
 
-export const ThankYouStep: FC<SpaceConfig["steps"]["thankYou"]> = (props) => {
-  return <h1 className="font-serif text-heading">{props.heading}</h1>;
+export const ThankYouStep: FC = () => {
+  const { spaceConfig } = useForm();
+
+  return (
+    <div>
+      <h1 className="font-serif text-heading">
+        {spaceConfig?.steps.thankYou.heading}
+      </h1>
+      <p>{spaceConfig?.steps.thankYou.description}</p>
+    </div>
+  );
 };

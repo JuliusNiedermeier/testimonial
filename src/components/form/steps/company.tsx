@@ -2,13 +2,22 @@
 
 import { FC } from "react";
 import { useForm } from "..";
+import { Input } from "@/components/primitives/input";
 
 export const CompanyStep: FC = () => {
   const { spaceConfig } = useForm();
 
   return (
-    <h1 className="font-serif text-heading">
-      {spaceConfig?.steps.company.heading}
-    </h1>
+    <div>
+      <h1 className="text-heading font-serif">
+        {spaceConfig?.steps.company.heading}
+      </h1>
+      <p>{spaceConfig?.steps.company.description}</p>
+      <Input
+        className="w-full mt-4"
+        placeholder={spaceConfig?.steps.company.inputPlaceholder}
+        autoFocus
+      />
+    </div>
   );
 };

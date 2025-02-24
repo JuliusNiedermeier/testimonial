@@ -7,11 +7,20 @@ export const TextFeedbackStep: FC<{ questionIndex: number }> = (props) => {
   const { spaceConfig } = useForm();
 
   return (
-    <h1 className="font-serif text-heading">
-      {
-        spaceConfig?.steps.questionPreview.questions[props.questionIndex]
-          .question
-      }
-    </h1>
+    <div>
+      <h1 className="font-serif text-heading">
+        {
+          spaceConfig?.steps.questionPreview.questions[props.questionIndex]
+            .question
+        }
+      </h1>
+      <textarea
+        className="w-full h-40 mt-10 p-6"
+        placeholder={
+          spaceConfig?.steps.questionPreview.questions[props.questionIndex]
+            .inputPlaceholder
+        }
+      />
+    </div>
   );
 };

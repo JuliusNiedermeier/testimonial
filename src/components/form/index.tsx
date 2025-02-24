@@ -41,7 +41,11 @@ type FormContext = {
 };
 
 const FormContext = createContext<FormContext>({
-  testimonial: { ...defaultTestimonial, setName: () => {} },
+  testimonial: {
+    ...defaultTestimonial,
+    setName: () => {},
+    setFeedbackType: () => {},
+  },
   currentStepIndex: null,
   next: () => {},
   previous: () => {},
@@ -87,34 +91,32 @@ export const Form: FC<FormProps> = ({ spaceConfig, children }) => {
     const steps: Step[] = [
       {
         id: "cover",
-        component: <CoverStep {...spaceConfig.steps.cover} />,
+        component: <CoverStep />,
       },
-      { id: "name", component: <NameStep {...spaceConfig.steps.name} /> },
-      { id: "image", component: <ImageStep {...spaceConfig.steps.image} /> },
+      { id: "name", component: <NameStep /> },
+      { id: "image", component: <ImageStep /> },
       {
         id: "company",
         component: <CompanyStep />,
       },
-      { id: "role", component: <RoleStep {...spaceConfig.steps.role} /> },
+      { id: "role", component: <RoleStep /> },
       {
         id: "consent",
-        component: <ConsentStep {...spaceConfig.steps.consent} />,
+        component: <ConsentStep />,
       },
       {
         id: "feedbackType",
-        component: <FeedbackTypeStep {...spaceConfig.steps.feedbackType} />,
+        component: <FeedbackTypeStep />,
       },
       {
         id: "questionPreview",
-        component: (
-          <QuestionPreviewStep {...spaceConfig.steps.questionPreview} />
-        ),
+        component: <QuestionPreviewStep />,
       },
       ...questionSteps,
-      { id: "rating", component: <RatingStep {...spaceConfig.steps.rating} /> },
+      { id: "rating", component: <RatingStep /> },
       {
         id: "thankYou",
-        component: <ThankYouStep {...spaceConfig.steps.thankYou} />,
+        component: <ThankYouStep />,
       },
     ];
     return steps;

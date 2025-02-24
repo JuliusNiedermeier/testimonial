@@ -1,19 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export interface VideoFeedback {
-  type: "video";
+export interface Feedback {
+  type: "video" | "text";
   answers: {
     question: string;
-    videoUrl: string;
-  }[];
-}
-
-export interface TextFeedback {
-  type: "text";
-  answers: {
-    question: string;
-    content: string;
+    videoUrl?: string;
+    text?: string;
   }[];
 }
 
@@ -23,12 +16,13 @@ export interface Testimonial {
   company: string;
   role: string;
   consent: boolean;
-  feedback: VideoFeedback | TextFeedback;
+  feedback: Feedback;
   rating: number;
 }
 
 export type TestimonialStore = Testimonial & {
   setName: (name: string) => void;
+  setFeedbackType: (type: Feedback["type"]) => void;
 };
 
 export const defaultTestimonial: Testimonial = {
@@ -46,6 +40,9 @@ export const useTestimonial = create<TestimonialStore>()(
     (set, get) => ({
       ...defaultTestimonial,
       setName: (name) => set({ name }),
+      setFeedbackType: (type) => {
+        set({ feedback: { type, answers: get().feedback.answers } });
+      },
     }),
     {
       name: "testimonial",

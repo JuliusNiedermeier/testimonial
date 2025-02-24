@@ -3,8 +3,8 @@ import { SpaceConfig } from "./components/form/space-config";
 export const space: SpaceConfig = {
   steps: {
     cover: {
-      logoImageUrl: "https://example.com",
-      profileImageUrl: "https://example.com",
+      logoImageUrl: "/logo.svg",
+      profileImageUrl: "/profile-image.png",
       heading: "Thank you so much for sharing your feedback with us!",
       description:
         "We greatly appreciate your effort. This helps us immensely to continue givng people like you the great service they deserve.",
