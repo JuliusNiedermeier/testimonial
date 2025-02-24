@@ -1,28 +1,17 @@
-"use client";
-
-import { FormProvider } from "@/components/form-provider";
-import { NavigationButtons } from "@/components/navigation-buttons";
-import { StepCarousel } from "@/components/step-carousel";
-import { cn } from "@/utils/cn";
+import { Form } from "@/components/form";
+import { NavigationButtons } from "@/components/form/navigation-buttons";
+import { ProgressBar } from "@/components/form/progress-bar";
+import { StepCarousel } from "@/components/form/step-carousel";
+import { space } from "@/mock-space";
 
 export default function Home() {
   return (
-    <FormProvider>
+    <Form spaceConfig={space}>
       <div className="flex flex-col p-6 gap-8 h-[100svh]">
-        <div className="flex gap-2">
-          {Array.from(new Array(4)).map((_, index) => (
-            <div
-              key={index}
-              className={cn("h-1 flex-1", {
-                "bg-foreground-primary": index < 1,
-                "bg-foreground-secondary": index >= 1,
-              })}
-            />
-          ))}
-        </div>
+        <ProgressBar />
         <StepCarousel className="flex-1" />
         <NavigationButtons />
       </div>
-    </FormProvider>
+    </Form>
   );
 }
