@@ -8,7 +8,11 @@ export const TextFeedbackStep: FC<{ questionIndex: number }> = (props) => {
 
   return (
     <div>
-      <h1 className="font-serif text-heading">
+      <span className="text-label text-foreground-secondary">
+        {props.questionIndex + 1}/
+        {spaceConfig?.steps.questionPreview.questions.length}
+      </span>
+      <h1 className="text-label mt-4">
         {
           spaceConfig?.steps.questionPreview.questions[props.questionIndex]
             .question
