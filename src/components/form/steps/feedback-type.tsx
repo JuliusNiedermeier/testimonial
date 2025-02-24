@@ -35,7 +35,7 @@ export const FeedbackTypeStep: FC = () => {
           <div className="size-8 rounded-full bg-background-primary grid place-content-center text-foreground-primary">
             {testimonial.feedback.type === "text" && <Check />}
           </div>
-          <span>{spaceConfig?.steps.feedbackType.videoOptionLabel}</span>
+          <span>{spaceConfig?.steps.feedbackType.textOptionLabel}</span>
         </Button>
       </div>
     </div>
