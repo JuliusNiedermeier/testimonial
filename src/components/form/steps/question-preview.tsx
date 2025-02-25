@@ -12,10 +12,10 @@ export const QuestionPreviewStep: FC = () => {
         {spaceConfig?.steps.questionPreview.heading}
       </h1>
       <div className="flex flex-col gap-6 mt-10">
-        {spaceConfig?.steps.questionPreview.questions.map((question, index) => (
-          <div key={index} className="flex gap-6">
+        {spaceConfig?.questions.map((question, index) => (
+          <div key={question.id} className="flex gap-6">
             <span className="text-label">{index + 1}</span>
-            <p>{question.question}</p>
+            <p>{question.content}</p>
           </div>
         ))}
       </div>

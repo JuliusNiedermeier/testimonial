@@ -1,4 +1,4 @@
-import { SpaceConfig } from "./components/form/space-config";
+import { SpaceConfig } from "./utils/space-config";
 
 export const space: SpaceConfig = {
   steps: {
@@ -45,16 +45,6 @@ export const space: SpaceConfig = {
     },
     questionPreview: {
       heading: "We have prepared the following questions for you.",
-      questions: [
-        {
-          question: "How has our service helped you get more Leads?",
-          inputPlaceholder: "Your answer",
-        },
-        {
-          question: "Would you reccommend us to others in the industry?",
-          inputPlaceholder: "Your answer",
-        },
-      ],
       nextButtonlabel: "Next",
     },
     feedbackType: {
@@ -85,4 +75,16 @@ export const space: SpaceConfig = {
       description: "Lorem ipsum.",
     },
   },
+  questions: [
+    {
+      id: "question-1",
+      content: "How has our service helped you get more Leads?",
+      inputPlaceholder: "Your answer",
+    },
+    {
+      id: "question-2",
+      content: "Would you reccommend us to others in the industry?",
+      inputPlaceholder: "Your answer",
+    },
+  ],
 };

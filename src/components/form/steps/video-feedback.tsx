@@ -3,21 +3,22 @@
 import { FC } from "react";
 import { useForm } from "..";
 
-export const VideoFeedbackStep: FC<{ questionIndex: number }> = (props) => {
-  const { spaceConfig } = useForm();
+export const VideoFeedbackStep: FC<{ questionId: string }> = ({
+  questionId,
+}) => {
+  const { spaceConfig, getQuestion } = useForm();
+
+  if (!spaceConfig) return null;
+  
+  const { question, index } = getQuestion(questionId);
+  if (!question) return;
 
   return (
     <div>
       <span className="text-label text-foreground-secondary">
-        {props.questionIndex + 1}/
-        {spaceConfig?.steps.questionPreview.questions.length}
+        {index + 1}/{spaceConfig.questions.length}
       </span>
-      <h1 className="text-label mt-4">
-        {
-          spaceConfig?.steps.questionPreview.questions[props.questionIndex]
-            .question
-        }
-      </h1>
+      <h1 className="text-label mt-4">{question.content}</h1>
       <div className="aspect-square rounded-md bg-foreground-secondary mt-10 grid place-content-center">
         <div className="size-20 bg-background-primary rounded-full grid place-content-center" />
       </div>

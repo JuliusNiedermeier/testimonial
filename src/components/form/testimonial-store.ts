@@ -2,13 +2,17 @@ import { Rating } from "@/utils/local-db";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface Answer {
+  question: string; // Redundantly saved here in case the question is deleted from the spaceConfig in teh future
+  questionIndex: number; // Redundantly saved here, so answers are displayed in the original order, even if questions are reordered in the future
+  lostReference?: boolean;
+  videoUrl?: string;
+  text?: string;
+}
+
 export interface Feedback {
   type: "video" | "text";
-  answers: {
-    question: string;
-    videoUrl?: string;
-    text?: string;
-  }[];
+  answers: Record<string, Answer>;
 }
 
 export interface Testimonial {
@@ -27,7 +31,7 @@ export type TestimonialStore = Testimonial & {
   setRole: (role: string) => void;
   setConsent: (consent: boolean) => void;
   setFeedbackType: (type: Feedback["type"]) => void;
-  setTextFeedback: (feedbackIndex: number, text: string) => void;
+  setTextFeedback: (questionId: string, answer: Answer) => void;
   setRating: (rating: Rating) => void;
 };
 
@@ -37,7 +41,7 @@ export const defaultTestimonial: Testimonial = {
   company: "",
   role: "",
   consent: true,
-  feedback: { type: "video", answers: [] },
+  feedback: { type: "video", answers: {} },
   rating: 5,
 };
 
@@ -52,15 +56,15 @@ export const useTestimonial = create<TestimonialStore>()(
       setFeedbackType: (type) => {
         set({ feedback: { type, answers: get().feedback.answers } });
       },
-      setTextFeedback: (feedbackIndex, text) => {
+      setTextFeedback: (questionId, answer) => {
         const feedback = get().feedback;
         set({
           feedback: {
             type: feedback.type,
-            answers: feedback.answers.toSpliced(feedbackIndex, 1, {
-              ...feedback.answers[feedbackIndex],
-              text,
-            }),
+            answers: {
+              ...feedback.answers,
+              [questionId]: { ...feedback.answers[questionId], ...answer },
+            },
           },
         });
       },

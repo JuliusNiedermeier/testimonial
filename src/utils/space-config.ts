@@ -2,6 +2,12 @@ interface BaseStep {
   nextButtonlabel: string;
 }
 
+export interface QuestionConfig {
+  id: string;
+  content: string;
+  inputPlaceholder: string;
+}
+
 export interface SpaceConfig {
   steps: {
     cover: BaseStep & {
@@ -38,7 +44,6 @@ export interface SpaceConfig {
     };
     questionPreview: BaseStep & {
       heading: string;
-      questions: { question: string; inputPlaceholder: string }[];
     };
     feedbackType: BaseStep & {
       heading: string;
@@ -62,4 +67,5 @@ export interface SpaceConfig {
       description: string;
     };
   };
+  questions: QuestionConfig[];
 }
