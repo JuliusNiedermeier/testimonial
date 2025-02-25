@@ -9,9 +9,11 @@ interface Props {
   params: { spaceId: string };
 }
 
-const Home: FC<Props> = ({ params }) => {
+const Home: FC<Props> = async ({ params }) => {
+  const { spaceId } = await params; // Needs to be awaited since Next version 15
+
   return (
-    <Form spaceId={params.spaceId} spaceConfig={space}>
+    <Form spaceId={spaceId} spaceConfig={space}>
       <div className="flex flex-col p-6 gap-8 h-[100svh]">
         <ProgressBar />
         <StepCarousel className="flex-1" />
