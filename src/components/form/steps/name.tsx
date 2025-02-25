@@ -5,7 +5,7 @@ import { useForm } from "..";
 import { Input } from "@/components/primitives/input";
 
 export const NameStep: FC = () => {
-  const { spaceConfig } = useForm();
+  const { spaceConfig, testimonial } = useForm();
 
   return (
     <div>
@@ -17,6 +17,8 @@ export const NameStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.name.inputPlaceholder}
         autoFocus
+        value={testimonial.name}
+        onInput={(e) => testimonial.setName(e.currentTarget.value)}
       />
     </div>
   );
