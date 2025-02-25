@@ -44,7 +44,12 @@ const FormContext = createContext<FormContext>({
   testimonial: {
     ...defaultTestimonial,
     setName: () => {},
+    setCompany: () => {},
+    setRole: () => {},
+    setConsent: () => {},
     setFeedbackType: () => {},
+    setTextFeedback: () => {},
+    setRating: () => {},
   },
   currentStepIndex: null,
   next: () => {},
@@ -80,11 +85,11 @@ export const Form: FC<FormProps> = ({ spaceConfig, children }) => {
         testimonial.feedback.type === "video"
           ? {
               id: "videoFeedback",
-              component: <VideoFeedbackStep questionIndex={index} />,
+              component: <VideoFeedbackStep key={index} questionIndex={index} />,
             }
           : {
               id: "textFeedback",
-              component: <TextFeedbackStep questionIndex={index} />,
+              component: <TextFeedbackStep key={index} questionIndex={index} />,
             }
       );
 

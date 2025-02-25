@@ -28,6 +28,7 @@ export type TestimonialStore = Testimonial & {
   setRole: (role: string) => void;
   setConsent: (consent: boolean) => void;
   setFeedbackType: (type: Feedback["type"]) => void;
+  setTextFeedback: (feedbackIndex: number, text: string) => void;
   setRating: (rating: Rating) => void;
 };
 
@@ -51,6 +52,18 @@ export const useTestimonial = create<TestimonialStore>()(
       setConsent: (consent) => set({ consent }),
       setFeedbackType: (type) => {
         set({ feedback: { type, answers: get().feedback.answers } });
+      },
+      setTextFeedback: (feedbackIndex, text) => {
+        const feedback = get().feedback;
+        set({
+          feedback: {
+            type: feedback.type,
+            answers: feedback.answers.toSpliced(feedbackIndex, 1, {
+              ...feedback.answers[feedbackIndex],
+              text,
+            }),
+          },
+        });
       },
       setRating: (rating) => set({ rating }),
     }),
