@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { useForm } from "..";
 import { Star } from "@/components/primitives/star";
-import { Rating } from "../testimonial-store";
+import { Rating } from "@/utils/local-db";
 
 export const RatingStep: FC = () => {
   const { spaceConfig, testimonial } = useForm();

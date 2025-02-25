@@ -1,7 +1,6 @@
+import { Rating } from "@/utils/local-db";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-export type Rating = 1 | 2 | 3 | 4 | 5;
 
 export interface Feedback {
   type: "video" | "text";

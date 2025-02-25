@@ -30,6 +30,8 @@ import {
 } from "./testimonial-store";
 import { useFormState } from "./form-store";
 import { clamp } from "motion";
+import { useLiveQuery } from "dexie-react-hooks";
+import { localDb } from "@/utils/local-db";
 
 type FormContext = {
   spaceConfig?: SpaceConfig;
@@ -85,7 +87,9 @@ export const Form: FC<FormProps> = ({ spaceConfig, children }) => {
         testimonial.feedback.type === "video"
           ? {
               id: "videoFeedback",
-              component: <VideoFeedbackStep key={index} questionIndex={index} />,
+              component: (
+                <VideoFeedbackStep key={index} questionIndex={index} />
+              ),
             }
           : {
               id: "textFeedback",
