@@ -67,6 +67,7 @@ export const useForm = () => {
 };
 
 interface FormProps extends PropsWithChildren {
+  spaceId: string;
   spaceConfig: SpaceConfig;
 }
 
@@ -75,7 +76,7 @@ interface Step {
   component: JSX.Element;
 }
 
-export const Form: FC<FormProps> = ({ spaceConfig, children }) => {
+export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
   const testimonial = useTestimonial();
   const formState = useFormState();
 
