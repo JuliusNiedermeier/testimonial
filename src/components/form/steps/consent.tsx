@@ -2,9 +2,10 @@
 
 import { FC } from "react";
 import { useForm } from "..";
+import { Switch } from "@/components/primitives/switch";
 
 export const ConsentStep: FC = () => {
-  const { spaceConfig } = useForm();
+  const { spaceConfig, testimonial } = useForm();
 
   return (
     <div>
@@ -16,9 +17,10 @@ export const ConsentStep: FC = () => {
         <label htmlFor="consent-toggle" className="text-label">
           {spaceConfig?.steps.consent.inputLabel}
         </label>
-        <div className="rounded-full p-1 bg-foreground-primary">
-          <div className="size-8 rounded-full bg-background-secondary ml-8" />
-        </div>
+        <Switch
+          checked={testimonial.consent}
+          onCheckedChange={testimonial.setConsent}
+        />
       </div>
     </div>
   );
