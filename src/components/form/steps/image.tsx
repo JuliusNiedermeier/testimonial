@@ -1,11 +1,20 @@
 "use client";
 
-import { FC } from "react";
+import { ComponentProps, FC, useState } from "react";
 import { useForm } from "..";
 import { Upload } from "lucide-react";
+import Image from "next/image";
 
 export const ImageStep: FC = () => {
   const { spaceConfig } = useForm();
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  const handleFileChange: ComponentProps<"input">["onChange"] = (e) => {
+    const file = e.currentTarget.files?.item(0);
+    if (!file) return;
+    setImageUrl(URL.createObjectURL(file));
+  };
 
   return (
     <div>
@@ -13,9 +22,22 @@ export const ImageStep: FC = () => {
         {spaceConfig?.steps.image.heading}
       </h1>
       <p>{spaceConfig?.steps.image.description}</p>
-      <div className="size-40 rounded-full bg-background-secondary mx-auto my-10 grid place-content-center">
+      <label
+        htmlFor="image-input"
+        className="relative size-40 rounded-full bg-background-secondary mx-auto my-10 grid place-content-center overflow-hidden"
+      >
+        {imageUrl && (
+          <Image src={imageUrl} fill className="object-cover" alt="Avatar" />
+        )}
         <Upload />
-      </div>
+      </label>
+      <input
+        id="image-input"
+        type="file"
+        hidden
+        accept="image/*"
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
