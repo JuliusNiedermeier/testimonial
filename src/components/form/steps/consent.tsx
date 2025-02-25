@@ -18,6 +18,7 @@ export const ConsentStep: FC = () => {
           {spaceConfig?.steps.consent.inputLabel}
         </label>
         <Switch
+          id="consent-toggle"
           checked={testimonial.consent}
           onCheckedChange={testimonial.setConsent}
         />
