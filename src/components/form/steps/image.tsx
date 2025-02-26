@@ -1,19 +1,22 @@
 "use client";
 
-import { ComponentProps, FC, useState } from "react";
+import { ComponentProps, FC, useMemo } from "react";
 import { useForm } from "..";
 import { Upload } from "lucide-react";
 import Image from "next/image";
 
 export const ImageStep: FC = () => {
-  const { spaceConfig } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const avatarUrl = useMemo(() => {
+    if (!testimonial?.avatar) return null;
+    return URL.createObjectURL(testimonial.avatar);
+  }, [testimonial?.avatar]);
 
   const handleFileChange: ComponentProps<"input">["onChange"] = (e) => {
     const file = e.currentTarget.files?.item(0);
     if (!file) return;
-    setImageUrl(URL.createObjectURL(file));
+    updateTestimonial({ avatar: file });
   };
 
   return (
@@ -26,8 +29,8 @@ export const ImageStep: FC = () => {
         htmlFor="image-input"
         className="relative size-40 rounded-full bg-background-secondary mx-auto my-10 grid place-content-center overflow-hidden"
       >
-        {imageUrl && (
-          <Image src={imageUrl} fill className="object-cover" alt="Avatar" />
+        {avatarUrl && (
+          <Image src={avatarUrl} fill className="object-cover" alt="Avatar" />
         )}
         <Upload />
       </label>
