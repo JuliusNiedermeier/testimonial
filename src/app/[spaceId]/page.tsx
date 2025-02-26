@@ -6,7 +6,7 @@ import { space } from "@/mock-space";
 import { FC } from "react";
 
 interface Props {
-  params: { spaceId: string };
+  params: Promise<{ spaceId: string }>;
 }
 
 const Home: FC<Props> = async ({ params }) => {
