@@ -44,6 +44,14 @@ export const localDb = new Dexie("db") as Dexie & {
 
 localDb.version(1).stores({
   testimonials: "spaceId",
+  // Intentionally not using a compound primary key of [testimonialId+questionId] based on the following arguments:
+  // - Compound indexes can only be looked up by the first or both components, not the second alone.
+  // - Didn't find a good way of typing compound primary keys bacause EntityTable<T, K extends keyof T>.
+  // Why this works and is an acceptable tradeoff:
+  // - id can be manually set to "testimonialId:questionId" and used as a pseudo compound primary key.
+  // - Becuase ids should never change in general, this duplication is acceptable.
+  // This way the combination of testimonialId and questionId can be looked up using id,
+  // and both components can also be looked up individually.
   answers: "id, testimonialId, questionId",
   spaces: "id",
 });
