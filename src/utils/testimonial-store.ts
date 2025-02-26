@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Answer, createAnswerId, localDb, Testimonial } from "./local-db";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { SpaceConfig } from "./space-config";
 
 export type TestimonialUpdate = Partial<Omit<Testimonial, "id">>;
@@ -45,7 +45,7 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
     );
 
     return { ...testimonial, answers: Object.fromEntries(answerMap.entries()) };
-  });
+  }, [spaceId]);
 
   // Create empty default testimonial and answers if no testimonial with that spaceId exists on client.
   // This eliminates the need to check for existence first on every update for the testimonial or its answers.
@@ -83,17 +83,23 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
     );
   }, [testimonial]);
 
+  const syncedWithSpaceConfig = useRef(false);
+
   useEffect(() => {
-    if (!testimonial) return;
+    if (!testimonial || syncedWithSpaceConfig.current) return;
 
     // Sync the order of existing answers with the order of questions in the spaceConfig
     Object.keys(testimonial.answers).forEach((questionId) => {
-      const questionConfigIndex = spaceConfig.questions.findIndex(
+      const questionIndexInConfig = spaceConfig.questions.findIndex(
         (question) => question.id === questionId
       );
 
-      if (questionConfigIndex < 0) {
+      if (
+        questionIndexInConfig < 0 &&
+        !testimonial.answers[questionId].lostReference
+      ) {
         // If no matching question to an answer is present in the spaceConfig anymore,
+        // and the answer is not already marked as lost,
         // leave the current index, just mark the answer as lost.
         return update({
           answers: { [questionId]: { lostReference: true } },
@@ -106,12 +112,14 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
         answers: {
           [questionId]: {
             lostReference: false,
-            questionIndex: questionConfigIndex,
-            question: spaceConfig.questions[questionConfigIndex].content,
+            questionIndex: questionIndexInConfig,
+            question: spaceConfig.questions[questionIndexInConfig].content,
           },
         },
       });
     });
+
+    syncedWithSpaceConfig.current = true;
   }, [spaceConfig, testimonial]);
 
   const update = async (update: DenormalizedTestimonialUpdate) => {
