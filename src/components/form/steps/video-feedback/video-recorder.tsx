@@ -71,7 +71,7 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
     const stop = () => recorder.stop();
 
     return { start, stop };
-  }, [stream]);
+  }, [stream, onVideo]);
 
   if (!recorder) return null;
 

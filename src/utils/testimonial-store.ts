@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { Answer, createAnswerId, localDb, Testimonial } from "./local-db";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { SpaceConfig } from "./space-config";
 
 export type TestimonialUpdate = Partial<Omit<Testimonial, "id">>;
@@ -82,9 +82,39 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
           question: question.content,
         }))
     );
-  }, [testimonial]);
+  }, [testimonial, spaceConfig.questions, spaceId]);
 
   const syncedWithSpaceConfig = useRef(false);
+
+  const update = useCallback(
+    async (update: DenormalizedTestimonialUpdate) => {
+      const { answers, ...normalizedUpdate } = update;
+
+      try {
+        await localDb.transaction(
+          "readwrite",
+          [localDb.testimonials, localDb.answers],
+          async () => {
+            await Promise.all([
+              // Update the testimonial
+              localDb.testimonials.update(spaceId, normalizedUpdate),
+              // Update the answers, if any answer updates are present
+              localDb.answers.bulkUpdate(
+                Object.keys(answers || {}).map((questionId) => ({
+                  key: createAnswerId(spaceId, questionId),
+                  changes: answers![questionId],
+                }))
+              ),
+            ]);
+          }
+        );
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [spaceId]
+  );
 
   useEffect(() => {
     if (!testimonial || syncedWithSpaceConfig.current) return;
@@ -121,34 +151,7 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
     });
 
     syncedWithSpaceConfig.current = true;
-  }, [spaceConfig, testimonial]);
-
-  const update = async (update: DenormalizedTestimonialUpdate) => {
-    const { answers, ...normalizedUpdate } = update;
-
-    try {
-      await localDb.transaction(
-        "readwrite",
-        [localDb.testimonials, localDb.answers],
-        async () => {
-          await Promise.all([
-            // Update the testimonial
-            localDb.testimonials.update(spaceId, normalizedUpdate),
-            // Update the answers, if any answer updates are present
-            localDb.answers.bulkUpdate(
-              Object.keys(answers || {}).map((questionId) => ({
-                key: createAnswerId(spaceId, questionId),
-                changes: answers![questionId],
-              }))
-            ),
-          ]);
-        }
-      );
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  }, [spaceConfig, testimonial, update]);
 
   return { testimonial, update };
 };

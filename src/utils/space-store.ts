@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { localDb, Space } from "./local-db";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { clamp } from "motion";
 
 export type SpaceUpdate = Partial<Omit<Space, "id">>;
@@ -12,6 +12,25 @@ export const useSpace = (spaceId: string, stepCount: number) => {
     async () => (await localDb.spaces.get(spaceId)) || null
   );
 
+  const update = useCallback(
+    (update: SpaceUpdate) => {
+      localDb.spaces.update(
+        spaceId,
+        update.currentStepIndex !== undefined
+          ? {
+              ...update,
+              currentStepIndex: clamp(
+                0,
+                stepCount - 1,
+                update.currentStepIndex
+              ),
+            }
+          : update
+      );
+    },
+    [spaceId, stepCount]
+  );
+
   // Initialize new space if no space with that spaceId exists on client.
   useEffect(() => {
     if (space === null) {
@@ -20,7 +39,7 @@ export const useSpace = (spaceId: string, stepCount: number) => {
         currentStepIndex: 0,
       });
     }
-  }, [space]);
+  }, [space, spaceId]);
 
   // Jump to first step after completion
   useEffect(() => {
@@ -31,19 +50,7 @@ export const useSpace = (spaceId: string, stepCount: number) => {
     }
 
     initialized.current = true;
-  }, [space]);
-
-  const update = (update: SpaceUpdate) => {
-    localDb.spaces.update(
-      spaceId,
-      update.currentStepIndex !== undefined
-        ? {
-            ...update,
-            currentStepIndex: clamp(0, stepCount - 1, update.currentStepIndex),
-          }
-        : update
-    );
-  };
+  }, [space, stepCount, update]);
 
   return { space, update };
 };

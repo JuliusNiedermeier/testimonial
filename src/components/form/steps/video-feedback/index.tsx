@@ -16,14 +16,10 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
 }) => {
   const { spaceConfig, testimonial, updateTestimonial, getQuestion } =
     useForm();
-  if (!spaceConfig) return null;
-
-  const { question, index } = getQuestion(questionId);
-  if (!question) return null;
-
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const recordedVideo = testimonial?.answers[questionId].video;
+
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const recorder = useRecorder({
     enabled: !recordedVideo,
@@ -31,12 +27,6 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
       updateTestimonial({ answers: { [questionId]: { video } } });
     },
   });
-
-  const handleRecordControlClick = () => {
-    if (recordedVideo) {
-      updateTestimonial({ answers: { [questionId]: { video: undefined } } });
-    } else recorder?.recording ? recorder?.stop() : recorder?.start();
-  };
 
   // Handle switching video source between recorded video and live stream
   useEffect(() => {
@@ -50,10 +40,21 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     }
   }, [recorder?.stream, recordedVideo, recorder?.recording]);
 
+  const handleRecordControlClick = () => {
+    if (recordedVideo) {
+      updateTestimonial({ answers: { [questionId]: { video: undefined } } });
+    } else if (recorder?.recording) recorder?.stop();
+    else recorder?.start();
+  };
+
+  const { question, index: questionIndex } = getQuestion(questionId);
+
+  if (!spaceConfig || !question) return null;
+
   return (
     <div>
       <span className="text-label text-foreground-secondary">
-        {index + 1}/{spaceConfig.questions.length}
+        {questionIndex + 1}/{spaceConfig.questions.length}
       </span>
       <h1 className="text-label mt-4">{question.content}</h1>
       <div className="aspect-square relative rounded-md bg-background-secondary mt-10 grid overflow-hidden">
