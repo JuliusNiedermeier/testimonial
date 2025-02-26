@@ -5,7 +5,7 @@ export type Rating = 1 | 2 | 3 | 4 | 5;
 export type FeedbackType = "video" | "text";
 
 export interface Testimonial {
-  id: string;
+  spaceId: string;
   name?: string;
   avatar?: Blob;
   company?: string;
@@ -37,13 +37,13 @@ export const createAnswerId = (testimonialId: string, questionId: string) => {
 };
 
 export const localDb = new Dexie("db") as Dexie & {
-  testimonials: EntityTable<Testimonial, "id">;
+  testimonials: EntityTable<Testimonial, "spaceId">;
   answers: EntityTable<Answer, "id">;
   spaces: EntityTable<Space, "id">;
 };
 
 localDb.version(1).stores({
-  testimonials: "id",
+  testimonials: "spaceId",
   answers: "id, testimonialId, questionId",
   spaces: "id",
 });

@@ -22,7 +22,7 @@ export interface DenormalizedTestimonialUpdate extends TestimonialUpdate {
   answers?: Record<string, AnswerUpdate>;
 }
 
-export const defaultTestimonialValues: Omit<Testimonial, "id"> = {
+export const defaultTestimonialValues: Omit<Testimonial, "spaceId"> = {
   consent: true,
   feedbackType: "video",
   rating: 5,
@@ -52,7 +52,7 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
   useEffect(() => {
     if (testimonial === null) {
       localDb.testimonials.add({
-        id: spaceId,
+        spaceId,
         ...defaultTestimonialValues,
       });
     }
