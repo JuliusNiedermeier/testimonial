@@ -83,6 +83,37 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
     );
   }, [testimonial]);
 
+  useEffect(() => {
+    if (!testimonial) return;
+
+    // Sync the order of existing answers with the order of questions in the spaceConfig
+    Object.keys(testimonial.answers).forEach((questionId) => {
+      const questionConfigIndex = spaceConfig.questions.findIndex(
+        (question) => question.id === questionId
+      );
+
+      if (questionConfigIndex < 0) {
+        // If no matching question to an answer is present in the spaceConfig anymore,
+        // leave the current index, just mark the answer as lost.
+        return update({
+          answers: { [questionId]: { lostReference: true } },
+        });
+      }
+
+      // If a matching question to an answer is present in the spaceConfig,
+      // update it with the current question and questionIndex,
+      update({
+        answers: {
+          [questionId]: {
+            lostReference: false,
+            questionIndex: questionConfigIndex,
+            question: spaceConfig.questions[questionConfigIndex].content,
+          },
+        },
+      });
+    });
+  }, [spaceConfig, testimonial]);
+
   const update = async (update: DenormalizedTestimonialUpdate) => {
     const { answers, ...normalizedUpdate } = update;
 

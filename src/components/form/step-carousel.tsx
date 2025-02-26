@@ -10,13 +10,16 @@ export const StepCarousel: FC<StepCarouselProps> = ({
   className,
   ...restProps
 }) => {
-  const { steps, currentStepIndex } = useForm();
+  const { steps, space } = useForm();
+  if (space?.currentStepIndex === undefined) return;
+
   return (
     <div
       className={cn("flex-1 flex flex-col justify-end", className)}
       {...restProps}
     >
-      {currentStepIndex !== null && steps[currentStepIndex]?.component}
+      {typeof space.currentStepIndex === "number" &&
+        steps[space.currentStepIndex].component}
     </div>
   );
 };

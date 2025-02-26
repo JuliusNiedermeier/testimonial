@@ -27,6 +27,11 @@ export interface Answer {
   video?: Blob;
 }
 
+export interface Space {
+  id: string;
+  currentStepIndex: number;
+}
+
 export const createAnswerId = (testimonialId: string, questionId: string) => {
   return `${testimonialId}:${questionId}`;
 };
@@ -34,10 +39,12 @@ export const createAnswerId = (testimonialId: string, questionId: string) => {
 export const localDb = new Dexie("db") as Dexie & {
   testimonials: EntityTable<Testimonial, "id">;
   answers: EntityTable<Answer, "id">;
+  spaces: EntityTable<Space, "id">;
 };
 
 localDb.version(1).stores({
   testimonials: "id, name, image, company, role, consent, feedbackType, rating",
   answers:
     "id, testimonialId, questionId, lostReference, questionIndex, question, type, video, text",
+  spaces: "id, currentStepIndex",
 });

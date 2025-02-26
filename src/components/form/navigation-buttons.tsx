@@ -12,7 +12,11 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
   className,
   ...restProps
 }) => {
-  const { currentStepIndex, next, previous, steps, spaceConfig } = useForm();
+  const { steps, spaceConfig, space, navigate } = useForm();
+
+  const currentStepIndex = space?.currentStepIndex;
+
+  if (currentStepIndex === undefined) return null;
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
@@ -28,11 +32,15 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
   return (
     <div className={cn("flex gap-4", className)} {...restProps}>
       {!isFirstStep && !isLastStep && (
-        <Button variant="secondary" onClick={previous}>
+        <Button variant="secondary" onClick={() => navigate("back")}>
           <ChevronLeft />
         </Button>
       )}
-      <Button variant="primary" className="flex-1" onClick={next}>
+      <Button
+        variant="primary"
+        className="flex-1"
+        onClick={() => navigate("forward")}
+      >
         {isLastStep ? (
           <CheckCircle />
         ) : (

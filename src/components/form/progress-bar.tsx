@@ -11,7 +11,10 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   className,
   ...restProps
 }) => {
-  const { steps, currentStepIndex } = useForm();
+  const { steps, space } = useForm();
+
+  const currentStepIndex = space?.currentStepIndex;
+
   return (
     <div className={cn("flex gap-2", className)} {...restProps}>
       {steps.map((step, index) => (
@@ -19,9 +22,9 @@ export const ProgressBar: FC<ProgressBarProps> = ({
           key={index}
           className={cn("h-1 flex-1", {
             "bg-foreground-primary":
-              currentStepIndex !== null && index <= currentStepIndex,
+              currentStepIndex !== undefined && index <= currentStepIndex,
             "bg-foreground-secondary":
-              currentStepIndex === null || index > currentStepIndex,
+              currentStepIndex === undefined || index > currentStepIndex,
           })}
         />
       ))}
