@@ -38,6 +38,7 @@ export const useTestimonial = (spaceId: string, spaceConfig: SpaceConfig) => {
     if (!testimonial) return null;
 
     const answerMap = answers.reduce(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (answerMap, { id, testimonialId, questionId, ...answer }) => {
         return answerMap.set(questionId, answer);
       },

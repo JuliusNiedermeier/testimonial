@@ -4,8 +4,7 @@ import { cn } from "@/utils/cn";
 import { ComponentProps, FC } from "react";
 import { useForm } from ".";
 
-export interface ProgressBarProps
-  extends Omit<ComponentProps<"div">, "children"> {}
+export type ProgressBarProps = Omit<ComponentProps<"div">, "children">;
 
 export const ProgressBar: FC<ProgressBarProps> = ({
   className,
