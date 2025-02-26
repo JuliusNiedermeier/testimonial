@@ -43,8 +43,7 @@ export const localDb = new Dexie("db") as Dexie & {
 };
 
 localDb.version(1).stores({
-  testimonials: "id, name, image, company, role, consent, feedbackType, rating",
-  answers:
-    "id, testimonialId, questionId, lostReference, questionIndex, question, type, video, text",
-  spaces: "id, currentStepIndex",
+  testimonials: "id",
+  answers: "id, testimonialId, questionId",
+  spaces: "id",
 });
