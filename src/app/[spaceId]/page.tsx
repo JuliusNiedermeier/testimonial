@@ -14,7 +14,7 @@ const Home: FC<Props> = async ({ params }) => {
 
   return (
     <Form spaceId={spaceId} spaceConfig={space}>
-      <div className="flex flex-col p-6 gap-8 h-[100svh]">
+      <div className="flex flex-col p-6 gap-8 h-[100svh] max-w-[40rem] mx-auto">
         <ProgressBar />
         <StepCarousel className="flex-1" />
         <NavigationButtons />
