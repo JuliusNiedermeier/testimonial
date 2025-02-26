@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps, FC, useEffect } from "react";
+import { ComponentProps, FC } from "react";
 import { cn } from "@/utils/cn";
 import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../primitives/button";
