@@ -4,9 +4,10 @@ import { FC } from "react";
 import { useForm } from "..";
 import { Star } from "@/components/primitives/star";
 import { Rating } from "@/utils/local-db";
+import { defaultTestimonialValues } from "@/utils/testimonial-store";
 
 export const RatingStep: FC = () => {
-  const { spaceConfig, testimonial } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
@@ -19,8 +20,12 @@ export const RatingStep: FC = () => {
           <Star
             key={rating}
             className="size-10"
-            variant={testimonial.rating >= rating ? "filled" : "outline"}
-            onClick={() => testimonial.setRating(rating)}
+            variant={
+              (testimonial?.rating || defaultTestimonialValues.rating) >= rating
+                ? "filled"
+                : "outline"
+            }
+            onClick={() => updateTestimonial({ rating })}
           />
         ))}
       </div>

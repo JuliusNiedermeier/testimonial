@@ -6,7 +6,8 @@ import { useForm } from "..";
 export const TextFeedbackStep: FC<{ questionId: string }> = ({
   questionId,
 }) => {
-  const { spaceConfig, testimonial, getQuestion } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial, getQuestion } =
+    useForm();
 
   if (!spaceConfig) return null;
 
@@ -23,12 +24,16 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
         className="w-full h-40 mt-10 p-6"
         placeholder={question.inputPlaceholder}
         autoFocus
-        value={testimonial.feedback.answers[questionId]?.text || ""}
+        value={testimonial?.answers[questionId]?.text || ""}
         onInput={(e) =>
-          testimonial.setTextFeedback(questionId, {
-            question: question.content,
-            questionIndex: index,
-            text: e.currentTarget.value,
+          updateTestimonial({
+            answers: {
+              [questionId]: {
+                question: question.content,
+                questionIndex: index,
+                text: e.currentTarget.value,
+              },
+            },
           })
         }
       />

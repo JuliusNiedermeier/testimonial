@@ -5,7 +5,7 @@ import { useForm } from "..";
 import { Input } from "@/components/primitives/input";
 
 export const RoleStep: FC = () => {
-  const { spaceConfig, testimonial } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
@@ -17,8 +17,8 @@ export const RoleStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.role.inputPlaceholder}
         autoFocus
-        value={testimonial.role}
-        onInput={(e) => testimonial.setRole(e.currentTarget.value)}
+        value={testimonial?.role || ""}
+        onInput={(e) => updateTestimonial({ role: e.currentTarget.value })}
       />
     </div>
   );

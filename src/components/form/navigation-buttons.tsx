@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC, useEffect } from "react";
 import { cn } from "@/utils/cn";
 import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../primitives/button";
@@ -18,7 +18,7 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
   const isLastStep = currentStepIndex === steps.length - 1;
 
   const currentStepId =
-    currentStepIndex === null ? null : steps[currentStepIndex].id;
+    currentStepIndex === null ? null : steps[currentStepIndex]?.id;
 
   const nextButtonLabel =
     currentStepId !== "thankYou" && currentStepId

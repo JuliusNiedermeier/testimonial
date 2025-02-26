@@ -23,13 +23,9 @@ import { VideoFeedbackStep } from "./steps/video-feedback";
 import { TextFeedbackStep } from "./steps/text-feedback";
 import { RatingStep } from "./steps/rating";
 import { ThankYouStep } from "./steps/thank-you";
-import {
-  defaultTestimonial,
-  TestimonialStore,
-  useTestimonial,
-} from "./testimonial-store";
 import { useFormState } from "./form-store";
 import { clamp } from "motion";
+import { useTestimonial } from "@/utils/testimonial-store";
 
 type GetQuestionSuccessResult = { question: QuestionConfig; index: number };
 type GetQuestionErrorResult = { question: null; index: null };
@@ -42,25 +38,18 @@ type FormContext = {
   next: () => void;
   previous: () => void;
   steps: Step[];
-  testimonial: TestimonialStore;
+  testimonial: ReturnType<typeof useTestimonial>["testimonial"];
+  updateTestimonial: ReturnType<typeof useTestimonial>["update"];
 };
 
 const FormContext = createContext<FormContext>({
-  testimonial: {
-    ...defaultTestimonial,
-    setName: () => {},
-    setCompany: () => {},
-    setRole: () => {},
-    setConsent: () => {},
-    setFeedbackType: () => {},
-    setTextFeedback: () => {},
-    setRating: () => {},
-  },
-  getQuestion: () => ({ question: null, index: null }),
   currentStepIndex: null,
+  getQuestion: () => ({ question: null, index: null }),
   next: () => {},
   previous: () => {},
   steps: [],
+  testimonial: undefined,
+  updateTestimonial: async () => false,
 });
 
 export const useForm = () => {
@@ -81,14 +70,19 @@ interface Step {
 }
 
 export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
-  const testimonial = useTestimonial();
+  const { testimonial, update: updateTestimonial } = useTestimonial(
+    spaceId,
+    spaceConfig
+  );
   const formState = useFormState();
 
   const initialized = useRef(false);
 
   const steps = useMemo<Step[]>(() => {
+    if (!testimonial) return [];
+
     const questionSteps: Step[] = spaceConfig.questions.map((question) =>
-      testimonial.feedback.type === "video"
+      testimonial.feedbackType === "video"
         ? {
             id: "videoFeedback",
             component: (
@@ -135,7 +129,38 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
       },
     ];
     return steps;
-  }, [spaceConfig, testimonial.feedback.type]);
+  }, [spaceConfig, testimonial]);
+
+  useEffect(() => {
+    if (!testimonial) return;
+
+    // Sync the order of existing answers with the order of questions in the spaceConfig
+    Object.keys(testimonial.answers).forEach((questionId) => {
+      const questionConfigIndex = spaceConfig.questions.findIndex(
+        (question) => question.id === questionId
+      );
+
+      if (questionConfigIndex < 0) {
+        // If no matching question to an answer is present in the spaceConfig anymore,
+        // leave the current index, just mark the answer as lost.
+        return updateTestimonial({
+          answers: { [questionId]: { lostReference: true } },
+        });
+      }
+
+      // If a matching question to an answer is present in the spaceConfig,
+      // update it with the current question and questionIndex,
+      updateTestimonial({
+        answers: {
+          [questionId]: {
+            lostReference: false,
+            questionIndex: questionConfigIndex,
+            question: spaceConfig.questions[questionConfigIndex].content,
+          },
+        },
+      });
+    });
+  }, [spaceConfig, testimonial, updateTestimonial]);
 
   useEffect(() => {
     // Return early, if the form is already initialized or the formState has not been hydrated yet.
@@ -150,35 +175,8 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
       return formState.setCurrentStepIndex(0);
     }
 
-    // Sync the order of existing answers with the order of questions in the spaceConfig
-    Object.keys(testimonial.feedback.answers).forEach((questionId, index) => {
-      const questionConfigIndex = spaceConfig.questions.findIndex(
-        (question) => question.id === questionId
-      );
-
-      const answer = testimonial.feedback.answers[questionId];
-
-      if (questionConfigIndex < 0) {
-        // If no matching question to an answer is present in the spaceConfig anymore,
-        // leave the current index, just mark the answer as lost.
-        return testimonial.setTextFeedback(questionId, {
-          ...answer,
-          lostReference: true,
-        });
-      }
-
-      // If a matching question to an answer is present in the spaceConfig,
-      // update it with the current question and questionIndex,
-      testimonial.setTextFeedback(questionId, {
-        ...answer,
-        lostReference: false,
-        questionIndex: questionConfigIndex,
-        question: spaceConfig.questions[questionConfigIndex].content,
-      });
-    });
-
     initialized.current = true;
-  }, [formState, steps, testimonial, spaceConfig]);
+  }, [formState, steps]);
 
   const next = () => {
     if (formState.currentStepIndex === null) return;
@@ -210,6 +208,7 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
     <FormContext.Provider
       value={{
         testimonial,
+        updateTestimonial,
         currentStepIndex: formState.currentStepIndex,
         next,
         previous,

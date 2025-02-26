@@ -3,9 +3,10 @@
 import { FC } from "react";
 import { useForm } from "..";
 import { Switch } from "@/components/primitives/switch";
+import { defaultTestimonialValues } from "@/utils/testimonial-store";
 
 export const ConsentStep: FC = () => {
-  const { spaceConfig, testimonial } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
@@ -19,8 +20,8 @@ export const ConsentStep: FC = () => {
         </label>
         <Switch
           id="consent-toggle"
-          checked={testimonial.consent}
-          onCheckedChange={testimonial.setConsent}
+          checked={testimonial?.consent ?? defaultTestimonialValues.consent}
+          onCheckedChange={(consent) => updateTestimonial({ consent })}
         />
       </div>
     </div>

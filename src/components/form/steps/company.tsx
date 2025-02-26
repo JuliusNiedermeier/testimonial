@@ -5,7 +5,7 @@ import { useForm } from "..";
 import { Input } from "@/components/primitives/input";
 
 export const CompanyStep: FC = () => {
-  const { spaceConfig, testimonial } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
@@ -17,8 +17,8 @@ export const CompanyStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.company.inputPlaceholder}
         autoFocus
-        value={testimonial.company}
-        onInput={(e) => testimonial.setCompany(e.currentTarget.value)}
+        value={testimonial?.company || ""}
+        onInput={(e) => updateTestimonial({ company: e.currentTarget.value })}
       />
     </div>
   );

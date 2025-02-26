@@ -4,9 +4,13 @@ import { FC } from "react";
 import { useForm } from "..";
 import { Button } from "@/components/primitives/button";
 import { Check } from "lucide-react";
+import { defaultTestimonialValues } from "@/utils/testimonial-store";
 
 export const FeedbackTypeStep: FC = () => {
-  const { spaceConfig, testimonial } = useForm();
+  const { spaceConfig, testimonial, updateTestimonial } = useForm();
+
+  const feedbackType =
+    testimonial?.feedbackType || defaultTestimonialValues.feedbackType;
 
   return (
     <div>
@@ -16,24 +20,20 @@ export const FeedbackTypeStep: FC = () => {
       <p>{spaceConfig?.steps.feedbackType.description}</p>
       <div className="flex flex-col gap-2 mt-10">
         <Button
-          onClick={() => testimonial.setFeedbackType("video")}
-          variant={
-            testimonial.feedback.type === "video" ? "primary" : "secondary"
-          }
+          onClick={() => updateTestimonial({ feedbackType: "video" })}
+          variant={feedbackType === "video" ? "primary" : "secondary"}
         >
           <div className="size-8 rounded-full bg-background-primary grid place-content-center text-foreground-primary">
-            {testimonial.feedback.type === "video" && <Check />}
+            {feedbackType === "video" && <Check />}
           </div>
           <span>{spaceConfig?.steps.feedbackType.videoOptionLabel}</span>
         </Button>
         <Button
-          variant={
-            testimonial.feedback.type === "text" ? "primary" : "secondary"
-          }
-          onClick={() => testimonial.setFeedbackType("text")}
+          variant={feedbackType === "text" ? "primary" : "secondary"}
+          onClick={() => updateTestimonial({ feedbackType: "text" })}
         >
           <div className="size-8 rounded-full bg-background-primary grid place-content-center text-foreground-primary">
-            {testimonial.feedback.type === "text" && <Check />}
+            {feedbackType === "text" && <Check />}
           </div>
           <span>{spaceConfig?.steps.feedbackType.textOptionLabel}</span>
         </Button>
