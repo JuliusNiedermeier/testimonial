@@ -19,8 +19,6 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
 
   const recordedVideo = testimonial?.answers[questionId].video;
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   const recorder = useRecorder({
     enabled: !recordedVideo,
     onVideo: (video) => {
@@ -28,17 +26,21 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     },
   });
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   // Handle switching video source between recorded video and live stream
   useEffect(() => {
     if (!videoRef.current) return;
     if (recordedVideo) {
+      const objectUrl = URL.createObjectURL(recordedVideo);
       videoRef.current.srcObject = null;
-      videoRef.current.src = URL.createObjectURL(recordedVideo);
+      videoRef.current.src = objectUrl;
+      return () => URL.revokeObjectURL(objectUrl);
     } else {
       videoRef.current.src = "";
       videoRef.current.srcObject = recorder?.stream || null;
     }
-  }, [recorder?.stream, recordedVideo, recorder?.recording]);
+  }, [recorder?.stream, recordedVideo]);
 
   const handleRecordControlClick = () => {
     if (recordedVideo) {
