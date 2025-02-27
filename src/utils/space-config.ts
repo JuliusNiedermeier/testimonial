@@ -55,7 +55,7 @@ export interface SpaceConfig {
       recordLabel: string;
       stopLabel: string;
       playLabel: string;
-      rerecordLabel: string;
+      discardLabel: string;
     };
     textFeedback: BaseStep & {};
     rating: BaseStep & {

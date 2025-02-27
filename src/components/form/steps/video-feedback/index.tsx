@@ -1,9 +1,19 @@
 "use client";
 
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ComponentProps,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "../..";
 import { useRecorder } from "./video-recorder";
 import { cn } from "@/utils/cn";
+import { RecordToggle, RecordToggleState } from "./record-toggle";
+import { Button } from "@/components/primitives/button";
 
 const formatDuration = (durationInSeconds: number) => {
   const minutes = String(Math.floor(durationInSeconds / 60)).padStart(2, "0");
@@ -29,6 +39,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [duration, setDuration] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
 
   const formattedDuration = useMemo(() => formatDuration(duration), [duration]);
 
@@ -61,11 +72,6 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
   }, [recorder?.recording]);
 
   const handleRecordClick = useCallback(() => {
-    if (recordedVideo) {
-      updateTestimonial({ answers: { [questionId]: { video: undefined } } });
-      return;
-    }
-
     if (!recorder) return;
     if (!recorder.recording) return recorder.start();
 
@@ -73,12 +79,36 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
       recorder.stop();
       return setDuration(0);
     }
-  }, [recordedVideo, questionId, recorder?.start, recorder?.stop]);
+  }, [recorder?.start, recorder?.stop]);
+
+  const discardVideo = useCallback(() => {
+    updateTestimonial({ answers: { [questionId]: { video: undefined } } });
+  }, [updateTestimonial, questionId]);
+
+  const handleVideoTimeUpdate = useCallback<
+    NonNullable<ComponentProps<"video">["onTimeUpdate"]>
+  >((e) => {
+    if (!recordedVideo) return;
+    setVideoProgress(e.currentTarget.currentTime / e.currentTarget.duration);
+  }, []);
 
   const { question, index: questionIndex } = useMemo(
     () => getQuestion(questionId),
     [getQuestion, questionId]
   );
+
+  const recordState = useMemo<RecordToggleState>(() => {
+    if (recordedVideo) return "disabled";
+    if (!recorder) return "loading";
+    if (recorder.recording) return "recording";
+    return "idle";
+  }, [recordedVideo, recorder]);
+
+  const handleVideoOverlayClick = useCallback(() => {
+    if (!videoRef.current || recordState !== "disabled") return;
+    if (videoRef.current.paused) videoRef.current.play();
+    else videoRef.current.pause();
+  }, [recordState]);
 
   if (!spaceConfig || !question) return null;
 
@@ -95,40 +125,40 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
             controls={false}
             muted={!recordedVideo}
             autoPlay={!recordedVideo}
+            onTimeUpdate={handleVideoTimeUpdate}
             playsInline
             className="w-full h-full object-cover -scale-x-100"
           />
-          <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4 pointer-events-none">
-            <button
-              className={cn(
-                "size-20 rounded-full border-[3px] border-background-primary grid place-items-center transition-colors pointer-events-auto",
-                {
-                  "bg-[red]": recorder?.recording,
-                  "h-14 w-36": recordedVideo,
-                }
-              )}
-              onClick={handleRecordClick}
-            >
-              {recordedVideo ? (
-                <span className="text-background-secondary">Rerecord</span>
-              ) : (
+          <div
+            className="absolute top-0 left-0 h-full w-full flex flex-col items-center justify-end p-4 gap-4"
+            onClick={handleVideoOverlayClick}
+          >
+            {recordState !== "disabled" && (
+              <>
+                <RecordToggle state={recordState} onClick={handleRecordClick} />
                 <div
-                  className={cn("size-6 bg-background-primary transition-all", {
-                    "rounded-full": !recorder?.recording,
-                    "rounded-md": recorder?.recording,
+                  className={cn("rounded-full py-1 px-2", {
+                    "bg-background-primary": !recorder?.recording,
+                    "bg-[red] text-background-secondary": recorder?.recording,
                   })}
-                />
-              )}
-            </button>
-            {!recordedVideo && (
-              <div
-                className={cn("rounded-full py-1 px-2", {
-                  "bg-background-primary": !recorder?.recording,
-                  "bg-[red] text-background-secondary": recorder?.recording,
-                })}
-              >
-                {formattedDuration}
-              </div>
+                >
+                  {formattedDuration}
+                </div>
+              </>
+            )}
+
+            {recordState === "disabled" && (
+              <>
+                <Button onClick={discardVideo}>
+                  {spaceConfig.steps.videoFeedback.discardLabel}
+                </Button>
+                <div className="h-1 w-full bg-[hsl(0deg_0%_100%/50%)]">
+                  <div
+                    className="h-full bg-background-secondary transition-[width] duration-[250ms] ease-linear"
+                    style={{ width: `${videoProgress * 100}%` }}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

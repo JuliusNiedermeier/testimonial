@@ -58,7 +58,7 @@ export const space: SpaceConfig = {
       recordLabel: "Record",
       stopLabel: "Stop",
       playLabel: "Watch",
-      rerecordLabel: "Record again",
+      discardLabel: "Discard video",
       nextButtonlabel: "Next",
     },
     textFeedback: {
