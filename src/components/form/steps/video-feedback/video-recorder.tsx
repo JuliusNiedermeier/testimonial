@@ -5,6 +5,10 @@ export interface UseRecorderConfig {
   onVideo: (video: Blob) => void;
 }
 
+const closeStream = (stream: MediaStream) => {
+  stream.getTracks().forEach((track) => track.stop());
+};
+
 export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [recording, setRecording] = useState(false);
@@ -12,7 +16,7 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null); // Ref to store interval ID
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return setStream(null);
 
     if (!window.navigator.mediaDevices) {
       return console.warn(
@@ -20,6 +24,7 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
       );
     }
 
+    let isMounted = true;
     let internalStream: MediaStream | null = null;
 
     window.navigator.mediaDevices
@@ -27,10 +32,14 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
         video: { facingMode: "user" },
         audio: true,
       })
-      .then((stream) => setStream((internalStream = stream)));
+      .then((stream) => {
+        if (!isMounted) return closeStream(stream);
+        setStream((internalStream = stream));
+      });
 
     return () => {
-      internalStream?.getTracks().forEach((track) => track.stop());
+      isMounted = false;
+      if (internalStream) closeStream(internalStream);
     };
   }, [enabled]);
 
