@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface UseRecorderConfig {
   enabled: boolean;
@@ -10,13 +10,12 @@ const closeStream = (stream: MediaStream) => {
 };
 
 export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
   const [recording, setRecording] = useState(false);
-  const [duration, setDuration] = useState(0); // Track recording duration
-  const intervalRef = useRef<NodeJS.Timeout | null>(null); // Ref to store interval ID
+  const recordedChunks = useRef<Blob[]>([]);
 
   useEffect(() => {
-    if (!enabled) return setStream(null);
+    if (!enabled) return;
 
     if (!window.navigator.mediaDevices) {
       return console.warn(
@@ -24,8 +23,14 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
       );
     }
 
-    let isMounted = true;
-    let internalStream: MediaStream | null = null;
+    let internalRecorderReference: MediaRecorder | null = null;
+
+    const abortController = new AbortController();
+    abortController.signal.addEventListener("abort", () => {
+      if (internalRecorderReference) {
+        closeStream(internalRecorderReference.stream);
+      }
+    });
 
     window.navigator.mediaDevices
       .getUserMedia({
@@ -33,62 +38,55 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
         audio: true,
       })
       .then((stream) => {
-        if (!isMounted) return closeStream(stream);
-        setStream((internalStream = stream));
+        if (abortController.signal.aborted) return closeStream(stream);
+
+        const recorder = new MediaRecorder(stream);
+        internalRecorderReference = recorder;
+        setRecorder(recorder);
+
+        recorder.addEventListener(
+          "dataavailable",
+          ({ data }) => {
+            if (data.size) recordedChunks.current.push(data);
+          },
+          { signal: abortController.signal }
+        );
+
+        recorder.addEventListener("start", () => setRecording(true), {
+          signal: abortController.signal,
+        });
       });
 
     return () => {
-      isMounted = false;
-      if (internalStream) closeStream(internalStream);
+      abortController.abort();
+      setRecorder(null);
     };
   }, [enabled]);
 
-  const recorder = useMemo(() => {
-    if (!stream) return null;
+  useEffect(() => {
+    if (!recorder) return;
 
-    let recordedChunks: Blob[] = [];
+    const abortController = new AbortController();
 
-    const recorder = new MediaRecorder(stream);
+    recorder.addEventListener(
+      "stop",
+      () => {
+        onVideo?.(new Blob(recordedChunks.current, { type: "video/webm" }));
+        recordedChunks.current = [];
+        setRecording(false);
+      },
+      { signal: abortController.signal }
+    );
 
-    recorder.ondataavailable = (e) => {
-      if (e.data.size) recordedChunks.push(e.data);
-    };
-
-    recorder.onstart = () => {
-      setRecording(true);
-      setDuration(0); // Reset duration when recording starts
-
-      // Start timer
-      intervalRef.current = setInterval(() => {
-        setDuration((prev) => prev + 1);
-      }, 1000);
-    };
-
-    recorder.onstop = () => {
-      setRecording(false);
-      onVideo?.(new Blob(recordedChunks, { type: "video/webm" }));
-      recordedChunks = [];
-      // Stop timer
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      setDuration(0); // Reset duration when recording starts
-    };
-
-    const start = () => recorder.start();
-    const stop = () => recorder.stop();
-
-    return { start, stop };
-  }, [stream, onVideo]);
+    return () => abortController.abort();
+  }, [recorder, onVideo]);
 
   if (!recorder) return null;
 
   return {
-    start: recorder.start,
-    stop: recorder.stop,
+    stream: recorder.stream,
+    start: () => recorder.start(),
+    stop: () => recorder.stop(),
     recording,
-    duration,
-    stream,
   };
 };

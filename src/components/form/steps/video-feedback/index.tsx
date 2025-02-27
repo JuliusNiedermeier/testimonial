@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useRef } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "../..";
 import { useRecorder } from "./video-recorder";
 import { cn } from "@/utils/cn";
@@ -28,6 +28,10 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const [duration, setDuration] = useState(0);
+
+  const formattedDuration = useMemo(() => formatDuration(duration), [duration]);
+
   // Handle switching video source between recorded video and live stream
   useEffect(() => {
     if (!videoRef.current) return;
@@ -42,14 +46,39 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     }
   }, [recorder?.stream, recordedVideo]);
 
-  const handleRecordControlClick = () => {
+  useEffect(() => {
+    if (!recorder) return;
+
+    let intervalId: NodeJS.Timeout | null = null;
+
+    if (recorder.recording) {
+      intervalId = setInterval(() => setDuration((prev) => prev + 1), 1000);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [recorder?.recording]);
+
+  const handleRecordClick = useCallback(() => {
     if (recordedVideo) {
       updateTestimonial({ answers: { [questionId]: { video: undefined } } });
-    } else if (recorder?.recording) recorder?.stop();
-    else recorder?.start();
-  };
+      return;
+    }
 
-  const { question, index: questionIndex } = getQuestion(questionId);
+    if (!recorder) return;
+    if (!recorder.recording) return recorder.start();
+
+    if (recorder.recording) {
+      recorder.stop();
+      return setDuration(0);
+    }
+  }, [recordedVideo, questionId, recorder?.start, recorder?.stop]);
+
+  const { question, index: questionIndex } = useMemo(
+    () => getQuestion(questionId),
+    [getQuestion, questionId]
+  );
 
   if (!spaceConfig || !question) return null;
 
@@ -78,7 +107,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
                   "h-14 w-36": recordedVideo,
                 }
               )}
-              onClick={handleRecordControlClick}
+              onClick={handleRecordClick}
             >
               {recordedVideo ? (
                 <span className="text-background-secondary">Rerecord</span>
@@ -98,7 +127,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
                   "bg-[red] text-background-secondary": recorder?.recording,
                 })}
               >
-                {formatDuration(recorder?.duration || 0)}
+                {formattedDuration}
               </div>
             )}
           </div>
