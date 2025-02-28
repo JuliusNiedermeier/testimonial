@@ -13,8 +13,6 @@ import { useForm } from ".";
 import { cn } from "@/utils/cn";
 import { AnimatePresence, motion } from "motion/react";
 
-const animationDistance = 500;
-
 export type StepCarouselProps = Omit<ComponentProps<"div">, "children">;
 
 export const StepCarousel: FC<StepCarouselProps> = ({
@@ -22,7 +20,7 @@ export const StepCarousel: FC<StepCarouselProps> = ({
   ...restProps
 }) => {
   const { steps, space } = useForm();
-  const [containerWidth, setContaienerWidth] = useState<number | null>(null);
+  const [containerWidth, setContainerWidth] = useState<number | null>(null);
   const deferredCurrentStepIndex = useDeferredValue(space?.currentStepIndex);
   const previousStepIndex = useRef<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,13 +43,13 @@ export const StepCarousel: FC<StepCarouselProps> = ({
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver(([{ contentRect }]) => {
-      setContaienerWidth(contentRect.width);
+      setContainerWidth(contentRect.width);
     });
 
     observer.observe(containerRef.current);
 
     return () => observer.disconnect();
-  }, [containerRef.current]);
+  });
 
   const animationDistance = useMemo(() => {
     if (!containerWidth) return 0;

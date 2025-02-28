@@ -36,7 +36,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     (video) => {
       updateTestimonial({ answers: { [questionId]: { video } } });
     },
-    [questionId]
+    [questionId, updateTestimonial]
   );
 
   const recorder = useRecorder({ enabled: !recordedVideo, onVideo });
@@ -86,10 +86,13 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
 
   const handleVideoTimeUpdate = useCallback<
     NonNullable<ComponentProps<"video">["onTimeUpdate"]>
-  >((e) => {
-    if (!recordedVideo) return;
-    setVideoProgress(e.currentTarget.currentTime / e.currentTarget.duration);
-  }, []);
+  >(
+    (e) => {
+      if (!recordedVideo) return;
+      setVideoProgress(e.currentTarget.currentTime / e.currentTarget.duration);
+    },
+    [recordedVideo]
+  );
 
   const { question, index: questionIndex } = useMemo(
     () => getQuestion(questionId),
