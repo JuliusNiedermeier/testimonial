@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${switzer.variable} ${tiemposHeadline.variable} font-sans text-body antialiased bg-background-primary text-foreground-primary`}
+        className={`${switzer.variable} ${tiemposHeadline.variable} overflow-x-hidden font-sans text-body antialiased bg-background-primary text-foreground-primary`}
       >
         {children}
       </body>
