@@ -63,7 +63,7 @@ export const useRecorder = ({
     window.navigator.mediaDevices
       .getUserMedia({
         video: { facingMode: { exact: "user" } },
-        audio: false, // BUG: Chrome on Android seems to deny permission if audio is requested
+        audio: true,
       })
       .then((stream) => {
         if (abortController.signal.aborted) return closeStream(stream);
