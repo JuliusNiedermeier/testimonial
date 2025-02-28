@@ -1,17 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface UseRecorderConfig {
   enabled: boolean;
   onVideo: (video: Blob) => void;
 }
 
+export type UseRecorderWaitingResult = {
+  status: "waiting";
+  recording: false;
+};
+
+export type UseRecorderSuccessResult = {
+  status: "ready";
+  stream: MediaStream;
+  recording: boolean;
+  start: () => void;
+  stop: () => void;
+};
+
+export type UseRecorderErrorResult = {
+  status: "error";
+  error: Error;
+  recording: false;
+};
+
+export type UseRecorderResult =
+  | UseRecorderWaitingResult
+  | UseRecorderSuccessResult
+  | UseRecorderErrorResult;
+
 const closeStream = (stream: MediaStream) => {
   stream.getTracks().forEach((track) => track.stop());
 };
 
-export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
+export const useRecorder = ({
+  enabled,
+  onVideo,
+}: UseRecorderConfig): UseRecorderResult => {
   const [recorder, setRecorder] = useState<MediaRecorder | null>(null);
   const [recording, setRecording] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   const recordedChunks = useRef<Blob[]>([]);
 
   useEffect(() => {
@@ -34,8 +62,8 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
 
     window.navigator.mediaDevices
       .getUserMedia({
-        video: { facingMode: "user" },
-        audio: true,
+        video: { facingMode: { exact: "user" } },
+        audio: false, // BUG: Chrome on Android seems to deny permission if audio is requested
       })
       .then((stream) => {
         if (abortController.signal.aborted) return closeStream(stream);
@@ -55,6 +83,10 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
         recorder.addEventListener("start", () => setRecording(true), {
           signal: abortController.signal,
         });
+      })
+      .catch((error) => {
+        if (error instanceof Error) return setError(error);
+        setError(new Error("Failed accessing the camera."));
       });
 
     return () => {
@@ -81,12 +113,16 @@ export const useRecorder = ({ enabled, onVideo }: UseRecorderConfig) => {
     return () => abortController.abort();
   }, [recorder, onVideo]);
 
-  if (!recorder) return null;
+  return useMemo(() => {
+    if (error) return { status: "error", error, recording: false };
+    if (!recorder) return { status: "waiting", recording: false };
 
-  return {
-    stream: recorder.stream,
-    start: () => recorder.start(),
-    stop: () => recorder.stop(),
-    recording,
-  };
+    return {
+      status: "ready",
+      stream: recorder.stream,
+      recording,
+      start: () => recorder.start(),
+      stop: () => recorder.stop(),
+    };
+  }, [recorder, recording, error]);
 };
