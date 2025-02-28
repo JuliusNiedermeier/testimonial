@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { switzer, tiemposHeadline } from "@/fonts";
-import "./globals.css";
+import { switzer, tiemposHeadline } from "@/app/_shared/fonts";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "Testimonial",

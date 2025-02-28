@@ -1,4 +1,4 @@
-import { SpaceConfig } from "./utils/space-config";
+import { SpaceConfig } from "@/app/_shared/testimonial-form/space-config";
 
 export const space: SpaceConfig = {
   steps: {
