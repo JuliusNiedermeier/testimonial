@@ -24,7 +24,7 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
         className="w-full h-40 mt-10 p-6"
         placeholder={question.inputPlaceholder}
         autoFocus
-        value={testimonial?.answers[questionId]?.text || ""}
+        defaultValue={testimonial?.answers[questionId]?.text || ""}
         onInput={(e) =>
           updateTestimonial({
             answers: {

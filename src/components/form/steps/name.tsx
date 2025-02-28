@@ -17,7 +17,7 @@ export const NameStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.name.inputPlaceholder}
         autoFocus
-        value={testimonial?.name || ""}
+        defaultValue={testimonial?.name || ""}
         onInput={(e) => updateTestimonial({ name: e.currentTarget.value })}
       />
     </div>

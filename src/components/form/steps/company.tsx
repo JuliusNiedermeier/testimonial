@@ -17,7 +17,7 @@ export const CompanyStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.company.inputPlaceholder}
         autoFocus
-        value={testimonial?.company || ""}
+        defaultValue={testimonial?.company || ""}
         onInput={(e) => updateTestimonial({ company: e.currentTarget.value })}
       />
     </div>

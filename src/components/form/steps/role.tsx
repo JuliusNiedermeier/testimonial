@@ -17,7 +17,7 @@ export const RoleStep: FC = () => {
         className="w-full mt-4"
         placeholder={spaceConfig?.steps.role.inputPlaceholder}
         autoFocus
-        value={testimonial?.role || ""}
+        defaultValue={testimonial?.role || ""}
         onInput={(e) => updateTestimonial({ role: e.currentTarget.value })}
       />
     </div>
