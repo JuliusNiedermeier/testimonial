@@ -54,19 +54,19 @@ export const useSteps = (
       },
       { id: "role", component: <RoleStep /> },
       {
-        id: "consent",
-        component: <ConsentStep />,
+        id: "questionPreview",
+        component: <QuestionPreviewStep />,
       },
       {
         id: "feedbackType",
         component: <FeedbackTypeStep />,
       },
-      {
-        id: "questionPreview",
-        component: <QuestionPreviewStep />,
-      },
       ...questionSteps,
       { id: "rating", component: <RatingStep /> },
+      {
+        id: "consent",
+        component: <ConsentStep />,
+      },
       {
         id: "thankYou",
         component: <ThankYouStep />,

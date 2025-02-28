@@ -36,13 +36,6 @@ export const space: SpaceConfig = {
       inputPlaceholder: "Your role",
       nextButtonlabel: "Next",
     },
-    consent: {
-      heading: "Is it okay, if we share your feedback publicly?",
-      description:
-        "Your name, image, company, role and feedback will be visible.",
-      inputLabel: "Allow sharing",
-      nextButtonlabel: "Next",
-    },
     questionPreview: {
       heading: "We have prepared the following questions for you.",
       nextButtonlabel: "Next",
@@ -65,8 +58,15 @@ export const space: SpaceConfig = {
       nextButtonlabel: "Next",
     },
     rating: {
-      heading: "And finally... What star rating would you give us?",
+      heading: "What star rating would you give us?",
       description: "Lorem ipsum.",
+      nextButtonlabel: "Next",
+    },
+    consent: {
+      heading: "Is it okay, if we share your feedback publicly?",
+      description:
+        "Your name, image, company, role and feedback will be visible.",
+      inputLabel: "Allow sharing",
       nextButtonlabel: "Submit",
     },
     thankYou: {
