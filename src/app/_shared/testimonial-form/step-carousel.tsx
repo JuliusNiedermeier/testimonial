@@ -74,7 +74,7 @@ export const StepCarousel: FC<StepCarouselProps> = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -animationDistance * direction }}
           >
-            {steps[deferredCurrentStepIndex]?.component}
+            {steps?.[deferredCurrentStepIndex]?.component}
           </motion.div>
         )}
       </AnimatePresence>

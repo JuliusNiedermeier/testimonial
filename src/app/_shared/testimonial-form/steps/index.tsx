@@ -25,8 +25,8 @@ export const useSteps = (
   testimonial: ReturnType<typeof useSpace>["testimonial"],
   spaceConfig: SpaceConfig
 ) => {
-  return useMemo<Step[]>(() => {
-    if (!testimonial) return [];
+  return useMemo<Step[] | null>(() => {
+    if (!testimonial) return null;
 
     const questionSteps: Step[] = spaceConfig.questions.map((question) => {
       const Component =

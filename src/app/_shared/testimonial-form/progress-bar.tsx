@@ -16,7 +16,7 @@ export const ProgressBar: FC<ProgressBarProps> = ({
 
   return (
     <div className={cn("flex gap-2", className)} {...restProps}>
-      {steps.map((step, index) => (
+      {steps?.map((step, index) => (
         <div
           key={index}
           className={cn("h-1 flex-1", {

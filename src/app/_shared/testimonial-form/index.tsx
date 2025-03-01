@@ -70,7 +70,7 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
 
   const navigate = useCallback(
     (direction: "forward" | "back") => {
-      if (!space) return;
+      if (!space || !steps) return;
       const change = direction === "forward" ? 1 : -1;
       const updatedStepIndex = space.currentStepIndex + change;
       if (updatedStepIndex < 0 || updatedStepIndex > steps.length - 1) return;
@@ -92,14 +92,14 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
   };
 
   useEffect(() => {
-    if (initializedCurrentStepIndex.current || !space) return;
+    if (initializedCurrentStepIndex.current || !space || !steps) return;
 
     if (space.currentStepIndex >= steps.length - 1) {
       updateSpace({ currentStepIndex: 0 });
     }
 
     initializedCurrentStepIndex.current = true;
-  }, [space, steps.length, updateSpace]);
+  }, [space, steps, updateSpace]);
 
   return (
     <FormContext.Provider

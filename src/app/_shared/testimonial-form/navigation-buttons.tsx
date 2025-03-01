@@ -16,7 +16,7 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
 
   const currentStepIndex = space?.currentStepIndex;
 
-  if (currentStepIndex === undefined) return null;
+  if (currentStepIndex === undefined || !steps) return null;
 
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
