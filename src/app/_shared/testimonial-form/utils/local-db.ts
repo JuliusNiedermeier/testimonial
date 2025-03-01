@@ -22,7 +22,6 @@ export interface Answer {
   lostReference?: boolean;
   questionIndex: number;
   question: string;
-  type: FeedbackType;
   text?: string;
   video?: Blob;
 }

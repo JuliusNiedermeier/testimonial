@@ -3,8 +3,8 @@
 import { FC } from "react";
 import { useForm } from "..";
 import { Star } from "@/app/_shared/components/primitives/star";
-import { Rating } from "@/app/_shared/testimonial-form/local-db";
-import { defaultTestimonialValues } from "@/app/_shared/testimonial-form/testimonial-store";
+import { Rating } from "@/app/_shared/testimonial-form/utils/local-db";
+import { defaultTestimonial } from "@/app/_shared/testimonial-form/utils/use-space";
 
 export const RatingStep: FC = () => {
   const { spaceConfig, testimonial, updateTestimonial } = useForm();
@@ -21,7 +21,7 @@ export const RatingStep: FC = () => {
             key={rating}
             className="size-10"
             variant={
-              (testimonial?.rating || defaultTestimonialValues.rating) >= rating
+              (testimonial?.rating || defaultTestimonial.rating) >= rating
                 ? "filled"
                 : "outline"
             }

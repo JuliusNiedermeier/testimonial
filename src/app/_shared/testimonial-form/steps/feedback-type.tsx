@@ -4,13 +4,13 @@ import { FC } from "react";
 import { useForm } from "..";
 import { Button } from "@/app/_shared/components/primitives/button";
 import { Check } from "lucide-react";
-import { defaultTestimonialValues } from "@/app/_shared/testimonial-form/testimonial-store";
+import { defaultTestimonial } from "@/app/_shared/testimonial-form/utils/use-space";
 
 export const FeedbackTypeStep: FC = () => {
   const { spaceConfig, testimonial, updateTestimonial } = useForm();
 
   const feedbackType =
-    testimonial?.feedbackType || defaultTestimonialValues.feedbackType;
+    testimonial?.feedbackType || defaultTestimonial.feedbackType;
 
   return (
     <div>

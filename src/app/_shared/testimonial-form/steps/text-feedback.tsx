@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { ComponentProps, FC, useCallback, useMemo } from "react";
 import { useForm } from "@/app/_shared/testimonial-form";
 
 export const TextFeedbackStep: FC<{ questionId: string }> = ({
@@ -9,10 +9,24 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
   const { spaceConfig, testimonial, updateTestimonial, getQuestion } =
     useForm();
 
-  if (!spaceConfig) return null;
+  const { question, index } = useMemo(
+    () => getQuestion(questionId),
+    [questionId]
+  );
 
-  const { question, index } = getQuestion(questionId);
-  if (!question) return;
+  const handleInput = useCallback<
+    NonNullable<ComponentProps<"textarea">["onInput"]>
+  >(
+    (e) => {
+      if (!question) return;
+      updateTestimonial({
+        answers: new Map([[questionId, { text: e.currentTarget.value }]]),
+      });
+    },
+    [questionId, question, updateTestimonial]
+  );
+
+  if (!spaceConfig || !question) return null;
 
   return (
     <div>
@@ -24,18 +38,8 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
         className="w-full h-40 mt-10 p-6"
         placeholder={question.inputPlaceholder}
         autoFocus
-        defaultValue={testimonial?.answers[questionId]?.text || ""}
-        onInput={(e) =>
-          updateTestimonial({
-            answers: {
-              [questionId]: {
-                question: question.content,
-                questionIndex: index,
-                text: e.currentTarget.value,
-              },
-            },
-          })
-        }
+        defaultValue={testimonial?.answers.get(questionId)?.text || ""}
+        onInput={handleInput}
       />
     </div>
   );

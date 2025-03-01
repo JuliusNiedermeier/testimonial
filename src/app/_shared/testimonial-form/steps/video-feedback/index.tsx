@@ -34,13 +34,13 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     useForm();
 
   const recordedVideo = useMemo(
-    () => testimonial?.answers[questionId].video,
+    () => testimonial?.answers.get(questionId)?.video,
     [testimonial?.answers, questionId]
   );
 
   const onVideo = useCallback<UseRecorderConfig["onVideo"]>(
     (video) => {
-      updateTestimonial({ answers: { [questionId]: { video } } });
+      updateTestimonial({ answers: new Map([[questionId, { video }]]) });
     },
     [questionId, updateTestimonial]
   );
@@ -87,7 +87,9 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
   }, [recorder]);
 
   const discardVideo = useCallback(() => {
-    updateTestimonial({ answers: { [questionId]: { video: undefined } } });
+    updateTestimonial({
+      answers: new Map([[questionId, { video: undefined }]]),
+    });
   }, [updateTestimonial, questionId]);
 
   const handleVideoTimeUpdate = useCallback<

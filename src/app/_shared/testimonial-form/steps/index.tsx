@@ -1,6 +1,8 @@
-import { SpaceConfig } from "@/app/_shared/testimonial-form/space-config";
-import { useTestimonial } from "@/app/_shared/testimonial-form/testimonial-store";
 import { JSX, useMemo } from "react";
+import { SpaceConfig } from "@/app/_shared/testimonial-form/utils/space-config";
+import { useSpace } from "@/app/_shared/testimonial-form/utils/use-space";
+
+// Step components
 import { VideoFeedbackStep } from "@/app/_shared/testimonial-form/steps/video-feedback";
 import { TextFeedbackStep } from "@/app/_shared/testimonial-form/steps/text-feedback";
 import { CoverStep } from "@/app/_shared/testimonial-form/steps/cover";
@@ -20,7 +22,7 @@ export interface Step {
 }
 
 export const useSteps = (
-  testimonial: ReturnType<typeof useTestimonial>["testimonial"],
+  testimonial: ReturnType<typeof useSpace>["testimonial"],
   spaceConfig: SpaceConfig
 ) => {
   return useMemo<Step[]>(() => {
