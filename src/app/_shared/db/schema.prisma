@@ -9,9 +9,11 @@ datasource db {
 }
 
 model space {
-  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  slug  String @unique
-  title String
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug   String @unique
+  title  String
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -24,6 +26,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  spaces        space[]
 
   @@unique([email])
   @@map("user")

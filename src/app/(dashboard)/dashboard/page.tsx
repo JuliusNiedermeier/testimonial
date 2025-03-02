@@ -13,7 +13,9 @@ const Dashboard: FC = async () => {
 
   if (!session) redirect("/login");
 
-  const spaces = await db.space.findMany();
+  const spaces = await db.space.findMany({
+    where: { userId: session.user.id },
+  });
 
   return (
     <div className="p-6 h-[100svh] flex items-start justify-between gap-6">
