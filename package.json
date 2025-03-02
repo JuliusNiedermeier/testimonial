@@ -2,6 +2,7 @@
   "name": "testimonial",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -20,6 +21,7 @@
     "@prisma/client": "6.4.1",
     "@radix-ui/react-switch": "^1.1.3",
     "@t3-oss/env-nextjs": "^0.12.0",
+    "better-auth": "^1.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dexie": "^4.0.11",
