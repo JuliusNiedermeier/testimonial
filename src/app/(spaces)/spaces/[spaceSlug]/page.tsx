@@ -1,11 +1,9 @@
 import { db } from "@/app/_shared/db";
-import { spaceTable } from "@/app/_shared/db/schema";
 import { Form } from "@/app/_shared/testimonial-form";
 import { NavigationButtons } from "@/app/_shared/testimonial-form/navigation-buttons";
 import { ProgressBar } from "@/app/_shared/testimonial-form/progress-bar";
 import { StepCarousel } from "@/app/_shared/testimonial-form/step-carousel";
 import { space as spaceConfig } from "@/mock-space";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { FC } from "react";
 
@@ -16,9 +14,7 @@ interface Props {
 const Home: FC<Props> = async ({ params }) => {
   const { spaceSlug } = await params; // Needs to be awaited since Next version 15
 
-  const space = await db.query.spaceTable.findFirst({
-    where: eq(spaceTable.slug, spaceSlug),
-  });
+  const space = await db.space.findFirst({ where: { slug: spaceSlug } });
 
   if (!space) notFound();
 

@@ -1,0 +1,15 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEON_URL")
+}
+
+model space {
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug  String @unique
+  title String
+}

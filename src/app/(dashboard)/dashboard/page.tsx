@@ -4,7 +4,7 @@ import { CreateSpaceForm } from "@/app/(dashboard)/_components/create-space-form
 import { SpaceListItem } from "../_components/space-list-item";
 
 const Dashboard: FC = async () => {
-  const spaces = await db.query.spaceTable.findMany();
+  const spaces = await db.space.findMany();
 
   return (
     <div className="p-6 h-[100svh]">
