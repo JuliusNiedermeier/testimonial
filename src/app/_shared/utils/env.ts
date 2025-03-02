@@ -16,6 +16,7 @@ export const env = createEnv({
     NEON_URL: z.string().url(),
     BETTER_AUTH_SECRET: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
+    AUTHORIZED_USER_EMAIL: z.string().email(),
   },
 
   client: {
