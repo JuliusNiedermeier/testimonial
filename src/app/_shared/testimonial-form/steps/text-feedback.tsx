@@ -11,7 +11,7 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
 
   const { question, index } = useMemo(
     () => getQuestion(questionId),
-    [questionId]
+    [questionId, getQuestion]
   );
 
   const handleInput = useCallback<
