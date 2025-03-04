@@ -6,8 +6,7 @@ import { useForm } from "@/app/_shared/testimonial-form";
 export const TextFeedbackStep: FC<{ questionId: string }> = ({
   questionId,
 }) => {
-  const { spaceConfig, testimonial, updateTestimonial, getQuestion } =
-    useForm();
+  const { formConfig, testimonial, updateTestimonial, getQuestion } = useForm();
 
   const { question, index } = useMemo(
     () => getQuestion(questionId),
@@ -26,12 +25,12 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
     [questionId, question, updateTestimonial]
   );
 
-  if (!spaceConfig || !question) return null;
+  if (!formConfig || !question) return null;
 
   return (
     <div>
       <span className="text-label text-foreground-secondary">
-        {index + 1}/{spaceConfig.questions.length}
+        {index + 1}/{formConfig.questions.length}
       </span>
       <h1 className="text-label mt-4">{question.content}</h1>
       <textarea

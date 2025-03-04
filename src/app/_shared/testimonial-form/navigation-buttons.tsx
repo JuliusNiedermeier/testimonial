@@ -12,9 +12,9 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
   className,
   ...restProps
 }) => {
-  const { steps, spaceConfig, space, navigate } = useForm();
+  const { steps, formConfig, form, navigate } = useForm();
 
-  const currentStepIndex = space?.currentStepIndex;
+  const currentStepIndex = form?.currentStepIndex;
 
   if (currentStepIndex === undefined || !steps) return null;
 
@@ -26,7 +26,7 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
 
   const nextButtonLabel =
     currentStepId !== "thankYou" && currentStepId
-      ? spaceConfig?.steps[currentStepId].nextButtonlabel
+      ? formConfig?.steps[currentStepId].nextButtonlabel
       : "";
 
   return (

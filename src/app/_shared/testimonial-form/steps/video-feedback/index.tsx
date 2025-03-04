@@ -30,8 +30,7 @@ const formatDuration = (durationInSeconds: number) => {
 export const VideoFeedbackStep: FC<{ questionId: string }> = ({
   questionId,
 }) => {
-  const { spaceConfig, testimonial, updateTestimonial, getQuestion } =
-    useForm();
+  const { formConfig, testimonial, updateTestimonial, getQuestion } = useForm();
 
   const recordedVideo = useMemo(
     () => testimonial?.answers.get(questionId)?.video,
@@ -120,12 +119,12 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
     else videoRef.current.pause();
   }, [recordState]);
 
-  if (!spaceConfig || !question) return null;
+  if (!formConfig || !question) return null;
 
   return (
     <div>
       <span className="text-label text-foreground-secondary">
-        {questionIndex + 1}/{spaceConfig.questions.length}
+        {questionIndex + 1}/{formConfig.questions.length}
       </span>
       <h1 className="text-label mt-4">{question.content}</h1>
       <div className="aspect-square relative rounded-md bg-background-secondary mt-10 overflow-hidden">
@@ -168,7 +167,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
               {recordState === "disabled" && (
                 <>
                   <Button onClick={discardVideo}>
-                    {spaceConfig.steps.videoFeedback.discardLabel}
+                    {formConfig.steps.videoFeedback.discardLabel}
                   </Button>
                   <div className="h-1 w-full bg-[hsl(0deg_0%_100%/50%)]">
                     <div

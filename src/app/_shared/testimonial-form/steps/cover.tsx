@@ -5,15 +5,15 @@ import Image from "next/image";
 import { useForm } from "@/app/_shared/testimonial-form";
 
 export const CoverStep: FC = () => {
-  const { spaceConfig } = useForm();
+  const { formConfig } = useForm();
 
   return (
     <div>
       <div className="flex gap-2">
         <div className="size-12 bg-background-secondary overflow-hidden relative">
-          {spaceConfig && (
+          {formConfig && (
             <Image
-              src={spaceConfig.steps.cover.logoImageUrl}
+              src={formConfig.steps.cover.logoImageUrl}
               alt="Logo"
               fill
               className="object-cover"
@@ -21,9 +21,9 @@ export const CoverStep: FC = () => {
           )}
         </div>
         <div className="size-12 rounded-full bg-background-secondary overflow-hidden relative">
-          {spaceConfig && (
+          {formConfig && (
             <Image
-              src={spaceConfig.steps.cover.profileImageUrl}
+              src={formConfig.steps.cover.profileImageUrl}
               alt="Logo"
               fill
               className="object-cover"
@@ -32,10 +32,10 @@ export const CoverStep: FC = () => {
         </div>
       </div>
       <h1 className="font-serif text-heading mt-20">
-        {spaceConfig?.steps.cover.heading}
+        {formConfig?.steps.cover.heading}
       </h1>
       <p className="text-foreground-secondary">
-        {spaceConfig?.steps.cover.description}
+        {formConfig?.steps.cover.description}
       </p>
     </div>
   );

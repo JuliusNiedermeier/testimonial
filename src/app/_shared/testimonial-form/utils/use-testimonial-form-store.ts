@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
-import { SpaceConfig } from "@/app/_shared/testimonial-form/utils/space-config";
+import { FormConfig } from "@/app/_shared/testimonial-form/utils/form-config";
 import {
-  Space,
+  Form,
   Testimonial,
   Answer,
-  localDb,
+  testimonialDraftDb,
   createAnswerId,
-} from "@/app/_shared/testimonial-form/utils/local-db";
+} from "@/app/_shared/testimonial-form/utils/testimonial-draft-db";
 
-export type SpaceUpdate = Partial<Omit<Space, "id">>;
+export type FormUpdate = Partial<Omit<Form, "id">>;
 
 export type TestimonialUpdate = Partial<Omit<Testimonial, "id">>;
 
@@ -30,33 +30,40 @@ export interface DenormalizedTestimonialUpdate extends TestimonialUpdate {
   answers?: Map<string, AnswerUpdate>;
 }
 
-export const defaultTestimonial: Omit<Testimonial, "spaceId"> = {
+export const defaultTestimonial: Omit<Testimonial, "formId"> = {
   consent: true,
   feedbackType: "video",
   rating: 5,
 };
 
-export const defaultSpace: Omit<Space, "id"> = {
+export const defaultForm: Omit<Form, "id"> = {
   currentStepIndex: 0,
 };
 
-export interface UseSpaceConfig {
-  spaceId: string;
-  spaceConfig: SpaceConfig;
+export interface UseTestimonialFormStoreConfig {
+  formId: string;
+  formConfig: FormConfig;
 }
 
-export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
-  const spaceRecord = useLiveQuery(async () => {
-    const space = await localDb.spaces.get(spaceId);
-    if (!space)
-      return { space: { id: spaceId, ...defaultSpace }, hasRecord: false };
-    return { space: space, hasRecord: true };
+export const useTestimonialFormStore = ({
+  formId,
+  formConfig,
+}: UseTestimonialFormStoreConfig) => {
+  const formRecord = useLiveQuery(async () => {
+    const form = await testimonialDraftDb.forms.get(formId);
+
+    if (!form) {
+      return { form: { id: formId, ...defaultForm }, hasRecord: false };
+    }
+
+    return { form, hasRecord: true };
   });
 
   const testimonialRecord = useLiveQuery(async () => {
     const [testimonial, answers] = await Promise.all([
-      localDb.testimonials.get(spaceId),
-      localDb.answers.where("testimonialId").equals(spaceId).toArray(),
+      // The testimonial id is set to formId on creation, hence we can get a testimonial using the formId.
+      testimonialDraftDb.testimonials.get(formId),
+      testimonialDraftDb.answers.where("testimonialId").equals(formId).toArray(),
     ]);
 
     const answerMap = answers.reduce(
@@ -70,7 +77,7 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
     if (!testimonial) {
       return {
         testimonial: {
-          spaceId,
+          formId,
           ...defaultTestimonial,
           answers: answerMap,
         },
@@ -82,28 +89,28 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
       testimonial: { ...testimonial, answers: answerMap },
       hasRecord: true,
     };
-  }, [spaceId]);
+  }, [formId]);
 
-  const { space, hasRecord: hasSpaceRecord } = useMemo(() => {
-    if (!spaceRecord) return { space: null, hasRecord: null };
-    return spaceRecord;
-  }, [spaceRecord]);
+  const { form, hasRecord: hasFormRecord } = useMemo(() => {
+    if (!formRecord) return { form: null, hasRecord: null };
+    return formRecord;
+  }, [formRecord]);
 
   const { testimonial, hasRecord: hasTestimonialRecord } = useMemo(() => {
     if (!testimonialRecord) return { testimonial: null, hasRecord: null };
     return testimonialRecord;
   }, [testimonialRecord]);
 
-  const updateSpace = useCallback(
-    (update: SpaceUpdate) => {
-      if (space === null) {
-        throw new Error("Tried updating space before it was loaded.");
+  const updateForm = useCallback(
+    (update: FormUpdate) => {
+      if (form === null) {
+        throw new Error("Tried updating form before it was loaded.");
       }
 
-      if (hasSpaceRecord) localDb.spaces.update(spaceId, update);
-      else localDb.spaces.add({ ...space, ...update });
+      if (hasFormRecord) testimonialDraftDb.forms.update(formId, update);
+      else testimonialDraftDb.forms.add({ ...form, ...update });
     },
-    [spaceId, space, hasSpaceRecord]
+    [formId, form, hasFormRecord]
   );
 
   const updateTestimonial = useCallback(
@@ -114,16 +121,16 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
 
       const { answers: answerUpdates, ...normalizedUpdate } = update;
 
-      localDb.transaction(
+      testimonialDraftDb.transaction(
         "readwrite",
-        [localDb.testimonials, localDb.answers],
+        [testimonialDraftDb.testimonials, testimonialDraftDb.answers],
         async () => {
           const operations = [];
 
           if (hasTestimonialRecord) {
             // Update testimonial
             operations.push(
-              localDb.testimonials.update(spaceId, normalizedUpdate)
+              testimonialDraftDb.testimonials.update(formId, normalizedUpdate)
             );
           } else {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -131,7 +138,7 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
 
             // Create testimonial
             operations.push(
-              localDb.testimonials.add({
+              testimonialDraftDb.testimonials.add({
                 ...normalizedTestimonial,
                 ...normalizedUpdate,
               })
@@ -153,32 +160,28 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
               ?.entries()
               .reduce((result, [questionId, answerUpdate]) => {
                 const existingAnswer = testimonial.answers.get(questionId);
-
-                const answerId = createAnswerId(
-                  testimonial.spaceId,
-                  questionId
-                );
+                const answerId = createAnswerId(testimonial.formId, questionId);
 
                 if (existingAnswer) {
                   result.updates.push({ key: answerId, changes: answerUpdate });
                 } else {
-                  const questionIndexInConfig = spaceConfig.questions.findIndex(
+                  const questionIndexInConfig = formConfig.questions.findIndex(
                     ({ id }) => id === questionId
                   );
 
                   const questionConfig =
-                    spaceConfig.questions[questionIndexInConfig];
+                    formConfig.questions[questionIndexInConfig];
 
                   if (!questionConfig) {
                     throw new Error(
-                      "Tried updating an answer, without a matching question specified in the spaceConfig."
+                      "Tried updating an answer, without a matching question specified in the formConfig."
                     );
                   }
 
                   result.creates.push({
                     id: answerId,
                     questionId,
-                    testimonialId: testimonial.spaceId,
+                    testimonialId: testimonial.formId,
                     question: questionConfig.content,
                     questionIndex: questionIndexInConfig,
                     ...answerUpdate,
@@ -188,31 +191,31 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
               }, emptyBulkUpdateMap) || emptyBulkUpdateMap;
 
           operations.push(
-            localDb.answers.bulkUpdate(bulkOperationConfig.updates)
+            testimonialDraftDb.answers.bulkUpdate(bulkOperationConfig.updates)
           );
 
-          operations.push(localDb.answers.bulkAdd(bulkOperationConfig.creates));
+          operations.push(testimonialDraftDb.answers.bulkAdd(bulkOperationConfig.creates));
 
           await Promise.all(operations);
         }
       );
     },
-    [spaceId, testimonial, hasTestimonialRecord, spaceConfig.questions]
+    [formId, testimonial, hasTestimonialRecord, formConfig.questions]
   );
 
-  const syncedWithSpaceConfig = useRef(false);
+  const syncedAnswersWithFormConfig = useRef(false);
 
   useEffect(() => {
-    if (!testimonial || syncedWithSpaceConfig.current) return;
+    if (!testimonial || syncedAnswersWithFormConfig.current) return;
 
-    // Sync the order of existing answers with the order of questions in the spaceConfig
+    // Sync the order of existing answers with the order of questions in the formConfig
     testimonial.answers.forEach((answer, questionId) => {
-      const questionIndexInConfig = spaceConfig.questions.findIndex(
+      const questionIndexInConfig = formConfig.questions.findIndex(
         (question) => question.id === questionId
       );
 
       if (questionIndexInConfig < 0 && !answer.lostReference) {
-        // If no matching question to an answer is present in the spaceConfig anymore,
+        // If no matching question to an answer is present in the formConfig anymore,
         // and the answer is not already marked as lost,
         // leave the current index, just mark the answer as lost.
         return updateTestimonial({
@@ -220,7 +223,7 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
         });
       }
 
-      // If a matching question to an answer is present in the spaceConfig,
+      // If a matching question to an answer is present in the formConfig,
       // update it with the current question and questionIndex,
       updateTestimonial({
         answers: new Map([
@@ -229,15 +232,20 @@ export const useSpace = ({ spaceId, spaceConfig }: UseSpaceConfig) => {
             {
               lostReference: false,
               questionIndex: questionIndexInConfig,
-              question: spaceConfig.questions[questionIndexInConfig].content,
+              question: formConfig.questions[questionIndexInConfig].content,
             },
           ],
         ]),
       });
     });
 
-    syncedWithSpaceConfig.current = true;
-  }, [spaceConfig.questions, testimonial, updateTestimonial]);
+    syncedAnswersWithFormConfig.current = true;
+  }, [formConfig.questions, testimonial, updateTestimonial]);
 
-  return { space, testimonial, updateSpace, updateTestimonial };
+  return {
+    form,
+    testimonial,
+    updateForm,
+    updateTestimonial,
+  };
 };

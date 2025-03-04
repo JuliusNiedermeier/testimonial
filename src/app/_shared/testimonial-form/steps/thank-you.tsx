@@ -4,14 +4,14 @@ import { FC } from "react";
 import { useForm } from "@/app/_shared/testimonial-form";
 
 export const ThankYouStep: FC = () => {
-  const { spaceConfig } = useForm();
+  const { formConfig } = useForm();
 
   return (
     <div>
       <h1 className="font-serif text-heading">
-        {spaceConfig?.steps.thankYou.heading}
+        {formConfig?.steps.thankYou.heading}
       </h1>
-      <p>{spaceConfig?.steps.thankYou.description}</p>
+      <p>{formConfig?.steps.thankYou.description}</p>
     </div>
   );
 };

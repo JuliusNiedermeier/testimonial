@@ -5,17 +5,17 @@ import { useForm } from "@/app/_shared/testimonial-form";
 import { Input } from "@/app/_shared/components/primitives/input";
 
 export const RoleStep: FC = () => {
-  const { spaceConfig, testimonial, updateTestimonial } = useForm();
+  const { formConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
       <h1 className="text-heading font-serif">
-        {spaceConfig?.steps.role.heading}
+        {formConfig?.steps.role.heading}
       </h1>
-      <p>{spaceConfig?.steps.role.description}</p>
+      <p>{formConfig?.steps.role.description}</p>
       <Input
         className="w-full mt-4"
-        placeholder={spaceConfig?.steps.role.inputPlaceholder}
+        placeholder={formConfig?.steps.role.inputPlaceholder}
         autoFocus
         defaultValue={testimonial?.role || ""}
         onInput={(e) => updateTestimonial({ role: e.currentTarget.value })}

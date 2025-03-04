@@ -1,6 +1,6 @@
 import { JSX, useMemo } from "react";
-import { SpaceConfig } from "@/app/_shared/testimonial-form/utils/space-config";
-import { useSpace } from "@/app/_shared/testimonial-form/utils/use-space";
+import { FormConfig } from "@/app/_shared/testimonial-form/utils/form-config";
+import { useTestimonialFormStore } from "@/app/_shared/testimonial-form/utils/use-testimonial-form-store";
 
 // Step components
 import { VideoFeedbackStep } from "@/app/_shared/testimonial-form/steps/video-feedback";
@@ -17,18 +17,18 @@ import { RatingStep } from "@/app/_shared/testimonial-form/steps/rating";
 import { ThankYouStep } from "@/app/_shared/testimonial-form/steps/thank-you";
 
 export interface Step {
-  id: keyof SpaceConfig["steps"];
+  id: keyof FormConfig["steps"];
   component: JSX.Element;
 }
 
 export const useSteps = (
-  testimonial: ReturnType<typeof useSpace>["testimonial"],
-  spaceConfig: SpaceConfig
+  testimonial: ReturnType<typeof useTestimonialFormStore>["testimonial"],
+  formConfig: FormConfig
 ) => {
   return useMemo<Step[] | null>(() => {
     if (!testimonial) return null;
 
-    const questionSteps: Step[] = spaceConfig.questions.map((question) => {
+    const questionSteps: Step[] = formConfig.questions.map((question) => {
       const Component =
         testimonial.feedbackType === "video"
           ? VideoFeedbackStep
@@ -76,5 +76,5 @@ export const useSteps = (
     ];
 
     return steps;
-  }, [spaceConfig, testimonial]);
+  }, [formConfig, testimonial]);
 };

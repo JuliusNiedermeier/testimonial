@@ -5,7 +5,7 @@ export type Rating = 1 | 2 | 3 | 4 | 5;
 export type FeedbackType = "video" | "text";
 
 export interface Testimonial {
-  spaceId: string;
+  formId: string;
   name?: string;
   avatar?: Blob;
   company?: string;
@@ -26,7 +26,7 @@ export interface Answer {
   video?: Blob;
 }
 
-export interface Space {
+export interface Form {
   id: string;
   currentStepIndex: number;
 }
@@ -35,14 +35,14 @@ export const createAnswerId = (testimonialId: string, questionId: string) => {
   return `${testimonialId}:${questionId}`;
 };
 
-export const localDb = new Dexie("db") as Dexie & {
-  testimonials: EntityTable<Testimonial, "spaceId">;
+export const testimonialDraftDb = new Dexie("testimonial-drafts") as Dexie & {
+  testimonials: EntityTable<Testimonial, "formId">;
   answers: EntityTable<Answer, "id">;
-  spaces: EntityTable<Space, "id">;
+  forms: EntityTable<Form, "id">;
 };
 
-localDb.version(1).stores({
-  testimonials: "spaceId",
+testimonialDraftDb.version(1).stores({
+  testimonials: "formId",
   // Intentionally not using a compound primary key of [testimonialId+questionId] based on the following arguments:
   // - Compound indexes can only be looked up by the first or both components, not the second alone.
   // - Didn't find a good way of typing compound primary keys bacause EntityTable<T, K extends keyof T>.
@@ -52,5 +52,5 @@ localDb.version(1).stores({
   // This way the combination of testimonialId and questionId can be looked up using id,
   // and both components can also be looked up individually.
   answers: "id, testimonialId, questionId",
-  spaces: "id",
+  forms: "id",
 });

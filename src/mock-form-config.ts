@@ -1,6 +1,6 @@
-import { SpaceConfig } from "@/app/_shared/testimonial-form/utils/space-config";
+import { FormConfig } from "@/app/_shared/testimonial-form/utils/form-config";
 
-export const space: SpaceConfig = {
+export const formConfig: FormConfig = {
   steps: {
     cover: {
       logoImageUrl: "/logo.svg",

@@ -10,9 +10,9 @@ export const ProgressBar: FC<ProgressBarProps> = ({
   className,
   ...restProps
 }) => {
-  const { steps, space } = useForm();
+  const { steps, form } = useForm();
 
-  const currentStepIndex = space?.currentStepIndex;
+  const currentStepIndex = form?.currentStepIndex;
 
   return (
     <div className={cn("flex gap-2", className)} {...restProps}>

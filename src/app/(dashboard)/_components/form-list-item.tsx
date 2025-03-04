@@ -3,23 +3,23 @@
 import { X } from "lucide-react";
 import Link from "next/link";
 import { FC } from "react";
-import { deleteSpace } from "../_actions/delete-space";
+import { deleteForm } from "../_actions/delete-form";
 
-export interface SpaceListItemProps {
+export interface FormListItemProps {
   id: string;
   slug: string;
   title: string;
 }
 
-export const SpaceListItem: FC<SpaceListItemProps> = ({ id, slug, title }) => {
+export const FormListItem: FC<FormListItemProps> = ({ id, slug, title }) => {
   return (
     <div className="flex hover:bg-background-secondary">
-      <Link href={`/spaces/${slug}`} className="flex-1 text-label p-4">
+      <Link href={`/forms/${slug}`} className="flex-1 text-label p-4">
         {title}
       </Link>
       <button
         className="px-4 hover:bg-foreground-primary hover:text-background-primary"
-        onClick={() => deleteSpace(id)}
+        onClick={() => deleteForm(id)}
       >
         <X />
       </button>

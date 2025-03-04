@@ -19,25 +19,25 @@ export const StepCarousel: FC<StepCarouselProps> = ({
   className,
   ...restProps
 }) => {
-  const { steps, space } = useForm();
+  const { steps, form } = useForm();
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
-  const deferredCurrentStepIndex = useDeferredValue(space?.currentStepIndex);
+  const deferredCurrentStepIndex = useDeferredValue(form?.currentStepIndex);
   const previousStepIndex = useRef<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const direction = useMemo(() => {
     if (
-      space?.currentStepIndex === undefined ||
+      form?.currentStepIndex === undefined ||
       previousStepIndex.current === undefined ||
-      space.currentStepIndex === previousStepIndex.current
+      form.currentStepIndex === previousStepIndex.current
     ) {
       return 0;
     }
 
-    return space.currentStepIndex > previousStepIndex.current ? 1 : -1;
-  }, [space?.currentStepIndex]);
+    return form.currentStepIndex > previousStepIndex.current ? 1 : -1;
+  }, [form?.currentStepIndex]);
 
-  previousStepIndex.current = space?.currentStepIndex;
+  previousStepIndex.current = form?.currentStepIndex;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -56,7 +56,7 @@ export const StepCarousel: FC<StepCarouselProps> = ({
     return containerWidth + 20;
   }, [containerWidth]);
 
-  if (space?.currentStepIndex === undefined) return;
+  if (form?.currentStepIndex === undefined) return;
 
   return (
     <div

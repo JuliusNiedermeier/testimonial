@@ -5,17 +5,17 @@ import { useForm } from "@/app/_shared/testimonial-form";
 import { Input } from "@/app/_shared/components/primitives/input";
 
 export const CompanyStep: FC = () => {
-  const { spaceConfig, testimonial, updateTestimonial } = useForm();
+  const { formConfig, testimonial, updateTestimonial } = useForm();
 
   return (
     <div>
       <h1 className="text-heading font-serif">
-        {spaceConfig?.steps.company.heading}
+        {formConfig?.steps.company.heading}
       </h1>
-      <p>{spaceConfig?.steps.company.description}</p>
+      <p>{formConfig?.steps.company.description}</p>
       <Input
         className="w-full mt-4"
-        placeholder={spaceConfig?.steps.company.inputPlaceholder}
+        placeholder={formConfig?.steps.company.inputPlaceholder}
         autoFocus
         defaultValue={testimonial?.company || ""}
         onInput={(e) => updateTestimonial({ company: e.currentTarget.value })}

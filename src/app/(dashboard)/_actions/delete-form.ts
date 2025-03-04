@@ -3,9 +3,9 @@
 import { db } from "@/app/_shared/db";
 import { revalidatePath } from "next/cache";
 
-export const deleteSpace = async (id: string) => {
+export const deleteForm = async (id: string) => {
   "use server";
-  const deletedSpace = await db.space.delete({ where: { id } });
+  const deletedForm = await db.form.delete({ where: { id } });
   revalidatePath("/dashboard");
-  return deletedSpace;
+  return deletedForm;
 };

@@ -11,25 +11,27 @@ import {
 } from "react";
 import {
   QuestionConfig,
-  SpaceConfig,
-} from "@/app/_shared/testimonial-form/utils/space-config";
-import { useSpace } from "@/app/_shared/testimonial-form/utils/use-space";
+  FormConfig,
+} from "@/app/_shared/testimonial-form/utils/form-config";
+import { useTestimonialFormStore } from "@/app/_shared/testimonial-form/utils/use-testimonial-form-store";
 import { useSteps } from "@/app/_shared/testimonial-form/steps";
 
 type GetQuestionSuccessResult = { question: QuestionConfig; index: number };
 type GetQuestionErrorResult = { question: null; index: null };
 type GetQuestionResult = GetQuestionSuccessResult | GetQuestionErrorResult;
 
+type UseTestimonialFormStoreResult = ReturnType<typeof useTestimonialFormStore>;
+
 type FormContext = {
   // General data
-  spaceConfig?: SpaceConfig;
+  formConfig?: FormConfig;
   steps: ReturnType<typeof useSteps>;
 
-  // Space
-  space: ReturnType<typeof useSpace>["space"];
-  testimonial: ReturnType<typeof useSpace>["testimonial"];
-  updateSpace: ReturnType<typeof useSpace>["updateSpace"];
-  updateTestimonial: ReturnType<typeof useSpace>["updateTestimonial"];
+  // Form
+  form: UseTestimonialFormStoreResult["form"];
+  testimonial: UseTestimonialFormStoreResult["testimonial"];
+  updateForm: UseTestimonialFormStoreResult["updateForm"];
+  updateTestimonial: UseTestimonialFormStoreResult["updateTestimonial"];
 
   // Helpers
   getQuestion: (id: string) => GetQuestionResult;
@@ -38,9 +40,9 @@ type FormContext = {
 
 const FormContext = createContext<FormContext>({
   steps: [],
-  space: null,
+  form: null,
   testimonial: null,
-  updateSpace: () => {},
+  updateForm: () => {},
   updateTestimonial: async () => {},
   getQuestion: () => ({ question: null, index: null }),
   navigate: () => {},
@@ -54,33 +56,31 @@ export const useForm = () => {
 };
 
 interface FormProps extends PropsWithChildren {
-  spaceId: string;
-  spaceConfig: SpaceConfig;
+  formId: string;
+  formConfig: FormConfig;
 }
 
-export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
-  const { space, testimonial, updateSpace, updateTestimonial } = useSpace({
-    spaceId,
-    spaceConfig,
-  });
+export const Form: FC<FormProps> = ({ formId, formConfig, children }) => {
+  const { form, testimonial, updateForm, updateTestimonial } =
+    useTestimonialFormStore({ formId, formConfig });
 
-  const steps = useSteps(testimonial, spaceConfig);
+  const steps = useSteps(testimonial, formConfig);
 
   const initializedCurrentStepIndex = useRef(false);
 
   const navigate = useCallback(
     (direction: "forward" | "back") => {
-      if (!space || !steps) return;
+      if (!form || !steps) return;
       const change = direction === "forward" ? 1 : -1;
-      const updatedStepIndex = space.currentStepIndex + change;
+      const updatedStepIndex = form.currentStepIndex + change;
       if (updatedStepIndex < 0 || updatedStepIndex > steps.length - 1) return;
-      updateSpace({ currentStepIndex: updatedStepIndex });
+      updateForm({ currentStepIndex: updatedStepIndex });
     },
-    [space, updateSpace, steps]
+    [form, updateForm, steps]
   );
 
   const getQuestion = (id: string): GetQuestionResult => {
-    const index = spaceConfig.questions.findIndex(
+    const index = formConfig.questions.findIndex(
       (question) => question.id === id
     );
 
@@ -88,27 +88,27 @@ export const Form: FC<FormProps> = ({ spaceId, spaceConfig, children }) => {
       return { question: null, index: null };
     }
 
-    return { question: spaceConfig.questions[index], index };
+    return { question: formConfig.questions[index], index };
   };
 
   useEffect(() => {
-    if (initializedCurrentStepIndex.current || !space || !steps) return;
+    if (initializedCurrentStepIndex.current || !form || !steps) return;
 
-    if (space.currentStepIndex >= steps.length - 1) {
-      updateSpace({ currentStepIndex: 0 });
+    if (form.currentStepIndex >= steps.length - 1) {
+      updateForm({ currentStepIndex: 0 });
     }
 
     initializedCurrentStepIndex.current = true;
-  }, [space, steps, updateSpace]);
+  }, [form, steps, updateForm]);
 
   return (
     <FormContext.Provider
       value={{
-        spaceConfig,
+        formConfig,
         steps,
-        space,
+        form,
         testimonial,
-        updateSpace,
+        updateForm,
         updateTestimonial,
         navigate,
         getQuestion,

@@ -8,7 +8,7 @@ export interface QuestionConfig {
   inputPlaceholder: string;
 }
 
-export interface SpaceConfig {
+export interface FormConfig {
   steps: {
     cover: BaseStep & {
       logoImageUrl: string;

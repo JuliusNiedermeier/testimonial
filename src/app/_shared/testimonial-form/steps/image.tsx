@@ -6,7 +6,7 @@ import { Upload } from "lucide-react";
 import Image from "next/image";
 
 export const ImageStep: FC = () => {
-  const { spaceConfig, testimonial, updateTestimonial } = useForm();
+  const { formConfig, testimonial, updateTestimonial } = useForm();
 
   const avatarUrl = useMemo(() => {
     if (!testimonial?.avatar) return null;
@@ -22,9 +22,9 @@ export const ImageStep: FC = () => {
   return (
     <div>
       <h1 className="font-serif text-heading">
-        {spaceConfig?.steps.image.heading}
+        {formConfig?.steps.image.heading}
       </h1>
-      <p>{spaceConfig?.steps.image.description}</p>
+      <p>{formConfig?.steps.image.description}</p>
       <label
         htmlFor="image-input"
         className="relative size-40 rounded-full bg-background-secondary mx-auto my-10 grid place-content-center overflow-hidden"
