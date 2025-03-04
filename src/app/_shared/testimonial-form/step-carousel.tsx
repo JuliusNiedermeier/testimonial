@@ -49,6 +49,12 @@ export const StepCarousel: FC<StepCarouselProps> = ({
     observer.observe(containerRef.current);
 
     return () => observer.disconnect();
+
+    // TODO: Improve performance. Currently this effect runs on every render,
+    // causing the ResizeObserver to be unnessecarily created on every update in the FormContext, thus also every input keystroke!
+    // Although it seems like adding an empty dep array would solve that issue, by only running the effect on the first render,
+    // however, containerRef.current is null at first render. Not sure why.
+    // Running this effect on every render makes it work for now.
   });
 
   const animationDistance = useMemo(() => {
