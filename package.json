@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "vercel:link": "vercel link",
+    "vercel:env:pull": "vercel env pull --environment=development",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
