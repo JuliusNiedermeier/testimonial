@@ -1,14 +1,12 @@
 "use client";
 
-import * as React from "react";
+import { ComponentProps, FC } from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
-
 import { cn } from "@/app/_shared/utils/cn";
 
-const Switch = React.forwardRef<
-  React.ComponentRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->(({ className, ...props }, ref) => (
+export type SwitchProps = ComponentProps<typeof SwitchPrimitives.Root>;
+
+export const Switch: FC<SwitchProps> = ({ className, ref, ...props }) => (
   <SwitchPrimitives.Root
     className={cn(
       "rounded-full p-1 data-[state=checked]:bg-foreground-primary data-[state=unchecked]:bg-background-secondary transition-colors",
@@ -23,7 +21,5 @@ const Switch = React.forwardRef<
       )}
     />
   </SwitchPrimitives.Root>
-));
+);
 Switch.displayName = SwitchPrimitives.Root.displayName;
-
-export { Switch };
