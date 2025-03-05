@@ -1,9 +1,8 @@
 "use server";
 
 import { db } from "@/app/_shared/db";
-import { auth } from "@/auth";
+import { getSession } from "@/app/_shared/utils/get-session";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import slugify from "slugify";
 
 interface CreateFormConfig {
@@ -14,7 +13,7 @@ interface CreateFormConfig {
 export const createForm = async ({ title, teamSlug }: CreateFormConfig) => {
   "use server";
 
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
 
   if (!session) return null;
 
@@ -26,6 +25,6 @@ export const createForm = async ({ title, teamSlug }: CreateFormConfig) => {
     },
   });
 
-  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/team");
   return form;
 };

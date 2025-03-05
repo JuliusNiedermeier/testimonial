@@ -1,24 +1,16 @@
-"use client";
-
-import { Button } from "@/app/_shared/components/primitives/button";
-import { authClient } from "@/app/_shared/utils/auth-client";
-import { Github } from "lucide-react";
+import { getSession } from "@/app/_shared/utils/get-session";
+import { redirect } from "next/navigation";
 import { FC } from "react";
+import { LoginButton } from "../_components/login-button";
 
-const Login: FC = () => {
+const Login: FC = async () => {
+  const session = await getSession();
+
+  if (session) redirect("/dashboard");
+
   return (
     <div className="h-[100svh] grid place-content-center">
-      <Button
-        onClick={() =>
-          authClient.signIn.social({
-            provider: "github",
-            callbackURL: "/dashboard",
-          })
-        }
-      >
-        <Github />
-        <span>Login using GitHub</span>
-      </Button>
+      <LoginButton />
     </div>
   );
 };

@@ -6,5 +6,5 @@ export const GET = async (
   { params }: { params: Promise<{ teamSlug: string }> }
 ) => {
   const { teamSlug } = await params;
-  redirect(`/dashboard/${teamSlug}/testimonials`);
+  redirect(`/dashboard/team/${teamSlug}/testimonials`);
 };
