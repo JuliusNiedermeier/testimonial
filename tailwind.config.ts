@@ -54,6 +54,20 @@ export default {
         },
       ],
     },
+    animation: {
+      radixCollapsibleOpen: "radixCollapsibleOpen 250ms",
+      radixCollapsibleClose: "radixCollapsibleClose 250ms",
+    },
+    keyframes: {
+      radixCollapsibleOpen: {
+        "0%": { height: "0" },
+        "100%": { height: "var(--radix-collapsible-content-height)" },
+      },
+      radixCollapsibleClose: {
+        "0%": { height: "var(--radix-collapsible-content-height)" },
+        "100%": { height: "0" },
+      },
+    },
   },
   plugins: [],
 } satisfies Config;

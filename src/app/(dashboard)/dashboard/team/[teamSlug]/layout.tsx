@@ -1,7 +1,6 @@
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/get-session";
 import {
-  ChevronsUpDown,
   CreditCard,
   List,
   MessageSquareQuote,
@@ -9,7 +8,6 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import {
@@ -25,6 +23,7 @@ import {
 } from "../../../_components/base-layout";
 import { AccountLink } from "../../../_components/navigation/account-link";
 import { Link } from "@/app/_shared/components/primitives/link";
+import { TeamSwitcher } from "@/app/(dashboard)/_components/navigation/team-switcher";
 
 interface LayoutProps {
   params: Promise<{ teamSlug: string }>;
@@ -59,19 +58,8 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = async ({
   return (
     <BaseLayout>
       <BaseLayoutSidebar>
-        <div className="grid grid-rows-[6rem_1fr] grid-cols-1 overflow-hidden divide-y">
-          <button className="p-6 overflow-hidden flex gap-4 items-center hover:bg-background-secondary text-left">
-            <div className="h-full aspect-square relative bg-background-secondary overflow-hidden shrink-0">
-              <Image
-                src="/logo.svg"
-                alt={team.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <span className="text-label truncate block">{team.name}</span>
-            <ChevronsUpDown className="shrink-0" />
-          </button>
+        <div className="grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden divide-y">
+          <TeamSwitcher teamSlug={teamSlug} />
           <div className="px-4 py-12 gap-12 flex flex-col  overflow-y-auto">
             <NavItemGroup>
               <Link href={`/dashboard/team/${team.slug}/testimonials`}>
