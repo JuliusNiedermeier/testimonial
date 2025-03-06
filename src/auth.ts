@@ -1,4 +1,4 @@
-import { betterAuth, BetterAuthError } from "better-auth";
+import { APIError, betterAuth, BetterAuthError } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "./app/_shared/db";
 import { env } from "./app/_shared/utils/env";
@@ -20,9 +20,9 @@ export const auth = betterAuth({
       create: {
         before: async (user) => {
           if (user.email !== env.AUTHORIZED_USER_EMAIL) {
-            throw new BetterAuthError(
-              `A user attempted to sign up with an unauthoried email: ${user.email}`
-            );
+            throw new APIError("UNAUTHORIZED", {
+              message: `Signing up with email "${user.email}" is currently not allowed.`,
+            });
           }
           return true;
         },
