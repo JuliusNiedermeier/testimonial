@@ -16,6 +16,16 @@ export const auth = betterAuth({
     },
   },
 
+  user: {
+    additionalFields: {
+      lastVisitedTeamId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+    },
+  },
+
   databaseHooks: {
     user: {
       create: {
