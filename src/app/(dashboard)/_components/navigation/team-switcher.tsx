@@ -76,14 +76,17 @@ export const TeamSwitcher: FC<TeamSwitcherProps> = async ({
               <span className="truncate block flex-1">{team.name}</span>
             </Link>
           ))}
-          <button className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg">
+          <Link
+            href="/dashboard/account/create-team"
+            className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg"
+          >
             <div className="size-8 relative bg-background-primary overflow-hidden shrink-0 rounded grid place-content-center">
               <Plus />
             </div>
             <span className="truncate block flex-1 text-foreground-secondary">
               Create Team
             </span>
-          </button>
+          </Link>
         </div>
       </CollapsibleContent>
     </Collapsible>

@@ -18,7 +18,7 @@ export const NavItem: FC<ComponentProps<"div">> = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-[1.5rem_1fr] items-center grid-rows-[1.5rem] gap-4 rounded-lg p-2",
+        "grid grid-cols-[1.5rem_1fr] items-center grid-rows-[1.5rem] gap-4 rounded-lg p-2 overflow-hidden",
         {
           "bg-background-secondary text-label": active,
           "hover:bg-background-secondary text-foreground-secondary": !active,
@@ -32,8 +32,16 @@ export const NavItem: FC<ComponentProps<"div">> = ({
   );
 };
 
-export const NavItemIcon: FC<PropsWithChildren> = ({ children }) => {
-  return <div className="col-start-1">{children}</div>;
+export const NavItemIcon: FC<ComponentProps<"div">> = ({
+  children,
+  className,
+  ...restProps
+}) => {
+  return (
+    <div className={cn("col-start-1", className)} {...restProps}>
+      {children}
+    </div>
+  );
 };
 
 export const NavItemLabel: FC<ComponentProps<"div">> = ({
@@ -43,7 +51,7 @@ export const NavItemLabel: FC<ComponentProps<"div">> = ({
 }) => {
   return (
     <div
-      className={cn("col-start-2 flex items-center", className)}
+      className={cn("col-start-2 flex items-center truncate", className)}
       {...restProps}
     >
       {children}
