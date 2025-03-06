@@ -55,6 +55,14 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = async ({
     );
   }
 
+  // Update lastVisitedTeam if the user switched teams
+  if (session.user.lastVisitedTeamId !== team.id) {
+    await db.user.update({
+      where: { id: session.user.id },
+      data: { lastVisitedTeamId: team.id },
+    });
+  }
+
   return (
     <BaseLayout>
       <BaseLayoutSidebar>

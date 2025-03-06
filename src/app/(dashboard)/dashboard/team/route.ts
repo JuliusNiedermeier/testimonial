@@ -9,6 +9,15 @@ export const GET = async () => {
 
   if (!session) redirect("/login");
 
+  // If set, redirect the user to the last visited team
+  // There is no need to check if he has a valid membership, bacause that is already checked on the team level.
+  if (session.user.lastVisitedTeamId) {
+    const lastVisitedTeam = await db.team.findFirst({
+      where: { id: session.user.lastVisitedTeamId },
+    });
+    if (lastVisitedTeam) redirect(`/dashboard/team/${lastVisitedTeam.slug}`);
+  }
+
   const firstMembership = await db.membership.findFirst({
     where: { userId: session.user.id },
     include: { team: true },
