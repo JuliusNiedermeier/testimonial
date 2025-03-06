@@ -1,4 +1,5 @@
-import { APIError, betterAuth, BetterAuthError } from "better-auth";
+import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "./app/_shared/db";
 import { env } from "./app/_shared/utils/env";
