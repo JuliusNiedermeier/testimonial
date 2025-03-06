@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "auth:generate": "pnpm dlx @better-auth/cli generate",
     "db:seed": "dotenv -e .env.local -- prisma db seed",
     "db:pull": "dotenv -e .env.local -- prisma db pull",
     "db:push": "dotenv -e .env.local -- prisma db push",
