@@ -8,7 +8,7 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import {
   NavItem,
@@ -40,20 +40,16 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = async ({
 
   // Get the team, if the user has a membership for it.
   const team = await db.team.findFirst({
-    where: {
-      AND: [
-        { slug: teamSlug },
-        { memberships: { some: { userId: session.user.id } } },
-      ],
+    where: { slug: teamSlug },
+    include: {
+      forms: true,
+      memberships: { where: { userId: session.user.id } },
     },
-    include: { forms: true },
   });
 
-  if (!team) {
-    throw new Error(
-      `Access denied. User is not a member of team "${teamSlug}".`
-    );
-  }
+  if (!team) notFound();
+
+  if (!team.memberships.length) redirect("/dashboard/account");
 
   // Update lastVisitedTeam if the user switched teams
   if (session.user.lastVisitedTeamId !== team.id) {

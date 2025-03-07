@@ -24,15 +24,15 @@ const AccountDashboardLayout: FC<PropsWithChildren> = async ({ children }) => {
     where: { memberships: { some: { userId: session.user.id } } },
   });
 
-  const lastVisitedTeam = teams.find(
-    (team) => team.id === session.user.lastVisitedTeamId
-  );
+  const lastVisitedTeam = teams.find((team) => {
+    return team.id === session.user.lastVisitedTeamId;
+  });
 
   return (
     <BaseLayout>
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
-          {teams.length && (
+          {lastVisitedTeam && (
             <NextLink href={"/dashboard/team"}>
               <NavItem>
                 <NavItemIcon>
