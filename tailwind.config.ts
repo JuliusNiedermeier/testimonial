@@ -54,18 +54,20 @@ export default {
         },
       ],
     },
-    animation: {
-      radixCollapsibleOpen: "radixCollapsibleOpen 250ms",
-      radixCollapsibleClose: "radixCollapsibleClose 250ms",
-    },
-    keyframes: {
-      radixCollapsibleOpen: {
-        "0%": { height: "0" },
-        "100%": { height: "var(--radix-collapsible-content-height)" },
+    extend: {
+      animation: {
+        radixCollapsibleOpen: "radixCollapsibleOpen 250ms",
+        radixCollapsibleClose: "radixCollapsibleClose 250ms",
       },
-      radixCollapsibleClose: {
-        "0%": { height: "var(--radix-collapsible-content-height)" },
-        "100%": { height: "0" },
+      keyframes: {
+        radixCollapsibleOpen: {
+          "0%": { height: "0" },
+          "100%": { height: "var(--radix-collapsible-content-height)" },
+        },
+        radixCollapsibleClose: {
+          "0%": { height: "var(--radix-collapsible-content-height)" },
+          "100%": { height: "0" },
+        },
       },
     },
   },

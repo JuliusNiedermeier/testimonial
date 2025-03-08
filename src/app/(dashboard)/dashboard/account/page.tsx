@@ -1,7 +1,22 @@
+import { AccountSettings } from "@/app/(dashboard)/_components/account-settings";
+import { getSession } from "@/app/_shared/utils/get-session";
+import { redirect } from "next/navigation";
 import { FC } from "react";
 
-const Account: FC = () => {
-  return <div className="p-6">Account</div>;
+const AccountSettingsPage: FC = async () => {
+  const session = await getSession();
+
+  if (!session) redirect("/login");
+
+  return (
+    <AccountSettings
+      userId={session.user.id}
+      name={session.user.name}
+      email={session.user.email}
+      image={session.user.image}
+      emailVerified={session.user.emailVerified}
+    />
+  );
 };
 
-export default Account;
+export default AccountSettingsPage;
