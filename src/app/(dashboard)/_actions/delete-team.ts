@@ -25,6 +25,11 @@ export const deleteTeam = async ({ teamSlug }: DeleteTeamConfig) => {
 
   if (!deletedTeam) return null;
 
+  await db.user.update({
+    where: { id: session.user.id },
+    data: { lastVisitedTeam: undefined },
+  });
+
   revalidatePath("/dashboard");
   redirect("/dashboard/account");
 };
