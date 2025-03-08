@@ -1,49 +1,25 @@
-import { getSession } from "@/app/_shared/utils/get-session";
-import { ChevronLeft, LogOut, Plus, Settings } from "lucide-react";
-import { redirect } from "next/navigation";
-import { FC, PropsWithChildren } from "react";
+import { LogOut, Settings } from "lucide-react";
+import { FC, PropsWithChildren, Suspense } from "react";
 import {
   NavItem,
-  NavItemGroup,
   NavItemIcon,
   NavItemLabel,
 } from "../../_components/navigation/nav-item";
 import { BaseLayout, BaseLayoutSidebar } from "../../_components/base-layout";
 import { AccountLink } from "../../_components/navigation/account-link";
 import { Link } from "@/app/_shared/components/primitives/link";
-import NextLink from "next/link";
 import { LogoutButton } from "../../_components/navigation/logout-button";
-import { db } from "@/app/_shared/db";
-import Image from "next/image";
+import { TeamList } from "../../_components/team-list";
+import { BackToTeamButton } from "../../_components/back-to-team-button";
 
-const AccountDashboardLayout: FC<PropsWithChildren> = async ({ children }) => {
-  const session = await getSession();
-  if (!session) redirect("/login");
-
-  const teams = await db.team.findMany({
-    where: { memberships: { some: { userId: session.user.id } } },
-  });
-
-  const lastVisitedTeam = teams.find((team) => {
-    return team.id === session.user.lastVisitedTeamId;
-  });
-
+const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <BaseLayout>
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
-          {lastVisitedTeam && (
-            <NextLink href={"/dashboard/team"}>
-              <NavItem>
-                <NavItemIcon>
-                  <ChevronLeft />
-                </NavItemIcon>
-                <NavItemLabel>
-                  Back to {lastVisitedTeam ? lastVisitedTeam.name : "Team"}
-                </NavItemLabel>
-              </NavItem>
-            </NextLink>
-          )}
+          <Suspense fallback="Loading back to team...">
+            <BackToTeamButton />
+          </Suspense>
 
           <Link href={"/dashboard/account"}>
             <NavItem>
@@ -54,35 +30,9 @@ const AccountDashboardLayout: FC<PropsWithChildren> = async ({ children }) => {
             </NavItem>
           </Link>
 
-          <NavItemGroup>
-            <span>Teams</span>
-            {teams.map((team) => (
-              <Link
-                key={team.id}
-                href={`/dashboard/team/${team.slug}/testimonials`}
-              >
-                <NavItem>
-                  <NavItemIcon className="relative rounded overflow-hidden h-full">
-                    <Image
-                      src="/logo.svg"
-                      alt={team.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </NavItemIcon>
-                  <NavItemLabel>{team.name}</NavItemLabel>
-                </NavItem>
-              </Link>
-            ))}
-            <Link href="/dashboard/account/create-team">
-              <NavItem>
-                <NavItemIcon>
-                  <Plus />
-                </NavItemIcon>
-                <NavItemLabel>Create Team</NavItemLabel>
-              </NavItem>
-            </Link>
-          </NavItemGroup>
+          <Suspense fallback="Loading Teams...">
+            <TeamList />
+          </Suspense>
 
           <LogoutButton>
             <NavItem>
@@ -93,9 +43,13 @@ const AccountDashboardLayout: FC<PropsWithChildren> = async ({ children }) => {
             </NavItem>
           </LogoutButton>
         </div>
-        <AccountLink />
+        <Suspense fallback="Loading Account link...">
+          <AccountLink />
+        </Suspense>
       </BaseLayoutSidebar>
-      <main>{children}</main>
+      <main>
+        <Suspense fallback="Loading page...">{children}</Suspense>
+      </main>
     </BaseLayout>
   );
 };
