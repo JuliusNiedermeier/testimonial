@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/_shared/db";
-import { getSession } from "@/app/_shared/utils/get-session";
+import { getSession } from "@/app/_shared/utils/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import slugify from "slugify";
@@ -13,9 +13,7 @@ interface CreateTeamConfig {
 export const createTeam = async ({ name }: CreateTeamConfig) => {
   "use server";
 
-  const session = await getSession();
-
-  if (!session) return null;
+  const session = await getSession({ require: true });
 
   const team = await db.team.create({
     data: {

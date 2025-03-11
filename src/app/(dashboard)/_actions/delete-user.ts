@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/_shared/db";
-import { getSession } from "@/app/_shared/utils/get-session";
+import { getSession } from "@/app/_shared/utils/auth";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -9,9 +9,7 @@ import { redirect } from "next/navigation";
 export const deleteUser = async () => {
   "use server";
 
-  const session = await getSession();
-
-  if (!session) return { status: "unauthenticated" } as const;
+  const session = await getSession({ require: true });
 
   const memberships = await db.membership.findMany({
     where: { userId: session.user.id },

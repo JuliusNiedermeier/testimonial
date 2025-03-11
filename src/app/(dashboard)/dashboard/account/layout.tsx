@@ -1,7 +1,8 @@
-import { LogOut, Settings } from "lucide-react";
-import { FC, PropsWithChildren, Suspense } from "react";
+import { LogOut, Plus, Settings } from "lucide-react";
+import { FC, PropsWithChildren } from "react";
 import {
   NavItem,
+  NavItemGroup,
   NavItemIcon,
   NavItemLabel,
 } from "../../_components/navigation/nav-item";
@@ -11,15 +12,16 @@ import { Link } from "@/app/_shared/components/primitives/link";
 import { LogoutButton } from "../../_components/navigation/logout-button";
 import { TeamList } from "../../_components/team-list";
 import { BackToTeamButton } from "../../_components/back-to-team-button";
+import { WithSession } from "@/app/_shared/components/with-session";
 
 const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <BaseLayout>
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
-          <Suspense fallback="Loading back to team...">
-            <BackToTeamButton />
-          </Suspense>
+          <WithSession require fallback={<BackToTeamButton.UI suspended />}>
+            {(session) => <BackToTeamButton user={session.user} />}
+          </WithSession>
 
           <Link href={"/dashboard/account"}>
             <NavItem>
@@ -30,9 +32,22 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             </NavItem>
           </Link>
 
-          <Suspense fallback="Loading Teams...">
-            <TeamList />
-          </Suspense>
+          <NavItemGroup>
+            <span>Teams</span>
+
+            <WithSession require fallback={<TeamList.UI suspended />}>
+              {(session) => <TeamList userId={session.user.id} />}
+            </WithSession>
+
+            <Link href="/dashboard/account/create-team">
+              <NavItem>
+                <NavItemIcon>
+                  <Plus />
+                </NavItemIcon>
+                <NavItemLabel>Create Team</NavItemLabel>
+              </NavItem>
+            </Link>
+          </NavItemGroup>
 
           <LogoutButton>
             <NavItem>
@@ -43,13 +58,12 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             </NavItem>
           </LogoutButton>
         </div>
-        <Suspense fallback="Loading Account link...">
-          <AccountLink />
-        </Suspense>
+
+        <WithSession require fallback={<AccountLink suspended />}>
+          {(session) => <AccountLink user={session.user} />}
+        </WithSession>
       </BaseLayoutSidebar>
-      <main>
-        <Suspense fallback="Loading page...">{children}</Suspense>
-      </main>
+      <main>{children}</main>
     </BaseLayout>
   );
 };

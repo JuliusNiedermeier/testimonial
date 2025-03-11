@@ -6,18 +6,36 @@ export type SyncFC<P = object> = FC<P> & {
 
 export type WithSuspended<Props = object, SuspendedProps = object> =
   | ({ suspended: true } & SuspendedProps)
-  | ({ suspended: false } & Props);
+  | ({ suspended?: false } & Props);
+
+export type WithSuspenseProps<P = object> = P & {
+  suspense?: boolean;
+  fallback?: ReactNode;
+};
 
 export const withSuspense = <Props extends object = object>(config: {
   Component: FC<Props>;
-  Fallback: SyncFC<Props>;
+  Fallback?: SyncFC<Props>;
 }) => {
-  const WithSuspense = (props: Props) => {
-    return (
-      <Suspense fallback={<config.Fallback {...props} />}>
-        <config.Component {...props} />
-      </Suspense>
-    );
+  const WithSuspense = ({
+    suspense,
+    fallback,
+    ...restProps
+  }: WithSuspenseProps<Props>) => {
+    const Component = <config.Component {...(restProps as Props)} />;
+
+    const Fallback =
+      fallback !== undefined ? (
+        fallback
+      ) : config.Fallback !== undefined ? (
+        <config.Fallback {...(restProps as Props)} />
+      ) : undefined;
+
+    if (suspense === false) {
+      return <config.Component {...(restProps as Props)} />;
+    }
+
+    return <Suspense fallback={Fallback}>{Component}</Suspense>;
   };
 
   return WithSuspense;
@@ -28,7 +46,7 @@ interface WithSuspenseFallbackConfig<
   UIProps extends object
 > {
   AsyncComponent: FC<{ UIComponent: FC<UIProps> } & AsyncProps>;
-  UIComponent: SyncFC<WithSuspended<UIProps, AsyncProps>>;
+  UIComponent: SyncFC<WithSuspended<UIProps, object>>; // Instead of putting object here, AsyncProps would be possible or a type that pulls fields out of AsyncProps based on another union type defined in the function type params.
 }
 
 export const withSuspenseFallback = <

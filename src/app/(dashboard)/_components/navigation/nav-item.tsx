@@ -1,6 +1,7 @@
 "use client";
 
 import { useLink } from "@/app/_shared/components/primitives/link";
+import { Skeleton } from "@/app/_shared/components/primitives/skeleton";
 import { cn } from "@/app/_shared/utils/cn";
 import { ComponentProps, FC, PropsWithChildren } from "react";
 
@@ -18,7 +19,7 @@ export const NavItem: FC<ComponentProps<"div">> = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-[1.5rem_1fr] items-center grid-rows-[1.5rem] gap-4 rounded-lg p-2 overflow-hidden",
+        "h-10 grid grid-cols-[1.5rem_1fr] items-center grid-rows-[1.5rem] gap-4 rounded-lg p-2 overflow-hidden",
         {
           "bg-background-secondary text-label": active,
           "hover:bg-background-secondary text-foreground-secondary": !active,
@@ -30,6 +31,10 @@ export const NavItem: FC<ComponentProps<"div">> = ({
       {children}
     </div>
   );
+};
+
+export const NavItemSkeleton: FC = () => {
+  return <Skeleton className="h-10" />;
 };
 
 export const NavItemIcon: FC<ComponentProps<"div">> = ({

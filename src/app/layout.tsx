@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { switzer, tiemposHeadline } from "@/app/_shared/fonts";
 import "@/app/globals.css";
 
+export const experimental_ppr = true;
+
 export const metadata: Metadata = {
   title: "Testimonial",
   description: "The smoothest way to gather testimonials.",

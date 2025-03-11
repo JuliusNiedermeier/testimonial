@@ -1,29 +1,42 @@
 import Link from "next/link";
-import { FC } from "react";
-import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
+import {
+  NavItem,
+  NavItemIcon,
+  NavItemLabel,
+  NavItemSkeleton,
+} from "./navigation/nav-item";
 import { ChevronLeft } from "lucide-react";
 import { db } from "@/app/_shared/db";
-import { getSession } from "@/app/_shared/utils/get-session";
+import { withSuspenseFallback } from "@/app/_shared/utils/suspense-fallback";
+import { Session } from "@/app/_shared/utils/auth";
 
-export const BackToTeamButton: FC = async () => {
-  const session = await getSession();
+export const BackToTeamButton = withSuspenseFallback<
+  { user: Session["user"] },
+  { teamName: string }
+>({
+  AsyncComponent: async ({ UIComponent, user }) => {
+    if (!user.lastVisitedTeamId) return null;
 
-  if (!session?.user.lastVisitedTeamId) return null;
+    const team = await db.team.findFirst({
+      where: { id: user.lastVisitedTeamId },
+    });
 
-  const team = await db.team.findFirst({
-    where: { id: session?.user.lastVisitedTeamId },
-  });
+    if (!team) return null;
 
-  if (!team) return null;
+    return <UIComponent teamName={team.name} />;
+  },
+  UIComponent: (props) => {
+    if (props.suspended) return <NavItemSkeleton />;
 
-  return (
-    <Link href={"/dashboard/team"}>
-      <NavItem>
-        <NavItemIcon>
-          <ChevronLeft />
-        </NavItemIcon>
-        <NavItemLabel>Back to {team.name}</NavItemLabel>
-      </NavItem>
-    </Link>
-  );
-};
+    return (
+      <Link href={"/dashboard/team"}>
+        <NavItem>
+          <NavItemIcon>
+            <ChevronLeft />
+          </NavItemIcon>
+          <NavItemLabel>Back to {props.teamName}</NavItemLabel>
+        </NavItem>
+      </Link>
+    );
+  },
+});

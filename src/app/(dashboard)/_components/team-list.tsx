@@ -1,51 +1,47 @@
-import { FC } from "react";
 import {
   NavItem,
-  NavItemGroup,
   NavItemIcon,
   NavItemLabel,
+  NavItemSkeleton,
 } from "./navigation/nav-item";
 import { db } from "@/app/_shared/db";
 import Link from "next/link";
-import { Plus } from "lucide-react";
 import Image from "next/image";
-import { getSession } from "@/app/_shared/utils/get-session";
+import { withSuspenseFallback } from "@/app/_shared/utils/suspense-fallback";
+import { Team } from "@prisma/client";
 
-export const TeamList: FC = async () => {
-  const session = await getSession();
+export const TeamList = withSuspenseFallback<
+  { userId: string },
+  { teams: Team[] }
+>({
+  AsyncComponent: async ({ UIComponent, userId }) => {
+    const teams = await db.team.findMany({
+      where: { memberships: { some: { userId } } },
+    });
 
-  if (!session) return null;
+    return <UIComponent teams={teams} />;
+  },
+  UIComponent: (props) => {
+    if (props.suspended) {
+      return Array.from(new Array(2)).map((_, index) => (
+        <NavItemSkeleton key={index} />
+      ));
+    }
 
-  const teams = await db.team.findMany({
-    where: { memberships: { some: { userId: session.user.id } } },
-  });
-
-  return (
-    <NavItemGroup>
-      <span>Teams</span>
-      {teams.map((team) => (
-        <Link key={team.id} href={`/dashboard/team/${team.slug}/testimonials`}>
-          <NavItem>
-            <NavItemIcon className="relative rounded overflow-hidden h-full">
-              <Image
-                src="/logo.svg"
-                alt={team.name}
-                fill
-                className="object-cover"
-              />
-            </NavItemIcon>
-            <NavItemLabel>{team.name}</NavItemLabel>
-          </NavItem>
-        </Link>
-      ))}
-      <Link href="/dashboard/account/create-team">
+    return props.teams.map((team) => (
+      <Link key={team.id} href={`/dashboard/team/${team.slug}/testimonials`}>
         <NavItem>
-          <NavItemIcon>
-            <Plus />
+          <NavItemIcon className="relative rounded overflow-hidden h-full">
+            <Image
+              src="/logo.svg"
+              alt={team.name}
+              fill
+              className="object-cover"
+            />
           </NavItemIcon>
-          <NavItemLabel>Create Team</NavItemLabel>
+          <NavItemLabel>{team.name}</NavItemLabel>
         </NavItem>
       </Link>
-    </NavItemGroup>
-  );
-};
+    ));
+  },
+});

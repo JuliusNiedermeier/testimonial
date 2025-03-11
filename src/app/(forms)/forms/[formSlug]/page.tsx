@@ -1,3 +1,5 @@
+import { Skeleton } from "@/app/_shared/components/primitives/skeleton";
+import { WithParams } from "@/app/_shared/components/with-params";
 import { db } from "@/app/_shared/db";
 import { Form } from "@/app/_shared/testimonial-form";
 import { NavigationButtons } from "@/app/_shared/testimonial-form/navigation-buttons";
@@ -11,21 +13,32 @@ interface Props {
   params: Promise<{ formSlug: string }>;
 }
 
-const Home: FC<Props> = async ({ params }) => {
-  const { formSlug } = await params; // Needs to be awaited since Next version 15
-
-  const form = await db.form.findFirst({ where: { slug: formSlug } });
-
-  if (!form) notFound();
-
+const Home: FC<Props> = ({ params }) => {
   return (
-    <Form formId={form.id} formConfig={formConfig}>
-      <div className="flex flex-col p-6 gap-8 h-[100svh] max-w-[40rem] mx-auto">
-        <ProgressBar />
-        <StepCarousel className="flex-1" />
-        <NavigationButtons />
-      </div>
-    </Form>
+    <WithParams
+      params={params}
+      fallback={
+        <div className="hw-full w-full p-6">
+          <Skeleton className="h-full w-full" />
+        </div>
+      }
+    >
+      {async (params) => {
+        const { formSlug } = await (params as Props["params"]);
+        const form = await db.form.findFirst({ where: { slug: formSlug } });
+        if (!form) notFound();
+
+        return (
+          <Form formId={form.id} formConfig={formConfig}>
+            <div className="flex flex-col p-6 gap-8 h-[100svh] max-w-[40rem] mx-auto">
+              <ProgressBar />
+              <StepCarousel className="flex-1" />
+              <NavigationButtons />
+            </div>
+          </Form>
+        );
+      }}
+    </WithParams>
   );
 };
 
