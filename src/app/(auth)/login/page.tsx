@@ -7,7 +7,7 @@ const Login: FC = () => {
   return (
     <WithSession fallback={"Loading login page..."}>
       {(session) => {
-        if (!session) redirect("/dashboard");
+        if (session) redirect("/dashboard");
         return (
           <div className="h-[100svh] grid place-content-center">
             <LoginButton />
