@@ -1,13 +1,16 @@
-import { redirect } from "next/navigation";
 import { FC } from "react";
-import { LoginButton } from "../_components/login-button";
 import { WithSession } from "@/app/_shared/components/with-session";
+import { redirect } from "next/navigation";
+import { LoginButton } from "../_components/login-button";
 
 const Login: FC = () => {
   return (
     <WithSession fallback={"Loading login page..."}>
-      {(session) => {
+      {async (session) => {
+        "use cache";
+
         if (session) redirect("/dashboard");
+
         return (
           <div className="h-[100svh] grid place-content-center">
             <LoginButton />
