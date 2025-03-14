@@ -1,9 +1,10 @@
 import { FC, ReactNode, Suspense } from "react";
 
-export type WithSuspenseProps<Props extends object = object> = Props & {
-  suspense?: boolean;
-  fallback?: ReactNode;
-};
+export type WithSuspenseProps<Props extends object = object> = Props &
+  (
+    | { suspense?: true; fallback: ReactNode }
+    | { suspense: false; fallback?: ReactNode }
+  );
 
 export const withSuspense = <Props extends object>(Component: FC<Props>) => {
   const WithSuspense: FC<WithSuspenseProps<Props>> = ({

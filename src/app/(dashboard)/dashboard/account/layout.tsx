@@ -23,7 +23,9 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
           <WithSession require fallback={<BackToTeamButtonUI fallback />}>
-            {(session) => <BackToTeamButton user={session.user} />}
+            {(session) => (
+              <BackToTeamButton suspense={false} user={session.user} />
+            )}
           </WithSession>
 
           <Link href={"/dashboard/account"}>
@@ -39,7 +41,9 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             <span>Teams</span>
 
             <WithSession require fallback={<TeamListUI fallback />}>
-              {(session) => <TeamList userId={session.user.id} />}
+              {(session) => (
+                <TeamList suspense={false} userId={session.user.id} />
+              )}
             </WithSession>
 
             <Link href="/dashboard/account/create-team">
