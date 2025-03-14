@@ -1,6 +1,5 @@
 import { AccountSettings } from "@/app/(dashboard)/_components/account-settings";
-import { Skeleton } from "@/app/_shared/components/primitives/skeleton";
-import { WithSession } from "@/app/_shared/components/with-session";
+import { WithSession } from "@/app/_shared/components/utils/with-session";
 import { FC } from "react";
 
 const AccountSettingsPage: FC = () => {
@@ -9,7 +8,7 @@ const AccountSettingsPage: FC = () => {
       require
       fallback={
         <div className="h-full w-full p-6">
-          <Skeleton className="h-full w-full" />
+          <div className="h-full w-full skeleton" />
         </div>
       }
     >

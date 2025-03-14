@@ -1,5 +1,4 @@
-import { Skeleton } from "@/app/_shared/components/primitives/skeleton";
-import { WithParams } from "@/app/_shared/components/with-params";
+import { WithParams } from "@/app/_shared/components/utils/with-params";
 import { db } from "@/app/_shared/db";
 import { Form } from "@/app/_shared/testimonial-form";
 import { NavigationButtons } from "@/app/_shared/testimonial-form/navigation-buttons";
@@ -19,13 +18,15 @@ const Home: FC<Props> = ({ params }) => {
       params={params}
       fallback={
         <div className="hw-full w-full p-6">
-          <Skeleton className="h-full w-full" />
+          <div className="h-full w-full skeleton" />
         </div>
       }
     >
       {async (params) => {
-        const { formSlug } = await (params as Props["params"]);
-        const form = await db.form.findFirst({ where: { slug: formSlug } });
+        const form = await db.form.findFirst({
+          where: { slug: params.formSlug },
+        });
+
         if (!form) notFound();
 
         return (

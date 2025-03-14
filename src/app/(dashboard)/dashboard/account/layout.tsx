@@ -10,16 +10,19 @@ import { BaseLayout, BaseLayoutSidebar } from "../../_components/base-layout";
 import { AccountLink } from "../../_components/navigation/account-link";
 import { Link } from "@/app/_shared/components/primitives/link";
 import { LogoutButton } from "../../_components/navigation/logout-button";
-import { TeamList } from "../../_components/team-list";
-import { BackToTeamButton } from "../../_components/back-to-team-button";
-import { WithSession } from "@/app/_shared/components/with-session";
+import { TeamList, TeamListUI } from "../../_components/team-list";
+import {
+  BackToTeamButton,
+  BackToTeamButtonUI,
+} from "../../_components/back-to-team-button";
+import { WithSession } from "@/app/_shared/components/utils/with-session";
 
 const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <BaseLayout>
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
-          <WithSession require fallback={<BackToTeamButton.UI suspended />}>
+          <WithSession require fallback={<BackToTeamButtonUI fallback />}>
             {(session) => <BackToTeamButton user={session.user} />}
           </WithSession>
 
@@ -35,7 +38,7 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           <NavItemGroup>
             <span>Teams</span>
 
-            <WithSession require fallback={<TeamList.UI suspended />}>
+            <WithSession require fallback={<TeamListUI fallback />}>
               {(session) => <TeamList userId={session.user.id} />}
             </WithSession>
 
@@ -59,7 +62,7 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           </LogoutButton>
         </div>
 
-        <WithSession require fallback={<AccountLink suspended />}>
+        <WithSession require fallback={<AccountLink fallback />}>
           {(session) => <AccountLink user={session.user} />}
         </WithSession>
       </BaseLayoutSidebar>

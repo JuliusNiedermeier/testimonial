@@ -1,20 +1,14 @@
-import Link from "next/link";
-import {
-  NavItem,
-  NavItemIcon,
-  NavItemLabel,
-  NavItemSkeleton,
-} from "./navigation/nav-item";
+import Link, { LinkProps } from "next/link";
+import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
 import { ChevronLeft } from "lucide-react";
 import { db } from "@/app/_shared/db";
-import { withSuspenseFallback } from "@/app/_shared/utils/suspense-fallback";
 import { Session } from "@/app/_shared/utils/auth";
+import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
+import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { omit } from "@/app/_shared/utils/omit";
 
-export const BackToTeamButton = withSuspenseFallback<
-  { user: Session["user"] },
-  { teamName: string }
->({
-  AsyncComponent: async ({ UIComponent, user }) => {
+export const BackToTeamButton = withSuspense<{ user: Session["user"] }>(
+  async ({ user }) => {
     if (!user.lastVisitedTeamId) return null;
 
     const team = await db.team.findFirst({
@@ -23,20 +17,30 @@ export const BackToTeamButton = withSuspenseFallback<
 
     if (!team) return null;
 
-    return <UIComponent teamName={team.name} />;
-  },
-  UIComponent: (props) => {
-    if (props.suspended) return <NavItemSkeleton />;
+    return <BackToTeamButtonUI teamName={team.name} />;
+  }
+);
 
-    return (
-      <Link href={"/dashboard/team"}>
-        <NavItem>
-          <NavItemIcon>
-            <ChevronLeft />
-          </NavItemIcon>
-          <NavItemLabel>Back to {props.teamName}</NavItemLabel>
-        </NavItem>
-      </Link>
-    );
-  },
-});
+export const BackToTeamButtonUI: SFC<
+  WithFallbackProps<
+    Omit<LinkProps, "href"> & { href?: LinkProps["href"]; teamName: string },
+    Omit<LinkProps, "href"> & { href?: LinkProps["href"] }
+  >
+> = (props) => {
+  const restProps = props.fallback
+    ? omit(props, ["fallback", "href"])
+    : omit(props, ["fallback", "href", "teamName"]);
+
+  return (
+    <Link href={props.href || "/dashboard/team"} {...restProps}>
+      <NavItem>
+        <NavItemIcon>
+          <ChevronLeft />
+        </NavItemIcon>
+        <NavItemLabel fallback={props.fallback}>
+          {!props.fallback && `Back to ${props.teamName}`}
+        </NavItemLabel>
+      </NavItem>
+    </Link>
+  );
+};

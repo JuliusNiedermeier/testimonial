@@ -12,7 +12,6 @@ import {
   NavItemGroup,
   NavItemIcon,
   NavItemLabel,
-  NavItemSkeleton,
 } from "../../../_components/navigation/nav-item";
 import NextLink from "next/link";
 import {
@@ -21,9 +20,12 @@ import {
 } from "../../../_components/base-layout";
 import { AccountLink } from "../../../_components/navigation/account-link";
 import { Link } from "@/app/_shared/components/primitives/link";
-import { TeamSwitcher } from "@/app/(dashboard)/_components/navigation/team-switcher";
-import { WithSession } from "@/app/_shared/components/with-session";
-import { WithParams } from "@/app/_shared/components/with-params";
+import {
+  TeamSwitcher,
+  TeamSwitcherUI,
+} from "@/app/(dashboard)/_components/navigation/team-switcher";
+import { WithSession } from "@/app/_shared/components/utils/with-session";
+import { WithParams } from "@/app/_shared/components/utils/with-params";
 
 interface LayoutProps {
   params: Promise<{ teamSlug: string }>;
@@ -37,16 +39,14 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
     <BaseLayout>
       <BaseLayoutSidebar>
         <div className="grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden divide-y">
-          <WithSession require fallback={<TeamSwitcher.UI suspended />}>
+          <WithSession require fallback={<TeamSwitcherUI fallback />}>
             {(session) => (
               <WithParams params={params} suspense={false}>
                 {(params) => (
                   <TeamSwitcher
                     suspense={false}
                     userId={session.user.id}
-                    teamSlug={
-                      (params as Awaited<LayoutProps["params"]>).teamSlug
-                    }
+                    teamSlug={params.teamSlug}
                   />
                 )}
               </WithParams>
@@ -55,12 +55,10 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
 
           <div className="px-4 py-12 gap-12 flex flex-col  overflow-y-auto">
             <NavItemGroup>
-              <WithParams params={params} fallback={<NavItemSkeleton />}>
+              <WithParams params={params} fallback={<NavItem fallback />}>
                 {(params) => (
                   <Link
-                    href={`/dashboard/team/${
-                      (params as Awaited<LayoutProps["params"]>).teamSlug
-                    }/testimonials`}
+                    href={`/dashboard/team/${params.teamSlug}/testimonials`}
                   >
                     <NavItem className="pr-3">
                       <NavItemIcon>
@@ -96,13 +94,9 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
             <NavItemGroup>
               <span className="text-foreground-secondary">Team</span>
 
-              <WithParams params={params} fallback={<NavItemSkeleton />}>
+              <WithParams params={params} fallback={<NavItem fallback />}>
                 {(params) => (
-                  <Link
-                    href={`/dashboard/team/${
-                      (params as Awaited<LayoutProps["params"]>).teamSlug
-                    }/members`}
-                  >
+                  <Link href={`/dashboard/team/${params.teamSlug}/members`}>
                     <NavItem className="pr-3">
                       <NavItemIcon>
                         <Users />
@@ -118,12 +112,10 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                 )}
               </WithParams>
 
-              <WithParams params={params} fallback={<NavItemSkeleton />}>
+              <WithParams params={params} fallback={<NavItem fallback />}>
                 {(params) => (
                   <Link
-                    href={`/dashboard/team/${
-                      (params as Awaited<LayoutProps["params"]>).teamSlug
-                    }/subscription`}
+                    href={`/dashboard/team/${params.teamSlug}/subscription`}
                   >
                     <NavItem>
                       <NavItemIcon>
@@ -135,13 +127,9 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                 )}
               </WithParams>
 
-              <WithParams params={params} fallback={<NavItemSkeleton />}>
+              <WithParams params={params} fallback={<NavItem fallback />}>
                 {(params) => (
-                  <Link
-                    href={`/dashboard/team/${
-                      (params as Awaited<LayoutProps["params"]>).teamSlug
-                    }/settings`}
-                  >
+                  <Link href={`/dashboard/team/${params.teamSlug}/settings`}>
                     <NavItem>
                       <NavItemIcon>
                         <Settings />
@@ -156,7 +144,7 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
         </div>
 
         <NextLink href="/dashboard/account">
-          <WithSession require fallback={<AccountLink suspended />}>
+          <WithSession require fallback={<AccountLink fallback />}>
             {(session) => <AccountLink user={session.user} />}
           </WithSession>
         </NextLink>

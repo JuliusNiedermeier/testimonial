@@ -1,11 +1,17 @@
 import { FC } from "react";
-import { WithSession } from "@/app/_shared/components/with-session";
+import { WithSession } from "@/app/_shared/components/utils/with-session";
 import { redirect } from "next/navigation";
 import { LoginButton } from "../_components/login-button";
 
 const Login: FC = () => {
   return (
-    <WithSession fallback={"Loading login page..."}>
+    <WithSession
+      fallback={
+        <div className="h-full w-full p-6">
+          <div className="h-full w-full skeleton" />
+        </div>
+      }
+    >
       {async (session) => {
         "use cache";
 

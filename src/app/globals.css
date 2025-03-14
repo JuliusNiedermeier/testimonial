@@ -9,4 +9,8 @@
     --color-foreground-primary: #282828;
     --color-foreground-secondary: #808080;
   }
+
+  .skeleton {
+    @apply animate-pulse rounded-md bg-[gray]/10;
+  }
 }
