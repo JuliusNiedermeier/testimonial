@@ -24,22 +24,33 @@ export const BackToTeamButton = withSuspense<{ user: Session["user"] }>(
 
     if (!team) return null;
 
-    return <BackToTeamButtonUI teamName={team.name} />;
+    return <BackToTeamButtonUI teamName={team.name} teamSlug={team.slug} />;
   }
 );
 
 export const BackToTeamButtonUI: SFC<
   WithFallbackProps<
-    Omit<LinkProps, "href"> & { href?: LinkProps["href"]; teamName: string },
+    Omit<LinkProps, "href"> & {
+      href?: LinkProps["href"];
+      teamName: string;
+      teamSlug: string;
+    },
     Omit<LinkProps, "href"> & { href?: LinkProps["href"] }
   >
 > = (props) => {
   const restProps = props.fallback
     ? omit(props, ["fallback", "href"])
-    : omit(props, ["fallback", "href", "teamName"]);
+    : omit(props, ["fallback", "href", "teamName", "teamSlug"]);
 
   return (
-    <Link href={props.href || "/dashboard/team"} {...restProps}>
+    <Link
+      href={
+        props.href || props.fallback
+          ? `/dashboard/team`
+          : `/dashboard/team/${props.teamSlug}`
+      }
+      {...restProps}
+    >
       <NavItem>
         <NavItemIcon>
           <ChevronLeft />
