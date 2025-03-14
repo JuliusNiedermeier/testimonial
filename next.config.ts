@@ -14,6 +14,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  redirects: async () => [
+    {
+      source: "/dashboard",
+      destination: "/dashboard/team",
+      permanent: true,
+    },
+    {
+      source: "/dashboard/team/:team",
+      destination: "/dashboard/team/:team/testimonials",
+      permanent: true,
+    },
+  ],
 };
 
 export default nextConfig;
