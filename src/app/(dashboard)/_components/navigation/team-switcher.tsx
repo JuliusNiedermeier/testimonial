@@ -64,10 +64,10 @@ export const TeamSwitcherUI: SFC<
         </div>
         <span
           className={cn("text-label truncate block flex-1", {
-            skeleton: props.fallback,
+            "skeleton h-[1em]": props.fallback,
           })}
         >
-          {props.fallback ? " " : props.currentTeam.name}
+          {!props.fallback && props.currentTeam.name}
         </span>
         <ChevronsUpDown className="shrink-0" />
       </CollapsibleTrigger>

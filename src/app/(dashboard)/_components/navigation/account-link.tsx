@@ -30,17 +30,17 @@ export const AccountLink: SFC<
       <div className="overflow-hidden w-full flex flex-col gap-1">
         <span
           className={cn("text-label truncate block", {
-            skeleton: props.fallback,
+            "skeleton h-[1em] w-2/3": props.fallback,
           })}
         >
-          {props.fallback ? " " : props.user.name}
+          {!props.fallback && props.user.name}
         </span>
         <span
           className={cn("text-foreground-secondary truncate block", {
-            skeleton: props.fallback,
+            "skeleton h-[1em]": props.fallback,
           })}
         >
-          {props.fallback ? " " : props.user.email}
+          {!props.fallback && props.user.email}
         </span>
       </div>
     </div>
