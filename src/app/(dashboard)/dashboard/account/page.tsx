@@ -12,15 +12,18 @@ const AccountSettingsPage: FC = () => {
         </div>
       }
     >
-      {(session) => (
-        <AccountSettings
-          userId={session.user.id}
-          name={session.user.name}
-          email={session.user.email}
-          image={session.user.image}
-          emailVerified={session.user.emailVerified}
-        />
-      )}
+      {async (session) => {
+        "use cache";
+        return (
+          <AccountSettings
+            userId={session.user.id}
+            name={session.user.name}
+            email={session.user.email}
+            image={session.user.image}
+            emailVerified={session.user.emailVerified}
+          />
+        );
+      }}
     </WithSession>
   );
 };

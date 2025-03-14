@@ -2,13 +2,13 @@
 
 import { getSession } from "@/app/_shared/utils/auth";
 import { auth } from "@/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 
 export const updateUserName = async (name: string) => {
   "use server";
 
-  await getSession({ require: true });
+  const session = await getSession({ require: true });
 
   const { status } = await auth.api.updateUser({
     body: { name },
@@ -17,7 +17,7 @@ export const updateUserName = async (name: string) => {
 
   if (!status) return null;
 
-  revalidatePath("/dashboard");
+  revalidateTag(`user:${session.user.id}`);
 
   return name;
 };

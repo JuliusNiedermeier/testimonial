@@ -13,6 +13,8 @@ const Login: FC = () => {
       }
     >
       {async (session) => {
+        "use cache";
+
         if (session) redirect("/dashboard");
 
         return (

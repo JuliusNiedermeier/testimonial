@@ -5,12 +5,24 @@ import Image from "next/image";
 import { Team } from "@prisma/client";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { unstable_cacheTag } from "next/cache";
 
-export const TeamList = withSuspense<{ userId: string }>(async ({ userId }) => {
+const getTeamsByUserId = async (userId: string) => {
+  "use cache";
+
   const teams = await db.team.findMany({
     where: { memberships: { some: { userId } } },
   });
 
+  unstable_cacheTag(`team(collection):${userId}`);
+  unstable_cacheTag(...teams.map((team) => `team:${team.id}`));
+
+  return teams;
+};
+
+export const TeamList = withSuspense<{ userId: string }>(async ({ userId }) => {
+  "use cache";
+  const teams = await getTeamsByUserId(userId);
   return <TeamListUI teams={teams} />;
 });
 

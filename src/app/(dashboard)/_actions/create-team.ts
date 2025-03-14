@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import slugify from "slugify";
 
@@ -23,7 +23,7 @@ export const createTeam = async ({ name }: CreateTeamConfig) => {
     },
   });
 
-  revalidatePath("/dashboard");
+  revalidateTag(`team(collection):${session.user.id}`);
 
   redirect(`/dashboard/team/${team.slug}`);
 };

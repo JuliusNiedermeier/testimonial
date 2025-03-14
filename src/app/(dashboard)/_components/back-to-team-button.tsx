@@ -6,14 +6,21 @@ import { Session } from "@/app/_shared/utils/auth";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
 import { omit } from "@/app/_shared/utils/omit";
+import { unstable_cacheTag } from "next/cache";
+
+const getTeamById = async (id: string) => {
+  "use cache";
+  unstable_cacheTag(`team:${id}`);
+  return await db.team.findFirst({ where: { id } });
+};
 
 export const BackToTeamButton = withSuspense<{ user: Session["user"] }>(
   async ({ user }) => {
+    "use cache";
+
     if (!user.lastVisitedTeamId) return null;
 
-    const team = await db.team.findFirst({
-      where: { id: user.lastVisitedTeamId },
-    });
+    const team = await getTeamById(user.lastVisitedTeamId);
 
     if (!team) return null;
 

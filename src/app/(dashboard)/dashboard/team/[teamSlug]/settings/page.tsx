@@ -1,11 +1,21 @@
 import TeamSettings from "@/app/(dashboard)/_components/team-settings";
 import { WithParams } from "@/app/_shared/components/utils/with-params";
 import { db } from "@/app/_shared/db";
+import { unstable_cacheTag } from "next/cache";
 import { FC } from "react";
 
 interface TeamSettingsPageProps {
   params: Promise<{ teamSlug: string }>;
 }
+
+const getTeamBySlug = async (slug: string) => {
+  "use cache";
+
+  const team = await db.team.findFirst({ where: { slug } });
+  if (team) unstable_cacheTag(`team:${team.id}`);
+
+  return team;
+};
 
 const TeamSettingsPage: FC<TeamSettingsPageProps> = ({ params }) => {
   return (
@@ -18,10 +28,11 @@ const TeamSettingsPage: FC<TeamSettingsPageProps> = ({ params }) => {
       }
     >
       {async (params) => {
-        const team = await db.team.findFirst({
-          where: { slug: params.teamSlug },
-        });
+        "use cache";
+
+        const team = await getTeamBySlug(params.teamSlug);
         if (!team) return null;
+
         return <TeamSettings slug={params.teamSlug} name={team.name} />;
       }}
     </WithParams>

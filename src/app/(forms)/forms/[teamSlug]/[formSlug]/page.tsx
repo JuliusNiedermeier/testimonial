@@ -5,12 +5,23 @@ import { NavigationButtons } from "@/app/_shared/testimonial-form/navigation-but
 import { ProgressBar } from "@/app/_shared/testimonial-form/progress-bar";
 import { StepCarousel } from "@/app/_shared/testimonial-form/step-carousel";
 import { formConfig } from "@/mock-form-config";
+import { unstable_cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import { FC } from "react";
 
 interface Props {
-  params: Promise<{ formSlug: string }>;
+  params: Promise<{ teamSlug: string; formSlug: string }>;
 }
+
+const getFormBySlug = async (teamSlug: string, formSlug: string) => {
+  const form = await db.form.findFirst({
+    where: { slug: formSlug, team: { slug: teamSlug } },
+  });
+
+  if (form) unstable_cacheTag(`form:${teamSlug}:${formSlug}`);
+
+  return form;
+};
 
 const Home: FC<Props> = ({ params }) => {
   return (
@@ -23,10 +34,9 @@ const Home: FC<Props> = ({ params }) => {
       }
     >
       {async (params) => {
-        const form = await db.form.findFirst({
-          where: { slug: params.formSlug },
-        });
+        "use cache";
 
+        const form = await getFormBySlug(params.formSlug, params.teamSlug);
         if (!form) notFound();
 
         return (

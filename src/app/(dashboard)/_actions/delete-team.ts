@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 interface DeleteTeamConfig {
@@ -28,6 +28,8 @@ export const deleteTeam = async ({ teamSlug }: DeleteTeamConfig) => {
     data: { lastVisitedTeam: undefined },
   });
 
-  revalidatePath("/dashboard");
+  revalidateTag(`team:${deletedTeam.id}`);
+  revalidateTag(`user:${session.user.id}`);
+
   redirect("/dashboard/account");
 };

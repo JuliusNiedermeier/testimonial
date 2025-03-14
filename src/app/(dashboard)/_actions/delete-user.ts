@@ -3,7 +3,7 @@
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
 import { auth } from "@/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const deleteUser = async () => {
@@ -27,6 +27,7 @@ export const deleteUser = async () => {
 
   if (!success) return { status: "failed", message } as const;
 
-  revalidatePath("/dashboard");
+  revalidateTag(`user:${session.user.id}`);
+
   redirect("/login");
 };

@@ -3,27 +3,40 @@ import { db } from "@/app/_shared/db";
 import Link from "next/link";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { unstable_cacheTag } from "next/cache";
 
-const getForms = async (teamSlug: string, userId: string) =>
-  await db.form.findMany({
-    where: { team: { slug: teamSlug, memberships: { some: { userId } } } },
+const getFormsByTeamSlug = async (teamSlug: string) => {
+  "use cache";
+
+  const team = await db.team.findFirst({
+    where: { slug: teamSlug },
+    include: { forms: true },
   });
+
+  if (!team) return [];
+
+  unstable_cacheTag(`form(collection):${team.id}`);
+  unstable_cacheTag(...team.forms.map((form) => `form:${team.id}:${form.id}`));
+
+  return team.forms;
+};
 
 export const FormList = withSuspense<{
   params: Promise<{ teamSlug: string }>;
-  userId: string;
-}>(async ({ params, userId }) => {
+}>(async ({ params }) => {
+  "use cache";
+
   const { teamSlug } = await params;
 
-  const teams = await getForms(teamSlug, userId);
+  const forms = await getFormsByTeamSlug(teamSlug);
 
-  return <FormListUI forms={teams} teamSlug={teamSlug} />;
+  return <FormListUI forms={forms} teamSlug={teamSlug} />;
 });
 
 export const FormListUI: SFC<
   WithFallbackProps<
     {
-      forms: Awaited<ReturnType<typeof getForms>>;
+      forms: Awaited<ReturnType<typeof getFormsByTeamSlug>>;
       teamSlug: string;
     },
     object

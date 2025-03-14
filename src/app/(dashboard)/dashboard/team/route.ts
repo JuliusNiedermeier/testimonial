@@ -1,18 +1,20 @@
 import { db } from "@/app/_shared/db";
-import { auth } from "@/auth";
-import { headers } from "next/headers";
+import { getSession } from "@/app/_shared/utils/auth";
+import { unstable_cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const GET = async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
+const getTeamById = async (id: string) => {
+  "use cache";
+  unstable_cacheTag(`team:${id}`);
+  return await db.team.findFirst({ where: { id } });
+};
 
-  if (!session) redirect("/login");
+export const GET = async () => {
+  const session = await getSession({ require: true });
 
   if (!session.user.lastVisitedTeamId) redirect("/dashboard/account");
 
-  const lastVisitedTeam = await db.team.findFirst({
-    where: { id: session.user.lastVisitedTeamId },
-  });
+  const lastVisitedTeam = await getTeamById(session.user.lastVisitedTeamId);
 
   // There is no need to check if he has a valid membership, bacause that is already checked on the team level.
   if (lastVisitedTeam) redirect(`/dashboard/team/${lastVisitedTeam.slug}`);

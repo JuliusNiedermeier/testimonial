@@ -12,12 +12,26 @@ import { Team } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { unstable_cacheTag } from "next/cache";
+
+const getUserTeams = async (userId: string) => {
+  "use cache";
+
+  const teams = await db.team.findMany({
+    where: { memberships: { some: { userId } } },
+  });
+
+  unstable_cacheTag(`team(collection):${userId}`);
+  unstable_cacheTag(...teams.map(({ id }) => `team:${id}`));
+
+  return teams;
+};
 
 export const TeamSwitcher = withSuspense<{ userId: string; teamSlug: string }>(
   async ({ userId, teamSlug }) => {
-    const teams = await db.team.findMany({
-      where: { memberships: { some: { userId } } },
-    });
+    "use cache";
+
+    const teams = await getUserTeams(userId);
 
     const currentTeam = teams.find((team) => team.slug === teamSlug);
 

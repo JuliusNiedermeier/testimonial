@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import slugify from "slugify";
 
 interface CreateFormConfig {
@@ -23,6 +23,7 @@ export const createForm = async ({ title, teamSlug }: CreateFormConfig) => {
     },
   });
 
-  revalidatePath("/dashboard/team");
+  revalidateTag(`form(collection):${form.teamId}`);
+
   return form;
 };

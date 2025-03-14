@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 interface UpdateTeamSettingsConfig {
@@ -31,6 +31,7 @@ export const updateTeamSettings = async ({
 
   if (!updatedTeam) return null;
 
-  revalidatePath("/dashboard");
+  revalidateTag(`team:${updatedTeam.id}`);
+
   redirect(`/dashboard/team/${updatedTeam.slug}/settings`);
 };
