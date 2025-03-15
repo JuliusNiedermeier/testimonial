@@ -11,11 +11,9 @@ export const UpdateLastVisitedTeamId: FC<{ teamId: string }> = ({ teamId }) => {
 
   useEffect(() => {
     if (hasUpdated.current) return;
-    console.log("Updating user");
-    updateUser({ lastVisitedTeamId: teamId }).then(() => {
-      console.log("Refetching session on client");
-      session.refetch();
-    });
+
+    updateUser({ lastVisitedTeamId: teamId }).then(() => session.refetch());
+
     hasUpdated.current = true;
   }, [teamId, session]);
 
