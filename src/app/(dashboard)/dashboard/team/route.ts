@@ -1,13 +1,6 @@
-import { db } from "@/app/_shared/db";
 import { getSession } from "@/app/_shared/utils/auth";
-import { unstable_cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
-
-const getTeamById = async (id: string) => {
-  "use cache";
-  unstable_cacheTag(`team:${id}`);
-  return await db.team.findFirst({ where: { id } });
-};
+import { getTeamById } from "../../_utils/get-team-by-id";
 
 export const GET = async () => {
   const session = await getSession({ require: true });

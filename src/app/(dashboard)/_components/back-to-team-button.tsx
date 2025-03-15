@@ -1,18 +1,11 @@
 import Link, { LinkProps } from "next/link";
 import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
 import { ChevronLeft } from "lucide-react";
-import { db } from "@/app/_shared/db";
 import { Session } from "@/app/_shared/utils/auth";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
 import { omit } from "@/app/_shared/utils/omit";
-import { unstable_cacheTag } from "next/cache";
-
-const getTeamById = async (id: string) => {
-  "use cache";
-  unstable_cacheTag(`team:${id}`);
-  return await db.team.findFirst({ where: { id } });
-};
+import { getTeamById } from "../_utils/get-team-by-id";
 
 export const BackToTeamButton = withSuspense<{ user: Session["user"] }>(
   async ({ user }) => {
