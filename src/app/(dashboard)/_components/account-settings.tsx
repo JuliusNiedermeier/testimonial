@@ -5,7 +5,7 @@ import { Input } from "@/app/_shared/components/primitives/input";
 import { FC, useCallback, useState, useTransition } from "react";
 import { deleteUser } from "../_actions/delete-user";
 import { Loader2 } from "lucide-react";
-import { updateUserName } from "../_actions/update-user-name";
+import { updateUser } from "../_actions/update-user";
 
 interface AccountSettingsProps {
   userId: string;
@@ -22,7 +22,7 @@ export const AccountSettings: FC<AccountSettingsProps> = (props) => {
   const [isUpdatePending, startUpdateUserTransition] = useTransition();
 
   const handleUpdateUserName = useCallback(() => {
-    startUpdateUserTransition(async () => void (await updateUserName(name)));
+    startUpdateUserTransition(async () => void (await updateUser({ name })));
   }, [name]);
 
   const handleDeleteUser = useCallback(() => {
