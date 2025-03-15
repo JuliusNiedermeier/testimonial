@@ -23,10 +23,12 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
       <BaseLayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
           <WithSession require fallback={<BackToTeamButtonUI fallback />}>
-            {async (session) => {
-              "use cache";
-              return <BackToTeamButton suspense={false} user={session.user} />;
-            }}
+            {(session) => (
+              <BackToTeamButton
+                suspense={false}
+                lastVisitedTeamId={session.user.lastVisitedTeamId || null}
+              />
+            )}
           </WithSession>
 
           <Link href={"/dashboard/account"}>

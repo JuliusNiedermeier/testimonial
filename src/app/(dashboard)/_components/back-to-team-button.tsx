@@ -1,25 +1,23 @@
 import Link, { LinkProps } from "next/link";
 import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
 import { ChevronLeft } from "lucide-react";
-import { Session } from "@/app/_shared/utils/auth";
 import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
 import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
 import { omit } from "@/app/_shared/utils/omit";
 import { getTeamById } from "../_utils/get-team-by-id";
 
-export const BackToTeamButton = withSuspense<{ user: Session["user"] }>(
-  async ({ user }) => {
-    "use cache";
+export const BackToTeamButton = withSuspense<{
+  lastVisitedTeamId: string | null;
+}>(async ({ lastVisitedTeamId }) => {
+  "use cache";
 
-    if (!user.lastVisitedTeamId) return null;
+  if (!lastVisitedTeamId) return null;
 
-    const team = await getTeamById(user.lastVisitedTeamId);
+  const team = await getTeamById(lastVisitedTeamId);
+  if (!team) return null;
 
-    if (!team) return null;
-
-    return <BackToTeamButtonUI teamName={team.name} teamSlug={team.slug} />;
-  }
-);
+  return <BackToTeamButtonUI teamName={team.name} teamSlug={team.slug} />;
+});
 
 export const BackToTeamButtonUI: SFC<
   WithFallbackProps<
