@@ -1,22 +1,23 @@
 "use client";
 
-import { Button } from "@/shared/components/primitives/button";
 import { authClient } from "@/shared/auth/client";
-import { Github } from "lucide-react";
+import { Button } from "@/shared/components/primitives/button";
 import { FC } from "react";
 
-export const LoginButton: FC = () => {
+export const SocialLoginButton: FC<{
+  provider: Parameters<typeof authClient.signIn.social>["0"]["provider"];
+  label: string;
+}> = ({ provider, label }) => {
   return (
     <Button
       onClick={() =>
         authClient.signIn.social({
-          provider: "github",
+          provider,
           callbackURL: "/dashboard",
         })
       }
     >
-      <Github />
-      <span>Login using GitHub</span>
+      {label}
     </Button>
   );
 };

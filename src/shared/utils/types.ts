@@ -9,7 +9,7 @@ export type WithBooleanDiscriminator<
   | ({ [K in Discriminator]?: false } & FalseType);
 
 export type WithFallbackProps<
-  Props,
+  Props = object,
   FallbackProps = Props
 > = WithBooleanDiscriminator<
   "fallback",
