@@ -1,5 +1,5 @@
 import { AccountSettings } from "@/app/(dashboard)/_components/account-settings";
-import { WithSession } from "@/app/_shared/components/utils/with-session";
+import { WithSession } from "@/shared/components/utils/with-session";
 import { FC } from "react";
 
 const AccountSettingsPage: FC = () => {

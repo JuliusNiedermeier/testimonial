@@ -1,8 +1,8 @@
 "use client";
 
 import { createTeam } from "@/app/(dashboard)/_actions/create-team";
-import { Button } from "@/app/_shared/components/primitives/button";
-import { Input } from "@/app/_shared/components/primitives/input";
+import { Button } from "@/shared/components/primitives/button";
+import { Input } from "@/shared/components/primitives/input";
 import { FC, useState } from "react";
 
 const CreateTeam: FC = () => {

@@ -1,10 +1,14 @@
-import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
-import { db } from "@/app/_shared/db";
+import {
+  NavItem,
+  NavItemIcon,
+  NavItemLabel,
+} from "@/app/(dashboard)/_components/navigation/nav-item";
+import { db } from "@/shared/db";
 import Link from "next/link";
 import Image from "next/image";
 import { Team } from "@prisma/client";
-import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
-import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { withSuspense } from "@/shared/components/utils/with-suspense";
+import { SFC, WithFallbackProps } from "@/shared/utils/types";
 import { unstable_cacheTag } from "next/cache";
 
 const getTeamsByUserId = async (userId: string) => {

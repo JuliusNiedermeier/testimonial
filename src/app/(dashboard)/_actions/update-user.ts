@@ -1,8 +1,8 @@
 "use server";
 
-import { db } from "@/app/_shared/db";
-import { getSession } from "@/app/_shared/utils/auth";
-import { pick } from "@/app/_shared/utils/omit";
+import { db } from "@/shared/db";
+import { getSession } from "@/shared/auth/server";
+import { pick } from "@/shared/utils/omit";
 import { User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 

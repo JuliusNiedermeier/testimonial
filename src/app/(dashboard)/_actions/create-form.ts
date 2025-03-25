@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@/app/_shared/db";
-import { getSession } from "@/app/_shared/utils/auth";
+import { db } from "@/shared/db";
+import { getSession } from "@/shared/auth/server";
 import { revalidateTag } from "next/cache";
 import slugify from "slugify";
 

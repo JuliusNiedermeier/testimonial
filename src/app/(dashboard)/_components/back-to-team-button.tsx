@@ -1,10 +1,14 @@
 import Link, { LinkProps } from "next/link";
-import { NavItem, NavItemIcon, NavItemLabel } from "./navigation/nav-item";
+import {
+  NavItem,
+  NavItemIcon,
+  NavItemLabel,
+} from "@/app/(dashboard)/_components/navigation/nav-item";
 import { ChevronLeft } from "lucide-react";
-import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
-import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
-import { omit } from "@/app/_shared/utils/omit";
-import { getTeamById } from "../_utils/get-team-by-id";
+import { withSuspense } from "@/shared/components/utils/with-suspense";
+import { SFC, WithFallbackProps } from "@/shared/utils/types";
+import { omit } from "@/shared/utils/omit";
+import { getTeamById } from "@/app/(dashboard)/_utils/get-team-by-id";
 
 export const BackToTeamButton = withSuspense<{
   lastVisitedTeamId: string | null;

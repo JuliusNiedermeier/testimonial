@@ -1,9 +1,9 @@
-import { WithParams } from "@/app/_shared/components/utils/with-params";
-import { db } from "@/app/_shared/db";
-import { Form } from "@/app/_shared/testimonial-form";
-import { NavigationButtons } from "@/app/_shared/testimonial-form/navigation-buttons";
-import { ProgressBar } from "@/app/_shared/testimonial-form/progress-bar";
-import { StepCarousel } from "@/app/_shared/testimonial-form/step-carousel";
+import { WithParams } from "@/shared/components/utils/with-params";
+import { db } from "@/shared/db";
+import { Form } from "@/shared/testimonial-form";
+import { NavigationButtons } from "@/shared/testimonial-form/navigation-buttons";
+import { ProgressBar } from "@/shared/testimonial-form/progress-bar";
+import { StepCarousel } from "@/shared/testimonial-form/step-carousel";
 import { formConfig } from "@/mock-form-config";
 import { unstable_cacheTag } from "next/cache";
 import { notFound } from "next/navigation";

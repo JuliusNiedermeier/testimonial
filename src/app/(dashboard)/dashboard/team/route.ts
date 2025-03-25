@@ -1,6 +1,6 @@
-import { getSession } from "@/app/_shared/utils/auth";
+import { getSession } from "@/shared/auth/server";
 import { redirect } from "next/navigation";
-import { getTeamById } from "../../_utils/get-team-by-id";
+import { getTeamById } from "@/app/(dashboard)/_utils/get-team-by-id";
 
 export const GET = async () => {
   const session = await getSession({ require: true });

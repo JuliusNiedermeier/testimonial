@@ -1,4 +1,4 @@
-import { WithParams } from "@/app/_shared/components/utils/with-params";
+import { WithParams } from "@/shared/components/utils/with-params";
 import Link from "next/link";
 import { FC } from "react";
 

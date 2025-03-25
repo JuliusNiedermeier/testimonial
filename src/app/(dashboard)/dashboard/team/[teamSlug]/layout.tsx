@@ -12,20 +12,20 @@ import {
   NavItemGroup,
   NavItemIcon,
   NavItemLabel,
-} from "../../../_components/navigation/nav-item";
+} from "@/app/(dashboard)/_components/navigation/nav-item";
 import NextLink from "next/link";
 import {
   BaseLayout,
   BaseLayoutSidebar,
-} from "../../../_components/base-layout";
-import { AccountLink } from "../../../_components/navigation/account-link";
-import { Link } from "@/app/_shared/components/primitives/link";
+} from "@/app/(dashboard)/_components/base-layout";
+import { AccountLink } from "@/app/(dashboard)/_components/navigation/account-link";
+import { Link } from "@/shared/components/primitives/link";
 import {
   TeamSwitcher,
   TeamSwitcherUI,
 } from "@/app/(dashboard)/_components/navigation/team-switcher";
-import { WithSession } from "@/app/_shared/components/utils/with-session";
-import { WithParams } from "@/app/_shared/components/utils/with-params";
+import { WithSession } from "@/shared/components/utils/with-session";
+import { WithParams } from "@/shared/components/utils/with-params";
 import { getTeamBySlug } from "@/app/(dashboard)/_utils/get-team-by-slug";
 import { UpdateLastVisitedTeamId } from "@/app/(dashboard)/_components/update-last-visited-team-id";
 

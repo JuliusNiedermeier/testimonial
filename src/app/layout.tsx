@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { switzer, tiemposHeadline } from "@/app/_shared/fonts";
+import { switzer, tiemposHeadline } from "@/shared/fonts";
 import "@/app/globals.css";
 
 export const experimental_ppr = true;

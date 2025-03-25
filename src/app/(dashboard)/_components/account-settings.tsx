@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/app/_shared/components/primitives/button";
-import { Input } from "@/app/_shared/components/primitives/input";
 import { FC, useCallback, useState, useTransition } from "react";
-import { deleteUser } from "../_actions/delete-user";
 import { Loader2 } from "lucide-react";
-import { updateUser } from "../_actions/update-user";
+import { Button } from "@/shared/components/primitives/button";
+import { Input } from "@/shared/components/primitives/input";
+import { deleteUser } from "@/app/(dashboard)/_actions/delete-user";
+import { updateUser } from "@/app/(dashboard)/_actions/update-user";
 
 interface AccountSettingsProps {
   userId: string;

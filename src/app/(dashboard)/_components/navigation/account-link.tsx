@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { WithFallbackProps } from "@/app/_shared/utils/types";
-import { cn } from "@/app/_shared/utils/cn";
-import { Session } from "@/app/_shared/utils/auth";
-import { SFC } from "@/app/_shared/utils/types";
+import { WithFallbackProps } from "@/shared/utils/types";
+import { cn } from "@/shared/utils/cn";
+import { Session } from "@/shared/auth/server";
+import { SFC } from "@/shared/utils/types";
 
 export const AccountLink: SFC<
   WithFallbackProps<{ user: Session["user"] }, object>

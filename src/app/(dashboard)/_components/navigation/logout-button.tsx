@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "@/app/_shared/utils/auth-client";
+import { authClient } from "@/shared/auth/client";
 import { useRouter } from "next/navigation";
 import { ComponentProps, FC } from "react";
 

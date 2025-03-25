@@ -1,6 +1,6 @@
 import TeamSettings from "@/app/(dashboard)/_components/team-settings";
 import { getTeamBySlug } from "@/app/(dashboard)/_utils/get-team-by-slug";
-import { WithParams } from "@/app/_shared/components/utils/with-params";
+import { WithParams } from "@/shared/components/utils/with-params";
 import { FC } from "react";
 
 interface TeamSettingsPageProps {

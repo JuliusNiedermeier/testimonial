@@ -1,8 +1,8 @@
 "use client";
 
-import { useLink } from "@/app/_shared/components/primitives/link";
-import { cn } from "@/app/_shared/utils/cn";
-import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { useLink } from "@/shared/components/primitives/link";
+import { cn } from "@/shared/utils/cn";
+import { SFC, WithFallbackProps } from "@/shared/utils/types";
 import { ComponentProps, PropsWithChildren } from "react";
 
 export const NavItemGroup: SFC<PropsWithChildren> = ({ children }) => {

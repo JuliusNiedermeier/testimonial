@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/app/_shared/components/primitives/button";
-import { Input } from "@/app/_shared/components/primitives/input";
+import { Button } from "@/shared/components/primitives/button";
+import { Input } from "@/shared/components/primitives/input";
 import { FC, useState } from "react";
-import { updateTeamSettings } from "../_actions/update-team-settings";
-import { deleteTeam } from "../_actions/delete-team";
+import { updateTeamSettings } from "@/app/(dashboard)/_actions/update-team-settings";
+import { deleteTeam } from "@/app/(dashboard)/_actions/delete-team";
 
 interface TeamSettingsProps {
   slug: string;

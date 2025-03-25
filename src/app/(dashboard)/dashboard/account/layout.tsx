@@ -5,17 +5,20 @@ import {
   NavItemGroup,
   NavItemIcon,
   NavItemLabel,
-} from "../../_components/navigation/nav-item";
-import { BaseLayout, BaseLayoutSidebar } from "../../_components/base-layout";
-import { AccountLink } from "../../_components/navigation/account-link";
-import { Link } from "@/app/_shared/components/primitives/link";
-import { LogoutButton } from "../../_components/navigation/logout-button";
-import { TeamList, TeamListUI } from "../../_components/team-list";
+} from "@/app/(dashboard)/_components/navigation/nav-item";
+import {
+  BaseLayout,
+  BaseLayoutSidebar,
+} from "@/app/(dashboard)/_components/base-layout";
+import { AccountLink } from "@/app/(dashboard)/_components/navigation/account-link";
+import { Link } from "@/shared/components/primitives/link";
+import { LogoutButton } from "@/app/(dashboard)/_components/navigation/logout-button";
+import { TeamList, TeamListUI } from "@/app/(dashboard)/_components/team-list";
 import {
   BackToTeamButton,
   BackToTeamButtonUI,
-} from "../../_components/back-to-team-button";
-import { WithSession } from "@/app/_shared/components/utils/with-session";
+} from "@/app/(dashboard)/_components/back-to-team-button";
+import { WithSession } from "@/shared/components/utils/with-session";
 
 const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (

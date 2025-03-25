@@ -1,4 +1,4 @@
-import { db } from "@/app/_shared/db";
+import { db } from "@/shared/db";
 import {
   Collapsible,
   CollapsibleContent,
@@ -6,12 +6,12 @@ import {
 } from "@radix-ui/react-collapsible";
 import Image from "next/image";
 import { ChevronsUpDown, Plus } from "lucide-react";
-import { cn } from "@/app/_shared/utils/cn";
+import { cn } from "@/shared/utils/cn";
 import Link from "next/link";
 import { Team } from "@prisma/client";
 import { redirect } from "next/navigation";
-import { withSuspense } from "@/app/_shared/components/utils/with-suspense";
-import { SFC, WithFallbackProps } from "@/app/_shared/utils/types";
+import { withSuspense } from "@/shared/components/utils/with-suspense";
+import { SFC, WithFallbackProps } from "@/shared/utils/types";
 import { unstable_cacheTag } from "next/cache";
 
 const getUserTeams = async (userId: string) => {

@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/app/_shared/components/primitives/button";
-import { authClient } from "@/app/_shared/utils/auth-client";
+import { Button } from "@/shared/components/primitives/button";
+import { authClient } from "@/shared/auth/client";
 import { Github } from "lucide-react";
 import { FC } from "react";
 
