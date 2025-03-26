@@ -1,4 +1,4 @@
-import { FormConfig } from "@/shared/testimonial-form/utils/form-config";
+import { FormConfig } from "@app/_components/testimonial-form/utils/form-config";
 
 export const formConfig: FormConfig = {
   steps: {
