@@ -21,7 +21,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
     "@prisma/adapter-neon": "^6.4.1",
-    "@prisma/client": "6.4.1",
+    "@prisma/client": "^6.4.1",
     "@radix-ui/react-collapsible": "^1.1.3",
     "@radix-ui/react-switch": "^1.1.3",
     "@t3-oss/env-nextjs": "^0.12.0",
@@ -58,8 +58,8 @@
     "vercel": "^41.3.2"
   },
   "prisma": {
-    "schema": "./src/app/_shared/db/schema.prisma",
-    "seed": "tsx ./src/app/_shared/db/seed.ts"
+    "schema": "./src/app/_db/schema.prisma",
+    "seed": "tsx ./src/app/_db/seed.ts"
   },
   "pnpm": {
     "overrides": {
