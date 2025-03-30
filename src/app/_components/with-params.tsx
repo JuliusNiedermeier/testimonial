@@ -8,7 +8,7 @@ import {
 
 type Props<Params extends Promise<object>> = WithSuspenseProps<{
   params: Params;
-  children: (params: Awaited<Promise<Params>>) => ReactNode;
+  children: (params: Awaited<Params>) => ReactNode;
 }>;
 
 export const WithParams = async <Params extends Promise<object>>(

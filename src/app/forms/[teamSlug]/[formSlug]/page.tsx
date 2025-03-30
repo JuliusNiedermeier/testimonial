@@ -18,7 +18,7 @@ const getFormBySlug = async (teamSlug: string, formSlug: string) => {
     where: { slug: formSlug, team: { slug: teamSlug } },
   });
 
-  if (form) unstable_cacheTag(`form:${teamSlug}:${formSlug}`);
+  if (form) unstable_cacheTag(`form:${form.id}`);
 
   return form;
 };
@@ -36,7 +36,7 @@ const Home: FC<Props> = ({ params }) => {
       {async (params) => {
         "use cache";
 
-        const form = await getFormBySlug(params.formSlug, params.teamSlug);
+        const form = await getFormBySlug(params.teamSlug, params.formSlug);
         if (!form) notFound();
 
         return (

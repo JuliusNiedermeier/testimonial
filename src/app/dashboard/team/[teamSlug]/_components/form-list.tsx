@@ -16,22 +16,20 @@ const getFormsByTeamSlug = async (teamSlug: string) => {
   if (!team) return [];
 
   unstable_cacheTag(`form(collection):${team.id}`);
-  unstable_cacheTag(...team.forms.map((form) => `form:${team.id}:${form.id}`));
+  unstable_cacheTag(...team.forms.map((form) => `form:${form.id}`));
 
   return team.forms;
 };
 
-export const FormList = withSuspense<{
-  params: Promise<{ teamSlug: string }>;
-}>(async ({ params }) => {
-  "use cache";
+export const FormList = withSuspense<{ teamSlug: string }>(
+  async ({ teamSlug }) => {
+    "use cache";
 
-  const { teamSlug } = await params;
+    const forms = await getFormsByTeamSlug(teamSlug);
 
-  const forms = await getFormsByTeamSlug(teamSlug);
-
-  return <FormListUI forms={forms} teamSlug={teamSlug} />;
-});
+    return <FormListUI forms={forms} teamSlug={teamSlug} />;
+  }
+);
 
 export const FormListUI: SFC<
   WithFallbackProps<

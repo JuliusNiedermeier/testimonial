@@ -28,6 +28,7 @@ import { WithSession } from "@app/_components/with-session";
 import { WithParams } from "@app/_components/with-params";
 import { getTeamBySlug } from "@app/dashboard/_utils/get-team-by-slug";
 import { UpdateLastVisitedTeamId } from "@app/dashboard/team/[teamSlug]/_components/update-last-visited-team-id";
+import { FormList, FormListUI } from "./_components/form-list";
 
 interface LayoutProps {
   params: Promise<{ teamSlug: string }>;
@@ -112,12 +113,32 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                   <NavItemLabel>Forms</NavItemLabel>
                 </NavItem>
 
-                <NavItem>
-                  <NavItemLabel className="gap-2">
-                    <Plus />
-                    <span>Add Form</span>
-                  </NavItemLabel>
-                </NavItem>
+                <WithParams params={params} fallback={<FormListUI fallback />}>
+                  {async (params) => {
+                    "use cache";
+                    return (
+                      <FormList teamSlug={params.teamSlug} suspense={false} />
+                    );
+                  }}
+                </WithParams>
+
+                <WithParams params={params} fallback={<NavItem fallback />}>
+                  {async (params) => {
+                    "use cache";
+                    return (
+                      <Link
+                        href={`/dashboard/team/${params.teamSlug}/create-form`}
+                      >
+                        <NavItem>
+                          <NavItemLabel className="gap-2">
+                            <Plus />
+                            <span>Add Form</span>
+                          </NavItemLabel>
+                        </NavItem>
+                      </Link>
+                    );
+                  }}
+                </WithParams>
               </NavItemGroup>
 
               <NavItemGroup>
