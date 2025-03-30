@@ -11,7 +11,7 @@ type Props<Params extends Promise<object>> = WithSuspenseProps<{
   children: (params: Awaited<Params>) => ReactNode;
 }>;
 
-export const WithClientParams = async <Params extends Promise<object>>(
+export const WithClientParams = <Params extends Promise<object>>(
   props: Props<Params>
 ) => {
   const Suspended = withSuspense<typeof props>(() => {
