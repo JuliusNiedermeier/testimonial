@@ -11,9 +11,11 @@ const CreateForm: FC<{ params: Promise<{ teamSlug: string }> }> = ({
   params,
 }) => {
   return (
-    <WithClientParams params={params} fallback={<CreateFormUI fallback />}>
-      {({ teamSlug }) => <CreateFormUI teamSlug={teamSlug} />}
-    </WithClientParams>
+    <div className="p-6">
+      <WithClientParams params={params} fallback={<CreateFormUI fallback />}>
+        {({ teamSlug }) => <CreateFormUI teamSlug={teamSlug} />}
+      </WithClientParams>
+    </div>
   );
 };
 
@@ -25,7 +27,7 @@ const CreateFormUI: SFC<WithFallbackProps<{ teamSlug: string }, object>> = (
   if (props.fallback) return <div className="h-full w-full skeleton" />;
 
   return (
-    <div className="p-6">
+    <>
       <h1>Create Form</h1>
       <div className="mt-8">
         <div>
@@ -45,7 +47,7 @@ const CreateFormUI: SFC<WithFallbackProps<{ teamSlug: string }, object>> = (
           Create
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -13,7 +13,7 @@ interface Props {
 
 const Form: FC<Props> = ({ params }) => {
   return (
-    <div className="p-6">
+    <div className="w-full h-full p-6">
       <WithSession
         require
         fallback={<div className="h-full w-full skeleton" />}

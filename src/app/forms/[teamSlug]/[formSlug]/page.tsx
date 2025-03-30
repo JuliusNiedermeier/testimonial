@@ -28,7 +28,7 @@ const Home: FC<Props> = ({ params }) => {
     <WithParams
       params={params}
       fallback={
-        <div className="hw-full w-full p-6">
+        <div className="h-full w-full p-6">
           <div className="h-full w-full skeleton" />
         </div>
       }
