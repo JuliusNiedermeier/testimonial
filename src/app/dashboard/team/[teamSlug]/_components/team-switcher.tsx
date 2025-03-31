@@ -62,7 +62,7 @@ export const TeamSwitcherUI: SFC<
         className="p-6 w-full overflow-hidden flex gap-4 items-center text-left"
       >
         <div
-          className={cn("size-8 relative overflow-hidden shrink-0 rounded", {
+          className={cn("size-8 relative overflow-hidden shrink-0 rounded-sm", {
             "bg-background-secondary": !props.fallback,
             skeleton: props.fallback,
           })}
@@ -86,7 +86,7 @@ export const TeamSwitcherUI: SFC<
         <ChevronsUpDown className="shrink-0" />
       </CollapsibleTrigger>
       {!props.fallback && (
-        <CollapsibleContent className="overflow-hidden data-[state=open]:animate-radixCollapsibleOpen data-[state=closed]:animate-radixCollapsibleClose">
+        <CollapsibleContent className="overflow-hidden data-[state=open]:animate-radix-collapsible-open data-[state=closed]:animate-radix-collapsible-close">
           <div className="flex flex-col p-4 pt-0">
             {props.selectableTeams.map((team) => (
               <Link
@@ -94,7 +94,7 @@ export const TeamSwitcherUI: SFC<
                 href={`/dashboard/team/${team.slug}`}
                 className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg"
               >
-                <div className="size-8 relative bg-background-secondary overflow-hidden shrink-0 rounded">
+                <div className="size-8 relative bg-background-secondary overflow-hidden shrink-0 rounded-sm">
                   <Image
                     src="/logo.svg"
                     alt={team.name}
@@ -109,7 +109,7 @@ export const TeamSwitcherUI: SFC<
               href="/dashboard/account/create-team"
               className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg"
             >
-              <div className="size-8 relative bg-background-primary overflow-hidden shrink-0 rounded grid place-content-center">
+              <div className="size-8 relative bg-background-primary overflow-hidden shrink-0 rounded-sm grid place-content-center">
                 <Plus />
               </div>
               <span className="truncate block flex-1 text-foreground-secondary">

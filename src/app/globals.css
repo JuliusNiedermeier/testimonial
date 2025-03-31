@@ -1,16 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme inline {
+  --color-*: initial;
+  --color-background-primary: #f2f2f2;
+  --color-background-secondary: #ffffff;
+  --color-foreground-primary: #282828;
+  --color-foreground-secondary: #808080;
+
+  --font-*: initial;
+  --font-sans: var(--font-switzer);
+  --font-serif: var(--font-tiempos-headline);
+
+  --font-weight-*: initial;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --text-*: initial;
+  --text-heading: 2rem;
+  --text-heading--font-weight: var(--font-weight-bold);
+  --text-heading--line-height: 2.375rem;
+  --text-heading--letter-spacing: -0.002em;
+  --text-label: 1.25rem;
+  --text-label--font-weight: var(--font-weight-semibold);
+  --text-label--line-height: 1.25rem;
+  --text-label--letter-spacing: -0.002em;
+  --text-body: 1.25rem;
+  --text-body--font-weight: var(--font-weight-regular);
+  --text-body--line-height: 1.625rem;
+  --text-body--letter-spacing: 0em;
+
+  --animate-radix-collapsible-open: radixCollapsibleOpen 250ms;
+  --animate-radix-collapsible-close: radixCollapsibleClose 250ms;
+}
 
 @layer base {
-  :root {
-    --color-background-primary: #f2f2f2;
-    --color-background-secondary: #ffffff;
-    --color-foreground-primary: #282828;
-    --color-foreground-secondary: #808080;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 
   .skeleton {
     @apply animate-pulse rounded-md bg-[gray]/10;
+  }
+
+  @keyframes radixCollapsibleOpen {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes radixCollapsibleClose {
+    0% {
+      height: var(--radix-collapsible-content-height);
+    }
+    100% {
+      height: 0;
+    }
   }
 }

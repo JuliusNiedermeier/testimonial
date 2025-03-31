@@ -42,7 +42,7 @@ export const TeamListUI: SFC<WithFallbackProps<{ teams: Team[] }, object>> = (
   return props.teams.map((team) => (
     <Link key={team.id} href={`/dashboard/team/${team.slug}/testimonials`}>
       <NavItem>
-        <NavItemIcon className="relative rounded overflow-hidden h-full">
+        <NavItemIcon className="relative rounded-sm overflow-hidden h-full">
           <Image
             src="/logo.svg"
             alt={team.name}
