@@ -7,5 +7,7 @@ export const getTeamBySlug = async (slug: string) => {
   const team = await db.team.findFirst({ where: { slug } });
   if (team) unstable_cacheTag(`team:${team.id}`);
 
+  unstable_cacheTag(`team:${slug}`);
+
   return team;
 };

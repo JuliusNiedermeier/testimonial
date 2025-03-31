@@ -33,6 +33,9 @@ export const createForm = async ({ title, teamSlug }: CreateTeamConfig) => {
     },
   });
 
+  // Revalidate every function that previously accessed a from with this slug,
+  // in case this slug was used and possibly deleted before.
+  revalidateTag(`form:${form.slug}`);
   revalidateTag(`form(collection):${team.id}`);
 
   redirect(`/dashboard/team/${team.slug}/forms/${form.slug}`);

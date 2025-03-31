@@ -24,6 +24,7 @@ export const createTeam = async ({ name }: CreateTeamConfig) => {
   });
 
   revalidateTag(`team(collection):${session.user.id}`);
+  revalidateTag(`team:${team.slug}`);
 
   redirect(`/dashboard/team/${team.slug}`);
 };

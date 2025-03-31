@@ -5,6 +5,7 @@ import { Input } from "@app/_components/primitives/input";
 import { FC, useState } from "react";
 import { updateFormSettings } from "../_actions/update-form-settings";
 import { deleteForm } from "../_actions/delete-form";
+import { useRouter } from "next/navigation";
 
 interface FormSettingsProps {
   teamSlug: string;
@@ -15,6 +16,8 @@ interface FormSettingsProps {
 export const FormSettings: FC<FormSettingsProps> = (props) => {
   const [title, setTitle] = useState(props.title);
   const [newFormSlug, setNewFormSlug] = useState(props.formSlug);
+
+  const router = useRouter();
 
   return (
     <div className="p-6">
@@ -57,7 +60,12 @@ export const FormSettings: FC<FormSettingsProps> = (props) => {
       <div className="mt-8 flex flex-col gap-4 border p-4">
         <Button
           className="bg-[red]"
-          onClick={() => deleteForm(props.teamSlug, props.formSlug)}
+          onClick={() =>
+            deleteForm(props.teamSlug, props.formSlug).then((success) => {
+              if (!success) return;
+              router.replace(`/dashboard/team/${props.teamSlug}/testimonials`);
+            })
+          }
         >
           Delete Form {props.title}
         </Button>
