@@ -24,14 +24,14 @@ const LoginUI: SFC<WithFallbackProps> = ({}) => {
       <SocialLoginButton provider="google" label="Login with Google" />
       <SocialLoginButton provider="github" label="Login with GitHub" />
 
-      <div className="flex gap-4 items-center">
-        <div className="h-px bg-foreground-secondary flex-1" />
-        <div>Or</div>
-        <div className="h-px bg-foreground-secondary flex-1" />
+      <div className="flex gap-4 items-center my-4">
+        <div className="h-px bg-muted-foreground flex-1" />
+        <div className="text-muted-foreground">Or</div>
+        <div className="h-px bg-muted-foreground flex-1" />
       </div>
 
       <Input placeholder="Email" />
-      <Button>Login with Email</Button>
+      <Button variant="secondary">Login with Email</Button>
     </div>
   );
 };

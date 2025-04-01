@@ -27,7 +27,7 @@ export const ImageStep: FC = () => {
       <p>{formConfig?.steps.image.description}</p>
       <label
         htmlFor="image-input"
-        className="relative size-40 rounded-full bg-background-secondary mx-auto my-10 grid place-content-center overflow-hidden"
+        className="relative size-40 rounded-full bg-secondary mx-auto my-10 grid place-content-center overflow-hidden"
       >
         {avatarUrl && (
           <Image src={avatarUrl} fill className="object-cover" alt="Avatar" />

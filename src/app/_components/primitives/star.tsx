@@ -5,20 +5,17 @@ import { ComponentProps, FC } from "react";
 export type StarProps = Omit<ComponentProps<"svg">, "children"> &
   VariantProps<typeof starVariants>;
 
-const starVariants = cva(
-  "[&>path]:stroke-foreground-primary [&>path]:stroke-2",
-  {
-    variants: {
-      variant: {
-        outline: "",
-        filled: "[&>path]:fill-foreground-primary",
-      },
+const starVariants = cva("[&>path]:stroke-foreground [&>path]:stroke-2", {
+  variants: {
+    variant: {
+      outline: "",
+      filled: "[&>path]:fill-foreground",
     },
-    defaultVariants: {
-      variant: "outline",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "outline",
+  },
+});
 
 export const Star: FC<StarProps> = ({ variant, className, ...restProps }) => {
   return (

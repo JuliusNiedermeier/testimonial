@@ -8,12 +8,12 @@ export const AccountBadge: SFC<
   WithFallbackProps<{ user: Session["user"] }, object>
 > = (props) => {
   return (
-    <div className="p-6 flex gap-4 items-center hover:bg-background-secondary text-left overflow-hidden">
+    <div className="p-6 flex gap-4 items-center hover:bg-secondary text-left overflow-hidden">
       <div
         className={cn(
           "shrink-0 size-12 relative rounded-full overflow-hidden",
           {
-            "bg-background-secondary": !props.fallback,
+            "bg-secondary": !props.fallback,
             "skeleton rounded-full": props.fallback,
           }
         )}
@@ -36,7 +36,7 @@ export const AccountBadge: SFC<
           {!props.fallback && props.user.name}
         </span>
         <span
-          className={cn("text-foreground-secondary truncate block", {
+          className={cn("text-muted-foreground truncate block", {
             "skeleton h-[1em]": props.fallback,
           })}
         >

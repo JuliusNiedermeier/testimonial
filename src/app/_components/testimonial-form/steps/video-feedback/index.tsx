@@ -123,11 +123,11 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
 
   return (
     <div>
-      <span className="text-label text-foreground-secondary">
+      <span className="text-label text-muted-foreground">
         {questionIndex + 1}/{formConfig.questions.length}
       </span>
       <h1 className="text-label mt-4">{question.content}</h1>
-      <div className="aspect-square relative rounded-md bg-background-secondary mt-10 overflow-hidden">
+      <div className="aspect-square relative rounded-md bg-secondary mt-10 overflow-hidden">
         {recorder.status === "error" ? (
           <span className="w-full h-full grid place-content-center">
             {recorder.error.message}
@@ -155,8 +155,9 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
                   />
                   <div
                     className={cn("rounded-full py-1 px-2", {
-                      "bg-background-primary": !recorder?.recording,
-                      "bg-[red] text-background-secondary": recorder?.recording,
+                      "bg-background": !recorder?.recording,
+                      "bg-destructive text-primary-foreground":
+                        recorder?.recording,
                     })}
                   >
                     {formattedDuration}
@@ -171,7 +172,7 @@ export const VideoFeedbackStep: FC<{ questionId: string }> = ({
                   </Button>
                   <div className="h-1 w-full bg-[hsl(0deg_0%_100%/50%)]">
                     <div
-                      className="h-full bg-background-secondary transition-[width] duration-[250ms] ease-linear"
+                      className="h-full bg-secondary transition-[width] duration-[250ms] ease-linear"
                       style={{ width: `${videoProgress * 100}%` }}
                     />
                   </div>

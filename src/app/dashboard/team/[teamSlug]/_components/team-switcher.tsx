@@ -53,9 +53,7 @@ export const TeamSwitcherUI: SFC<
 > = (props) => {
   return (
     <Collapsible
-      className={cn(
-        "hover:bg-background-secondary data-[state=open]:bg-background-secondary"
-      )}
+      className={cn("hover:bg-secondary data-[state=open]:bg-secondary")}
     >
       <CollapsibleTrigger
         disabled={props.fallback}
@@ -63,7 +61,7 @@ export const TeamSwitcherUI: SFC<
       >
         <div
           className={cn("size-8 relative overflow-hidden shrink-0 rounded-sm", {
-            "bg-background-secondary": !props.fallback,
+            "bg-secondary": !props.fallback,
             skeleton: props.fallback,
           })}
         >
@@ -92,9 +90,9 @@ export const TeamSwitcherUI: SFC<
               <Link
                 key={team.id}
                 href={`/dashboard/team/${team.slug}`}
-                className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg"
+                className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background rounded-lg"
               >
-                <div className="size-8 relative bg-background-secondary overflow-hidden shrink-0 rounded-sm">
+                <div className="size-8 relative bg-background overflow-hidden shrink-0 rounded-sm">
                   <Image
                     src="/logo.svg"
                     alt={team.name}
@@ -107,12 +105,12 @@ export const TeamSwitcherUI: SFC<
             ))}
             <Link
               href="/dashboard/account/create-team"
-              className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background-primary rounded-lg"
+              className="p-2 w-full overflow-hidden flex gap-4 items-center text-left hover:bg-background rounded-lg"
             >
-              <div className="size-8 relative bg-background-primary overflow-hidden shrink-0 rounded-sm grid place-content-center">
+              <div className="size-8 relative bg-background overflow-hidden shrink-0 rounded-sm grid place-content-center">
                 <Plus />
               </div>
-              <span className="truncate block flex-1 text-foreground-secondary">
+              <span className="truncate block flex-1 text-muted-foreground">
                 Create Team
               </span>
             </Link>

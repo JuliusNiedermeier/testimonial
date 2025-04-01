@@ -29,7 +29,7 @@ export const TextFeedbackStep: FC<{ questionId: string }> = ({
 
   return (
     <div>
-      <span className="text-label text-foreground-secondary">
+      <span className="text-label text-muted-foreground">
         {index + 1}/{formConfig.questions.length}
       </span>
       <h1 className="text-label mt-4">{question.content}</h1>

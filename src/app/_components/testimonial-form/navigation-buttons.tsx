@@ -37,7 +37,7 @@ export const NavigationButtons: FC<NavigationButtonsProps> = ({
         </Button>
       )}
       <Button
-        variant="primary"
+        variant="default"
         className="flex-1"
         onClick={() => navigate("forward")}
       >

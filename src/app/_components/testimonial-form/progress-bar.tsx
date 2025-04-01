@@ -20,9 +20,9 @@ export const ProgressBar: FC<ProgressBarProps> = ({
         <div
           key={index}
           className={cn("h-1 flex-1", {
-            "bg-foreground-primary":
+            "bg-primary":
               currentStepIndex !== undefined && index <= currentStepIndex,
-            "bg-foreground-secondary":
+            "bg-secondary":
               currentStepIndex === undefined || index > currentStepIndex,
           })}
         />

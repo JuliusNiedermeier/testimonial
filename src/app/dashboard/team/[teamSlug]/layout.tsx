@@ -95,8 +95,8 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                           </NavItemIcon>
                           <NavItemLabel className="gap-2">
                             <span className="flex-1">Testimonials</span>
-                            <div className="h-2 w-2 rounded-full bg-[red]" />
-                            <span className="text-foreground-secondary font-regular">
+                            <div className="h-2 w-2 rounded-full bg-destructive" />
+                            <span className="text-muted-foreground font-normal">
                               14
                             </span>
                           </NavItemLabel>
@@ -142,7 +142,7 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
               </NavItemGroup>
 
               <NavItemGroup>
-                <span className="text-foreground-secondary">Team</span>
+                <span className="text-muted-foreground">Team</span>
 
                 <WithParams params={params} fallback={<NavItem fallback />}>
                   {async (params) => {
@@ -155,7 +155,7 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                           </NavItemIcon>
                           <NavItemLabel>
                             <span className="flex-1">Members</span>
-                            <span className="text-foreground-secondary font-regular">
+                            <span className="text-muted-foreground font-normal">
                               2
                             </span>
                           </NavItemLabel>

@@ -10,7 +10,7 @@ export const CoverStep: FC = () => {
   return (
     <div>
       <div className="flex gap-2">
-        <div className="size-12 bg-background-secondary overflow-hidden relative">
+        <div className="size-12 bg-secondary overflow-hidden relative">
           {formConfig && (
             <Image
               src={formConfig.steps.cover.logoImageUrl}
@@ -20,7 +20,7 @@ export const CoverStep: FC = () => {
             />
           )}
         </div>
-        <div className="size-12 rounded-full bg-background-secondary overflow-hidden relative">
+        <div className="size-12 rounded-full bg-secondary overflow-hidden relative">
           {formConfig && (
             <Image
               src={formConfig.steps.cover.profileImageUrl}
@@ -34,7 +34,7 @@ export const CoverStep: FC = () => {
       <h1 className="font-serif text-heading mt-20">
         {formConfig?.steps.cover.heading}
       </h1>
-      <p className="text-foreground-secondary">
+      <p className="text-muted-foreground">
         {formConfig?.steps.cover.description}
       </p>
     </div>

@@ -16,7 +16,7 @@ export const RecordToggle: FC<RecordToggleProps> = ({
   return (
     <button
       className={cn(
-        "size-20 rounded-full border-[3px] border-background-primary flex items-center justify-center gap-4 transition-colors pointer-events-auto",
+        "size-20 rounded-full border-[3px] border-background flex items-center justify-center gap-4 transition-colors pointer-events-auto",
         {
           "bg-[red]": state === "recording",
           "opacity-50": state === "disabled",
@@ -28,7 +28,7 @@ export const RecordToggle: FC<RecordToggleProps> = ({
     >
       {(state === "idle" || state === "recording" || state === "disabled") && (
         <div
-          className={cn("size-6 bg-background-primary transition-all", {
+          className={cn("size-6 bg-background transition-all", {
             "rounded-full": state === "idle" || state === "disabled",
             "rounded-md": state === "recording",
           })}

@@ -24,9 +24,8 @@ export const NavItem: SFC<WithFallbackProps<ComponentProps<"div">>> = ({
           skeleton: fallback,
           "grid grid-cols-[1.5rem_1fr] items-center grid-rows-[1.5rem] gap-4 p-2 overflow-hidden":
             !fallback,
-          "bg-background-secondary text-label": !fallback && active,
-          "hover:bg-background-secondary text-foreground-secondary":
-            !fallback && !active,
+          "bg-secondary text-label": !fallback && active,
+          "hover:bg-secondary text-muted-foreground": !fallback && !active,
         },
         className
       )}

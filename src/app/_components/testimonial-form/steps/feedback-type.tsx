@@ -5,6 +5,7 @@ import { useForm } from "@app/_components/testimonial-form";
 import { Button } from "@app/_components/primitives/button";
 import { Check } from "lucide-react";
 import { defaultTestimonial } from "@app/_components/testimonial-form/utils/use-testimonial-form-store";
+import { cn } from "root/src/app/_utils/cn";
 
 export const FeedbackTypeStep: FC = () => {
   const { formConfig, testimonial, updateTestimonial } = useForm();
@@ -19,24 +20,36 @@ export const FeedbackTypeStep: FC = () => {
       </h1>
       <p>{formConfig?.steps.feedbackType.description}</p>
       <div className="flex flex-col gap-2 mt-10">
-        <Button
-          onClick={() => updateTestimonial({ feedbackType: "video" })}
-          variant={feedbackType === "video" ? "primary" : "secondary"}
-        >
-          <div className="size-8 rounded-full bg-background-primary grid place-content-center text-foreground-primary">
-            {feedbackType === "video" && <Check />}
-          </div>
-          <span>{formConfig?.steps.feedbackType.videoOptionLabel}</span>
-        </Button>
-        <Button
-          variant={feedbackType === "text" ? "primary" : "secondary"}
-          onClick={() => updateTestimonial({ feedbackType: "text" })}
-        >
-          <div className="size-8 rounded-full bg-background-primary grid place-content-center text-foreground-primary">
-            {feedbackType === "text" && <Check />}
-          </div>
-          <span>{formConfig?.steps.feedbackType.textOptionLabel}</span>
-        </Button>
+        {(["video", "text"] as const).map((type) => (
+          <Button
+            key={type}
+            className="justify-start"
+            size="lg"
+            onClick={() => updateTestimonial({ feedbackType: type })}
+            variant={feedbackType === type ? "default" : "secondary"}
+          >
+            <div
+              className={cn(
+                "size-6 rounded-full grid place-content-center transition-colors",
+                {
+                  "bg-primary-foreground/10": feedbackType === type,
+                  "bg-primary/10": feedbackType !== type,
+                }
+              )}
+            >
+              <Check
+                className={cn({
+                  invisible: feedbackType !== type,
+                })}
+              />
+            </div>
+            <span>
+              {type === "video"
+                ? formConfig?.steps.feedbackType.videoOptionLabel
+                : formConfig?.steps.feedbackType.textOptionLabel}
+            </span>
+          </Button>
+        ))}
       </div>
     </div>
   );

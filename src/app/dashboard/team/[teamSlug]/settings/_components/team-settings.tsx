@@ -51,7 +51,7 @@ const TeamSettings: FC<TeamSettingsProps> = (props) => {
       </div>
       <div className="mt-8 flex flex-col gap-4 border p-4">
         <Button
-          className="bg-[red]"
+          variant="destructive"
           onClick={() => deleteTeam({ teamSlug: props.slug })}
         >
           Delete Team {props.name}

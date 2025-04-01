@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { switzer, tiemposHeadline } from "@app/_fonts";
+import { geist, tiemposHeadline } from "@app/_fonts";
 import "@app/globals.css";
 
 export const experimental_ppr = true;
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${switzer.variable} ${tiemposHeadline.variable} overflow-x-hidden font-sans text-body antialiased bg-background-primary text-foreground-primary`}
+        className={`${geist.variable} ${tiemposHeadline.variable} overflow-x-hidden font-sans text-body antialiased bg-background text-foreground`}
       >
         {children}
       </body>

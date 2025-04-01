@@ -1,9 +1,9 @@
 import { NavItem, NavItemLabel } from "@app/dashboard/_components/nav-item";
 import { db } from "@app/_db";
-import Link from "next/link";
 import { withSuspense } from "@app/_components/with-suspense";
 import { SFC, WithFallbackProps } from "@app/_utils/types";
 import { unstable_cacheTag } from "next/cache";
+import { Link } from "@app/_components/primitives/link";
 
 const getFormsByTeamSlug = async (teamSlug: string) => {
   "use cache";

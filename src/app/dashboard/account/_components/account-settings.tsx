@@ -50,7 +50,7 @@ export const AccountSettings: FC<AccountSettingsProps> = (props) => {
         </Button>
       </div>
       <div className="mt-8 flex flex-col gap-4 border p-4">
-        <Button className="bg-[red]" onClick={handleDeleteUser}>
+        <Button variant="destructive" onClick={handleDeleteUser}>
           <span>Delete User {props.name}</span>
           {isDeletionPending && <Loader2 className="animate-spin" />}
         </Button>
