@@ -2,7 +2,7 @@ import {
   CreditCard,
   List,
   MessageSquareQuote,
-  Plus,
+  PlusIcon,
   Settings,
   Users,
 } from "lucide-react";
@@ -18,17 +18,16 @@ import {
   BaseLayout,
   BaseLayoutSidebar,
 } from "@app/dashboard/_components/base-layout";
-import { AccountBadge } from "@app/dashboard/_components/account-badge";
 import { Link } from "@app/_components/primitives/link";
-import {
-  TeamSwitcher,
-  TeamSwitcherUI,
-} from "@app/dashboard/team/[teamSlug]/_components/team-switcher";
 import { WithSession } from "@app/_components/with-session";
 import { WithParams } from "@app/_components/with-params";
 import { getTeamBySlug } from "@app/dashboard/_utils/get-team-by-slug";
 import { UpdateLastVisitedTeamId } from "@app/dashboard/team/[teamSlug]/_components/update-last-visited-team-id";
 import { FormList, FormListUI } from "./_components/form-list";
+import { Button } from "root/src/app/_components/primitives/button";
+import { cn } from "root/src/app/_utils/cn";
+import Image from "next/image";
+import { TeamBadge, TeamBadgeUI } from "./_components/team-badge";
 
 interface LayoutProps {
   params: Promise<{ teamSlug: string }>;
@@ -59,159 +58,181 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
 
       <BaseLayout>
         <BaseLayoutSidebar>
-          <div className="grid grid-rows-[min-content_1fr] grid-cols-1 overflow-hidden divide-y">
-            <WithSession require fallback={<TeamSwitcherUI fallback />}>
-              {async (session) => {
-                "use cache";
-                return (
-                  <WithParams params={params} suspense={false}>
-                    {async (params) => {
-                      "use cache";
-                      return (
-                        <TeamSwitcher
-                          suspense={false}
-                          userId={session.user.id}
-                          teamSlug={params.teamSlug}
-                        />
-                      );
-                    }}
-                  </WithParams>
-                );
-              }}
-            </WithSession>
+          <div className="gap-8 flex flex-col overflow-hidden">
+            <div className="p-6 pr-4 w-full overflow-hidden flex gap-4 items-center text-left">
+              <div
+                className={cn(
+                  "size-8 relative overflow-hidden shrink-0 rounded-sm bg-secondary"
+                )}
+              >
+                <Image
+                  src="/logo.svg"
+                  alt="Testimonial.io"
+                  fill
+                  className="object-cover"
+                />
+              </div>
 
-            <div className="px-4 py-12 gap-12 flex flex-col  overflow-y-auto">
-              <NavItemGroup>
-                <WithParams params={params} fallback={<NavItem fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <Link
-                        href={`/dashboard/team/${params.teamSlug}/testimonials`}
-                      >
-                        <NavItem className="pr-3">
-                          <NavItemIcon>
-                            <MessageSquareQuote />
-                          </NavItemIcon>
-                          <NavItemLabel className="gap-2">
-                            <span className="flex-1">Testimonials</span>
-                            <div className="h-2 w-2 rounded-full bg-destructive" />
-                            <span className="text-muted-foreground font-normal">
-                              14
-                            </span>
-                          </NavItemLabel>
-                        </NavItem>
-                      </Link>
-                    );
-                  }}
-                </WithParams>
+              <span
+                className={cn("text-label font-bold truncate block flex-1")}
+              >
+                Appname
+              </span>
 
-                <NavItem>
-                  <NavItemIcon>
-                    <List />
-                  </NavItemIcon>
-                  <NavItemLabel>Forms</NavItemLabel>
-                </NavItem>
-
-                <WithParams params={params} fallback={<FormListUI fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <FormList teamSlug={params.teamSlug} suspense={false} />
-                    );
-                  }}
-                </WithParams>
-
-                <WithParams params={params} fallback={<NavItem fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <Link
-                        href={`/dashboard/team/${params.teamSlug}/create-form`}
-                      >
-                        <NavItem>
-                          <NavItemLabel className="gap-2">
-                            <Plus />
-                            <span>Add Form</span>
-                          </NavItemLabel>
-                        </NavItem>
-                      </Link>
-                    );
-                  }}
-                </WithParams>
-              </NavItemGroup>
-
-              <NavItemGroup>
-                <span className="text-muted-foreground">Team</span>
-
-                <WithParams params={params} fallback={<NavItem fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <Link href={`/dashboard/team/${params.teamSlug}/members`}>
-                        <NavItem className="pr-3">
-                          <NavItemIcon>
-                            <Users />
-                          </NavItemIcon>
-                          <NavItemLabel>
-                            <span className="flex-1">Members</span>
-                            <span className="text-muted-foreground font-normal">
-                              2
-                            </span>
-                          </NavItemLabel>
-                        </NavItem>
-                      </Link>
-                    );
-                  }}
-                </WithParams>
-
-                <WithParams params={params} fallback={<NavItem fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <Link
-                        href={`/dashboard/team/${params.teamSlug}/subscription`}
-                      >
-                        <NavItem>
-                          <NavItemIcon>
-                            <CreditCard />
-                          </NavItemIcon>
-                          <NavItemLabel>Subscription</NavItemLabel>
-                        </NavItem>
-                      </Link>
-                    );
-                  }}
-                </WithParams>
-
-                <WithParams params={params} fallback={<NavItem fallback />}>
-                  {async (params) => {
-                    "use cache";
-                    return (
-                      <Link
-                        href={`/dashboard/team/${params.teamSlug}/settings`}
-                      >
-                        <NavItem>
-                          <NavItemIcon>
-                            <Settings />
-                          </NavItemIcon>
-                          <NavItemLabel>Settings</NavItemLabel>
-                        </NavItem>
-                      </Link>
-                    );
-                  }}
-                </WithParams>
-              </NavItemGroup>
+              <WithSession require fallback={<TeamBadgeUI fallback />}>
+                {async (session) => {
+                  "use cache";
+                  return (
+                    <WithParams params={params} suspense={false}>
+                      {async (params) => {
+                        "use cache";
+                        return (
+                          <TeamBadge
+                            suspense={false}
+                            teamSlug={params.teamSlug}
+                            user={{
+                              name: session.user.name,
+                              image: session.user.image || undefined,
+                            }}
+                          />
+                        );
+                      }}
+                    </WithParams>
+                  );
+                }}
+              </WithSession>
             </div>
-          </div>
 
-          <NextLink href="/dashboard/account">
-            <WithSession require fallback={<AccountBadge fallback />}>
-              {async (session) => {
-                "use cache";
-                return <AccountBadge user={session.user} />;
-              }}
-            </WithSession>
-          </NextLink>
+            <NavItemGroup className="px-4 pt-4">
+              <WithParams params={params} fallback={<NavItem fallback />}>
+                {async (params) => {
+                  "use cache";
+                  return (
+                    <Link
+                      href={`/dashboard/team/${params.teamSlug}/testimonials`}
+                    >
+                      <NavItem>
+                        <NavItemIcon>
+                          <MessageSquareQuote size={20} />
+                        </NavItemIcon>
+                        <NavItemLabel className="gap-2">
+                          <span className="flex-1">Testimonials</span>
+                          <div className="h-2 w-2 rounded-full bg-destructive" />
+                          <span className="text-muted-foreground font-normal">
+                            14
+                          </span>
+                        </NavItemLabel>
+                      </NavItem>
+                    </Link>
+                  );
+                }}
+              </WithParams>
+            </NavItemGroup>
+
+            <NavItemGroup className="overflow-hidden bg-accent mx-2 rounded-xl gap-0">
+              <div className="p-2 border-b">
+                <NavItem interactive={false} className="pr-0">
+                  <NavItemIcon>
+                    <List size={20} />
+                  </NavItemIcon>
+                  <NavItemLabel>
+                    <span className="flex-1">Forms</span>
+                    <WithParams params={params} fallback={null}>
+                      {({ teamSlug }) => (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          asChild
+                          className="hover:bg-background"
+                        >
+                          <NextLink
+                            href={`/dashboard/team/${teamSlug}/create-form`}
+                          >
+                            <PlusIcon />
+                          </NextLink>
+                        </Button>
+                      )}
+                    </WithParams>
+                  </NavItemLabel>
+                </NavItem>
+              </div>
+
+              <WithParams
+                params={params}
+                fallback={
+                  <div className="overflow-y-auto flex-1 p-2">
+                    <FormListUI fallback />
+                  </div>
+                }
+              >
+                {async (params) => {
+                  "use cache";
+                  return (
+                    <div className="overflow-y-auto flex-1 p-2">
+                      <FormList teamSlug={params.teamSlug} suspense={false} />
+                    </div>
+                  );
+                }}
+              </WithParams>
+            </NavItemGroup>
+
+            <NavItemGroup className="mt-auto px-4 pb-4">
+              <WithParams params={params} fallback={<NavItem fallback />}>
+                {async (params) => {
+                  "use cache";
+                  return (
+                    <Link href={`/dashboard/team/${params.teamSlug}/members`}>
+                      <NavItem>
+                        <NavItemIcon>
+                          <Users size={20} />
+                        </NavItemIcon>
+                        <NavItemLabel>
+                          <span className="flex-1">Members</span>
+                          <span className="text-muted-foreground font-normal">
+                            2
+                          </span>
+                        </NavItemLabel>
+                      </NavItem>
+                    </Link>
+                  );
+                }}
+              </WithParams>
+
+              <WithParams params={params} fallback={<NavItem fallback />}>
+                {async (params) => {
+                  "use cache";
+                  return (
+                    <Link
+                      href={`/dashboard/team/${params.teamSlug}/subscription`}
+                    >
+                      <NavItem>
+                        <NavItemIcon>
+                          <CreditCard size={20} />
+                        </NavItemIcon>
+                        <NavItemLabel>Subscription</NavItemLabel>
+                      </NavItem>
+                    </Link>
+                  );
+                }}
+              </WithParams>
+
+              <WithParams params={params} fallback={<NavItem fallback />}>
+                {async (params) => {
+                  "use cache";
+                  return (
+                    <Link href={`/dashboard/team/${params.teamSlug}/settings`}>
+                      <NavItem>
+                        <NavItemIcon>
+                          <Settings size={20} />
+                        </NavItemIcon>
+                        <NavItemLabel>Team settings</NavItemLabel>
+                      </NavItem>
+                    </Link>
+                  );
+                }}
+              </WithParams>
+            </NavItemGroup>
+          </div>
         </BaseLayoutSidebar>
         <main>{children}</main>
       </BaseLayout>

@@ -1,4 +1,9 @@
-import { NavItem, NavItemLabel } from "@app/dashboard/_components/nav-item";
+import {
+  NavItem,
+  NavItemGroup,
+  NavItemIcon,
+  NavItemLabel,
+} from "@app/dashboard/_components/nav-item";
 import { db } from "@app/_db";
 import { withSuspense } from "@app/_components/with-suspense";
 import { SFC, WithFallbackProps } from "@app/_utils/types";
@@ -40,20 +45,29 @@ export const FormListUI: SFC<
     object
   >
 > = (props) => {
-  if (props.fallback) {
-    return Array.from(new Array(3)).map((_, index) => (
-      <NavItem key={index} fallback style={{ opacity: (3 - index) / 3 }} />
-    ));
-  }
-
-  return props.forms.map((form) => (
-    <Link
-      key={form.id}
-      href={`/dashboard/team/${props.teamSlug}/forms/${form.slug}`}
-    >
-      <NavItem>
-        <NavItemLabel>{form.title}</NavItemLabel>
-      </NavItem>
-    </Link>
-  ));
+  return (
+    <NavItemGroup>
+      {props.fallback
+        ? Array.from(new Array(3)).map((_, index) => (
+            <NavItem
+              key={index}
+              fallback
+              style={{ opacity: (3 - index) / 3 }}
+            />
+          ))
+        : props.forms.map((form) => (
+            <Link
+              key={form.id}
+              href={`/dashboard/team/${props.teamSlug}/forms/${form.slug}`}
+            >
+              <NavItem className=" data-[active=false]:hover:bg-card/50">
+                <NavItemIcon className="grid place-content-center">
+                  <div className="h-2 w-2 rounded-full bg-amber-500" />
+                </NavItemIcon>
+                <NavItemLabel>{form.title}</NavItemLabel>
+              </NavItem>
+            </Link>
+          ))}
+    </NavItemGroup>
+  );
 };

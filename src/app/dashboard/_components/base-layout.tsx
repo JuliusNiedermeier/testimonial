@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 export const BaseLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div className="h-[100dvh] overflow-hidden grid grid-cols-[24rem_1fr] divide-x">
+    <div className="h-[100dvh] overflow-hidden grid grid-cols-[20rem_1fr] divide-x">
       {children}
     </div>
   );
