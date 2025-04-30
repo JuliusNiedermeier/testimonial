@@ -1,6 +1,7 @@
 import {
   CreditCard,
   List,
+  MenuIcon,
   MessageSquareQuote,
   PlusIcon,
   Settings,
@@ -15,8 +16,12 @@ import {
 } from "@app/dashboard/_components/nav-item";
 import NextLink from "next/link";
 import {
-  BaseLayout,
-  BaseLayoutSidebar,
+  Layout,
+  LayoutPage,
+  LayoutPageOverlay,
+  LayoutSidebar,
+  LayoutSidebarContent,
+  LayoutSidebarOpenTrigger,
 } from "@app/dashboard/_components/base-layout";
 import { Link } from "@app/_components/primitives/link";
 import { WithSession } from "@app/_components/with-session";
@@ -56,9 +61,9 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
         )}
       </WithSession>
 
-      <BaseLayout>
-        <BaseLayoutSidebar>
-          <div className="gap-8 flex flex-col overflow-hidden">
+      <Layout>
+        <LayoutSidebar>
+          <LayoutSidebarContent className="gap-8 flex flex-col overflow-hidden">
             <div className="p-6 pr-4 w-full overflow-hidden flex gap-4 items-center text-left">
               <div
                 className={cn(
@@ -79,28 +84,11 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                 Appname
               </span>
 
-              <WithSession require fallback={<TeamBadgeUI fallback />}>
-                {async (session) => {
-                  "use cache";
-                  return (
-                    <WithParams params={params} suspense={false}>
-                      {async (params) => {
-                        "use cache";
-                        return (
-                          <TeamBadge
-                            suspense={false}
-                            teamSlug={params.teamSlug}
-                            user={{
-                              name: session.user.name,
-                              image: session.user.image || undefined,
-                            }}
-                          />
-                        );
-                      }}
-                    </WithParams>
-                  );
-                }}
-              </WithSession>
+              <WithParams params={params} fallback={<TeamBadgeUI fallback />}>
+                {async (params) => (
+                  <TeamBadge suspense={false} teamSlug={params.teamSlug} />
+                )}
+              </WithParams>
             </div>
 
             <NavItemGroup className="px-4 pt-4">
@@ -232,10 +220,32 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
                 }}
               </WithParams>
             </NavItemGroup>
+          </LayoutSidebarContent>
+        </LayoutSidebar>
+        <LayoutPage>
+          <LayoutPageOverlay />
+          <div className="md:hidden p-4">
+            <div className="rounded-full p-1 pl-2 bg-card flex gap-4 items-center">
+              <LayoutSidebarOpenTrigger
+                className="rounded-full"
+                size="icon"
+                variant="ghost"
+              >
+                <MenuIcon size={20} />
+              </LayoutSidebarOpenTrigger>
+
+              <h1 className="text-label flex-1">Page title</h1>
+
+              <WithParams params={params} fallback={<TeamBadgeUI fallback />}>
+                {async (params) => (
+                  <TeamBadge suspense={false} teamSlug={params.teamSlug} />
+                )}
+              </WithParams>
+            </div>
           </div>
-        </BaseLayoutSidebar>
-        <main>{children}</main>
-      </BaseLayout>
+          {children}
+        </LayoutPage>
+      </Layout>
     </>
   );
 };

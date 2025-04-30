@@ -7,8 +7,8 @@ import {
   NavItemLabel,
 } from "@app/dashboard/_components/nav-item";
 import {
-  BaseLayout,
-  BaseLayoutSidebar,
+  Layout,
+  LayoutSidebar,
 } from "@app/dashboard/_components/base-layout";
 import { AccountBadge } from "@app/dashboard/_components/account-badge";
 import { Link } from "@app/_components/primitives/link";
@@ -25,8 +25,8 @@ import { WithSession } from "@app/_components/with-session";
 
 const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <BaseLayout>
-      <BaseLayoutSidebar>
+    <Layout>
+      <LayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
           <WithSession require fallback={<BackToTeamButtonUI fallback />}>
             {(session) => (
@@ -82,9 +82,9 @@ const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
             return <AccountBadge user={session.user} />;
           }}
         </WithSession>
-      </BaseLayoutSidebar>
+      </LayoutSidebar>
       <main>{children}</main>
-    </BaseLayout>
+    </Layout>
   );
 };
 

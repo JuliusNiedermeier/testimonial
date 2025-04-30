@@ -4,18 +4,20 @@ import Image from "next/image";
 import { withSuspense } from "root/src/app/_components/with-suspense";
 import { getTeamBySlug } from "../../../_utils/get-team-by-slug";
 import { notFound } from "next/navigation";
+import { getSession } from "root/src/app/_auth/server";
 
 export const TeamBadge = withSuspense<{
   teamSlug: string;
-  user: TeamBadgeUIProps["user"];
 }>(async (props) => {
+  const session = await getSession({ require: true });
+
   const team = await getTeamBySlug(props.teamSlug);
   if (!team) notFound();
 
   return (
     <TeamBadgeUI
       team={{ name: team.name, image: "/logo.svg" }}
-      user={props.user}
+      user={{ name: session.user.name, image: session.user.image || undefined }}
     />
   );
 });

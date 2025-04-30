@@ -20,7 +20,7 @@ export const FormSettings: FC<FormSettingsProps> = (props) => {
   const router = useRouter();
 
   return (
-    <div className="p-6">
+    <div className="">
       <h1>Form settings</h1>
       <div className="mt-8 flex flex-col gap-4 border p-4">
         <div>
