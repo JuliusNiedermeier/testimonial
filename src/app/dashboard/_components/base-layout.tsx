@@ -38,10 +38,6 @@ export const Layout = withSuspense<ComponentProps<"div">>(
     const [open, setOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
 
-    const pathname = usePathname();
-
-    useEffect(() => setOpen(false), [pathname]);
-
     return (
       <LayoutContext.Provider
         value={{ open, collapsed, setOpen, setCollapsed }}
@@ -67,12 +63,25 @@ export const Layout = withSuspense<ComponentProps<"div">>(
           }}
           {...restProps}
         >
+          <AutoCloseOnNavigation fallback={null} />
           {children}
         </div>
       </LayoutContext.Provider>
     );
   }
 );
+
+// Helper component, that closes the mobile sidebar on navigation.
+// To access pathname in a client component, it needs to have a suspense boundary above it.
+// Moving this logic inside a separate component enables us to access the pathname inside a suspense boundary,
+// but render the children of <Layout> beside the suspense boundary instead of inside it,
+// allowing nextjs to prerender deeper than <Layout>.
+const AutoCloseOnNavigation = withSuspense(() => {
+  const { setOpen } = useLayout();
+  const pathname = usePathname();
+  useEffect(() => setOpen(false), [pathname]);
+  return null;
+});
 
 export const LayoutSidebar: FC<ComponentProps<"nav">> = ({
   className,
