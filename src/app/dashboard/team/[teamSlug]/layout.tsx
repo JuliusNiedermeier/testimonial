@@ -61,7 +61,7 @@ const TeamDashboardLayout: FC<PropsWithChildren<LayoutProps>> = ({
         )}
       </WithSession>
 
-      <Layout>
+      <Layout fallback={null}>
         <LayoutSidebar>
           <LayoutSidebarContent className="gap-8 flex flex-col overflow-hidden">
             <div className="p-6 pr-4 w-full overflow-hidden flex gap-4 items-center text-left">

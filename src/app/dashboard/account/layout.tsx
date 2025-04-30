@@ -6,10 +6,7 @@ import {
   NavItemIcon,
   NavItemLabel,
 } from "@app/dashboard/_components/nav-item";
-import {
-  Layout,
-  LayoutSidebar,
-} from "@app/dashboard/_components/base-layout";
+import { Layout, LayoutSidebar } from "@app/dashboard/_components/base-layout";
 import { AccountBadge } from "@app/dashboard/_components/account-badge";
 import { Link } from "@app/_components/primitives/link";
 import { LogoutButton } from "@app/dashboard/account/_components/logout-button";
@@ -25,7 +22,7 @@ import { WithSession } from "@app/_components/with-session";
 
 const AccountDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <Layout>
+    <Layout fallback={null}>
       <LayoutSidebar>
         <div className="p-4 flex flex-col gap-8">
           <WithSession require fallback={<BackToTeamButtonUI fallback />}>
