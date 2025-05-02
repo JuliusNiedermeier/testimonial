@@ -79,7 +79,7 @@ export const Layout = withSuspense<ComponentProps<"div">>(
 const AutoCloseOnNavigation = withSuspense(() => {
   const { setOpen } = useLayout();
   const pathname = usePathname();
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => setOpen(false), [pathname, setOpen]);
   return null;
 });
 

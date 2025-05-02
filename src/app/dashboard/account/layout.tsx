@@ -6,7 +6,7 @@ import {
   NavItemIcon,
   NavItemLabel,
 } from "@app/dashboard/_components/nav-item";
-import { Layout, LayoutSidebar } from "@app/dashboard/_components/base-layout";
+import { Layout, LayoutSidebar } from "root/src/app/dashboard/_components/layout";
 import { AccountBadge } from "@app/dashboard/_components/account-badge";
 import { Link } from "@app/_components/primitives/link";
 import { LogoutButton } from "@app/dashboard/account/_components/logout-button";
